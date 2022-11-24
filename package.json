@@ -1,0 +1,29 @@
+{
+  "name": "pinteg",
+  "version": "1.0.0",
+  "description": "Repositório utilizado para a disciplina de Projeto Integrado da Unisinos",
+  "main": "index.js",
+  "license": "MIT",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reenanms/ProjetoIntegrado.git"
+  },
+  "author": "Renan Martins",
+  "bugs": {
+    "url": "https://github.com/reenanms/ProjetoIntegrado/issues"
+  },
+  "homepage": "https://github.com/reenanms/ProjetoIntegrado#readme",
+  "devDependencies": {
+    "@types/jest": "^26.0.24",
+    "jest": "^26.6.3",
+    "ts-jest": "^26.5.6",
+    "typescript": "^4.3.5"
+  }
+}
