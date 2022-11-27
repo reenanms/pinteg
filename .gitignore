@@ -107,4 +107,4 @@ dist
 .vs/
 
 #build result folder
-public/
+out/
