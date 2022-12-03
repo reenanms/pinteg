@@ -1,10 +1,10 @@
 import IComponentSize from "./IComponentSize";
-import IScreenWriter from "./IScreenWriter";
+import IHtmlWriter from "./IHtmlWriter";
 
 export default interface IComponent {
   type: string;
   name: string;
   caption: string;
   size: IComponentSize;
-  build(screen: IScreenWriter): void;
+  build(writer: IHtmlWriter): void;
 }

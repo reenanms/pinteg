@@ -1,6 +1,6 @@
 import IComponent from "../contract/IComponent"
 import IComponentSize from "../contract/IComponentSize"
-import IScreenWriter from "../contract/IScreenWriter"
+import IHtmlWriter from "../contract/IHtmlWriter"
 
 export default class TextComponent implements IComponent {
   public name: string = "";
@@ -8,14 +8,14 @@ export default class TextComponent implements IComponent {
   public caption: string = "";
   public size: IComponentSize;
 
-  public build(writer: IScreenWriter): void {
+  public build(writer: IHtmlWriter): void {
     const html =
-    `<label for="${this.name}">${this.caption}:</label>
-     <input type="text" id="${this.name}" />`;
+    `<label for="${this.name}">${this.caption}:</label>` +
+    `<input type="text" id="${this.name}" />`;
     
      let ddd = this.size.width;
      ddd += 10;
      
-     writer.addDefinition(html);
+     writer.addHtml(html);
   }
 }
