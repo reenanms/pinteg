@@ -1,4 +1,4 @@
 export default interface IScreenWriter {
   addNewLine(): void;
-  addDefinition(definition: string): void;
+  addHtml(html: string): void;
 }

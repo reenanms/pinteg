@@ -10,17 +10,21 @@ export default class ComponentLoader {
     this.configuration = configuration;
   }
 
+  private loadComponent(propertyName: string) {
+    const propertyConfig = this.configuration[propertyName];
+    const component = ComponentFactory.create(propertyConfig.type);
+    component.size = ComponentSizeFactory.create(propertyConfig.size);
+    component.name = propertyName;
+    component.caption = propertyConfig.caption;
+
+    return component;
+  }
+
   public load() : IComponent[] {
     const components : IComponent[] = [];
 
     for (const propertyName in this.configuration) {
-      const propertyConfig = this.configuration[propertyName];
-
-      const component = ComponentFactory.create(propertyConfig.type);
-      component.size = ComponentSizeFactory.create(propertyConfig.size);
-      component.name = propertyName;
-      component.caption = propertyConfig.caption;
-      
+      const component = this.loadComponent(propertyName);
       components.push(component);
     }
     
