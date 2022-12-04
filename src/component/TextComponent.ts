@@ -3,10 +3,11 @@ import IComponentSize from "../contract/IComponentSize"
 import IHtmlWriter from "../contract/IHtmlWriter"
 
 export default class TextComponent implements IComponent {
-  public name: string = "";
   public type: string = "string";
-  public caption: string = "";
+  public name: string;
+  public caption: string;
   public size: IComponentSize;
+  public props: Map<string, any>;
 
   public build(writer: IHtmlWriter): void {
     const html =
