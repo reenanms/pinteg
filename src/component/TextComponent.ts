@@ -12,7 +12,7 @@ export default class TextComponent implements IComponent {
   public build(writer: IHtmlWriter): void {
     const html =
     `<label for="${this.name}">${this.caption}:</label>` +
-    `<input type="text" id="${this.name}" />`;
+    `<input type="text" id="${this.name}" name="${this.name}" />`;
      
      writer.addHtml(html);
   }

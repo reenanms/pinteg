@@ -14,7 +14,7 @@ export default class ListComponent implements IComponent {
 
     const html =
     `<label for="${this.name}">${this.caption}:</label>` +
-    `<select name="${this.name} id="${this.name}" >${htmlOptions}</select>`;
+    `<select name="${this.name}" id="${this.name}" >${htmlOptions}</select>`;
     
     writer.addHtml(html);
   }
