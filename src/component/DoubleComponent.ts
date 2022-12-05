@@ -12,7 +12,7 @@ export default class DoubleComponent implements IComponent {
   public build(writer: IHtmlWriter): void {
     const html =
     `<label for="${this.name}">${this.caption}:</label>` +
-    `<input type="number" step="0.01" id="${this.name}" />`;
+    `<input type="number" step="0.01" id="${this.name}"  name="${this.name}" />`;
      
      writer.addHtml(html);
   }

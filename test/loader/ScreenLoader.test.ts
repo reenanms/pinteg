@@ -16,6 +16,6 @@ describe("ScreenLoader", () => {
     	.load();
 
 	const html = htmlWriter.getHtml();
-    expect(html).toBe("<label for=\"param1\">Param:</label><input type=\"text\" id=\"param1\" /><br />");
+    expect(html).toBe(`<label for="param1">Param:</label><input type="text" id="param1" name="param1" /><br />`);
   });
 });
