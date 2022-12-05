@@ -10,12 +10,26 @@ export default class ComponentLoader {
     this.configuration = configuration;
   }
 
+  private loadComponentProps(propertyConfig: IComponentDefinition) {
+    const propertiesIComponentDefinition = [ "type", "caption", "size" ];
+
+    const props = new Map<string, any>();
+    Object.entries(propertyConfig).forEach(([key, value]) => {
+      if (propertiesIComponentDefinition.some(p => p == key))
+        return;
+      props.set(key, value);
+    });
+
+    return props;
+  }
+
   private loadComponent(propertyName: string) {
     const propertyConfig = this.configuration[propertyName];
     const component = ComponentFactory.create(propertyConfig.type);
     component.size = ComponentSizeFactory.create(propertyConfig.size);
     component.name = propertyName;
     component.caption = propertyConfig.caption;
+    component.props = this.loadComponentProps(propertyConfig);
 
     return component;
   }
