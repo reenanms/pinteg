@@ -1,23 +1,17 @@
-import IComponentDefinition from "../contract/IComponentDefinition";
-import ComponentLoader from "../loader/ComponentLoader";
+import IComponent from "../contract/IComponent";
 
 export default class ObjectReader {
-  private configuration: Record<string, IComponentDefinition>;
-  private areaToWrite: Element;
+  private components : IComponent[];
 
-  public constructor(configuration: Record<string, IComponentDefinition>, htmlDivId: string) {
-    this.configuration = configuration;
-    this.areaToWrite = document.getElementById(htmlDivId) as Element;
+  public constructor(components : IComponent[]) {
+    this.components = components;
   }
 
   public read(): Object {
-    const componentLoader = new ComponentLoader(this.configuration);
-    const components = componentLoader.load();
-
     let object : Object = {};
-    for (const component of components) {
-      const componentElement = this.getInputElement(component.name);
-      this.setObjectValue(object, component.name, componentElement.value);
+    for (const component of this.components) {
+      const value = component.readValue();
+      this.setObjectValue(object, component.name, value);
     }
 
     return object;
@@ -25,10 +19,5 @@ export default class ObjectReader {
 
   private setObjectValue(object: Record<string, any>, propertyName: string, value: any): void {
     object[propertyName] = value;
-  }
-
-  private getInputElement(elementName: string): HTMLInputElement {
-    const elementFound = this.areaToWrite.querySelector(`[name="${elementName}"]`);
-    return elementFound as HTMLInputElement;
   }
 }

@@ -1,19 +1,19 @@
 import IComponent from "../contract/IComponent"
-import IHtmlWriter from "../contract/IHtmlWriter"
+import IScreenWriter from "../contract/IScreenWriter";
 
 export default class ScreenLoader {
-  private htmlWriter: IHtmlWriter;
   private components: IComponent[];
+  private screenWriter: IScreenWriter;
 
-  public constructor(htmlWriter: IHtmlWriter, components: IComponent[]) {
-    this.htmlWriter = htmlWriter;
+  public constructor(components: IComponent[], screenWriter: IScreenWriter) {
     this.components = components;
+    this.screenWriter = screenWriter;
   }
   
   public load(): void {
     for (const component of this.components) {
-      component.build(this.htmlWriter);
-      this.htmlWriter.addNewLine();
+      component.build();
+      this.screenWriter.addNewLine();
     }
   }
 }
