@@ -1,36 +1,20 @@
 import IComponent from '../contract/IComponent'
 import IComponentDefinition from '../contract/IComponentDefinition'
+import IScreenReaderWriter from '../contract/IScreenReaderWriter';
 import ComponentFactory from '../factory/ComponentFactory';
-import ComponentSizeFactory from '../factory/ComponentSizeFactory';
 
 export default class ComponentLoader {
   private configuration : Record<string, IComponentDefinition>;
+  private screenReaderWriter : IScreenReaderWriter;
 
-  public constructor(configuration : Record<string, IComponentDefinition>) {
+  public constructor(configuration : Record<string, IComponentDefinition>, screenReaderWriter : IScreenReaderWriter) {
     this.configuration = configuration;
-  }
-
-  private loadComponentProps(propertyConfig: IComponentDefinition) {
-    const propertiesIComponentDefinition = [ "type", "caption", "size" ];
-
-    const props = new Map<string, any>();
-    Object.entries(propertyConfig).forEach(([key, value]) => {
-      if (propertiesIComponentDefinition.some(p => p == key))
-        return;
-      props.set(key, value);
-    });
-
-    return props;
+    this.screenReaderWriter = screenReaderWriter;
   }
 
   private loadComponent(propertyName: string) {
     const propertyConfig = this.configuration[propertyName];
-    const component = ComponentFactory.create(propertyConfig.type);
-    component.size = ComponentSizeFactory.create(propertyConfig.size);
-    component.name = propertyName;
-    component.caption = propertyConfig.caption;
-    component.props = this.loadComponentProps(propertyConfig);
-
+    const component = ComponentFactory.create(propertyName, propertyConfig, this.screenReaderWriter);
     return component;
   }
 

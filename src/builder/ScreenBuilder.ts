@@ -1,24 +1,18 @@
-import IComponentDefinition from "../contract/IComponentDefinition"
-import ComponentLoader from "../loader/ComponentLoader";
+import IComponent from "../contract/IComponent";
+import IScreenWriter from "../contract/IScreenWriter";
 import ScreenLoader from "../loader/ScreenLoader";
-import HtmlDocumentWriter from "../writer/HtmlDocumentWriter";
 
 export default class ScreenBuilder {
-  private configuration: Record<string, IComponentDefinition>;
-  private htmlDivId: string;
+  private components : IComponent[];
+  private screenWriter: IScreenWriter;
 
-  public constructor(configuration: Record<string, IComponentDefinition>, htmlDivId: string) {
-    this.configuration = configuration;
-    this.htmlDivId = htmlDivId;
+  public constructor(components: IComponent[], screenWriter: IScreenWriter) {
+    this.components = components;
+    this.screenWriter = screenWriter;
   }
 
   public build(): void {
-    const htmlWriter = new HtmlDocumentWriter(this.htmlDivId);
-
-    const componentLoader = new ComponentLoader(this.configuration);
-    const components = componentLoader.load();
-
-    const screenLoader = new ScreenLoader(htmlWriter, components);
+    const screenLoader = new ScreenLoader(this.components, this.screenWriter);
     screenLoader.load();
   }
 }

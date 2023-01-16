@@ -7,4 +7,18 @@ describe("ComponentSizeFactory", () => {
 
 		expect(component.name).toBe(sizeName);
 	});
+
+	it("should return a M size", () => {
+		const sizeName = "M";
+		const component = ComponentSizeFactory.create(sizeName);
+
+		expect(component.name).toBe(sizeName);
+	});
+
+	it("should return a G size", () => {
+		const sizeName = "G";
+		const component = ComponentSizeFactory.create(sizeName);
+
+		expect(component.name).toBe(sizeName);
+	});
 });
