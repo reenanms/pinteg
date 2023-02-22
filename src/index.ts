@@ -4,12 +4,14 @@ import IComponentDefinition from "./contract/IComponentDefinition";
 import IScreenReaderWriter from "./contract/IScreenReaderWriter";
 import ComponentLoader from "./loader/ComponentLoader";
 import ObjectReader from "./reader/ObjectReader";
-import HtmlDocumentWriter from "./writer/HtmlDocumentWriter";
+import HtmlDocumentReaderWriter from "./HtmlDocumentReaderWriter";
 import ObjectWriter from "./writer/ObjectWriter";
 
 export class PInteg {
   private configuration: Record<string, IComponentDefinition>
   private htmlDivId: string;
+  private screenReaderWriter?: IScreenReaderWriter;
+  private components?: IComponent[];
 
   public constructor() {
     this.htmlDivId = "app"
@@ -26,36 +28,25 @@ export class PInteg {
   }
 
   public buildScreen() : PInteg {
-    const components = this.loadComponents();
-    const screenReaderWriter = this.createReaderWriter();
-    const builder = new ScreenBuilder(components, screenReaderWriter);
+    this.screenReaderWriter = new HtmlDocumentReaderWriter(this.htmlDivId);
+
+    const componentLoader = new ComponentLoader(this.configuration, this.screenReaderWriter!);
+    this.components = componentLoader.load();
+
+    const builder = new ScreenBuilder(this.components!, this.screenReaderWriter!);
     builder.build();
     return this;
   }
 
   public writeObject(object: Object) : PInteg {
-    const components = this.loadComponents();
-    const writer = new ObjectWriter(components);
+    const writer = new ObjectWriter(this.components!);
     writer.write(object);
     return this;
   }
 
   public readObject() : Object {
-    const components = this.loadComponents();
-    const reader = new ObjectReader(components);
+    const reader = new ObjectReader(this.components!);
     return reader.read();
-  }
-
-  private createReaderWriter() : IScreenReaderWriter {
-    const screenReaderWriter = new HtmlDocumentWriter(this.htmlDivId);
-    return screenReaderWriter;
-  }
-
-  private loadComponents() : IComponent[] {
-    const screenReaderWriter = this.createReaderWriter();
-    const componentLoader = new ComponentLoader(this.configuration, screenReaderWriter);
-    const components = componentLoader.load();
-    return components;
   }
 }
 
