@@ -8,6 +8,9 @@ export default class HtmlStringWriter implements IScreenReaderWriter{
     this.html = "";
     this.values = [];
   }
+  addListener(name: string, callback: (name: string, newValue: any) => void): void {    
+  }
+  
   getValueByElementName(name: string) {
     return this.values.pop();
   }

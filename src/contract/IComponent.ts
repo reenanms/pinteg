@@ -10,3 +10,4 @@ export default interface IComponent {
   writeValue(value: any): void;
   readValue(): any;
 }
+

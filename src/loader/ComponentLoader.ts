@@ -1,5 +1,7 @@
+import IChildComponent from '../contract/IChildComponent';
 import IComponent from '../contract/IComponent'
 import IComponentDefinition from '../contract/IComponentDefinition'
+import IParentComponent from '../contract/IParentComponent';
 import IScreenReaderWriter from '../contract/IScreenReaderWriter';
 import ComponentFactory from '../factory/ComponentFactory';
 
@@ -19,11 +21,23 @@ export default class ComponentLoader {
   }
 
   public load() : IComponent[] {
-    const components : IComponent[] = [];
+    const components: IComponent[] = [];
+    const componentsMapping: Map<string, IComponent> = new Map();
 
     for (const propertyName in this.configuration) {
       const component = this.loadComponent(propertyName);
+      componentsMapping.set(propertyName, component);
       components.push(component);
+    }
+
+    for (const propertyName in this.configuration) {
+      const propertyConfig = this.configuration[propertyName];
+      if (propertyConfig.parent == null)
+        continue;
+
+      const chieldComponent = componentsMapping.get(propertyName) as IChildComponent;
+      const parentComponent = componentsMapping.get(propertyConfig.parent!) as IParentComponent;
+      chieldComponent.parent = parentComponent;
     }
     
     return components;
