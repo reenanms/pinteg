@@ -2,19 +2,20 @@ import IComponent from "../contract/IComponent";
 import IComponentSize from "../contract/IComponentSize";
 import IParentComponent from "../contract/IParentComponent";
 import IScreenReaderWriter from "../contract/IScreenReaderWriter";
+import { ScreenBasicFieldTypes } from "../contract/IScreenWriter";
 
 export default class BasicComponent implements IComponent, IParentComponent {
   protected readonly readerWriter: IScreenReaderWriter;
   protected valueChangedCallbacks: ((component: IParentComponent) => void)[] = [];
 
-  public readonly type: string;
+  public readonly type: ScreenBasicFieldTypes;
   public name: string;
   public caption: string;
   public size: IComponentSize;
   public props: Map<string, any>;
   
 
-  protected constructor(readerWriter: IScreenReaderWriter, type: string) {
+  protected constructor(readerWriter: IScreenReaderWriter, type: ScreenBasicFieldTypes) {
     this.readerWriter = readerWriter;
     this.type = type;
   }
@@ -24,10 +25,7 @@ export default class BasicComponent implements IComponent, IParentComponent {
   }
 
   public build(): void {
-    const html = `<label for="${this.name}">${this.caption}:</label>` +
-      `<input type="${this.type}" id="${this.name}" name="${this.name}" />`;
-
-    this.readerWriter.addHtml(html);
+    this.readerWriter.addBasicField(this.type, this.name, this.caption);
     this.readerWriter.addListener(
       this.name, () => this.valueChangedCallbacks.forEach(callback => callback(this))
     );

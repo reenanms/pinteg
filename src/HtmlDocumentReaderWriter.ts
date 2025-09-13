@@ -1,4 +1,5 @@
 import IScreenReaderWriter from "./contract/IScreenReaderWriter";
+import { ScreenBasicFieldTypes } from "./contract/IScreenWriter";
 
 export default class HtmlDocumentReaderWriter implements IScreenReaderWriter {
   private document: Document;
@@ -14,7 +15,22 @@ export default class HtmlDocumentReaderWriter implements IScreenReaderWriter {
     this.areaToWrite.appendChild(lineBreak);
   }
 
-  public addHtml(html: string): void {
+  private buildFieldHtml(type: ScreenBasicFieldTypes, name: string, caption: string): string {
+    if (type === ScreenBasicFieldTypes.List)
+      return `<label for="${name}">${caption}:</label>` +
+             `<select name="${name}" id="${name}" ></select>`;
+    
+    return `<label for="${name}">${caption}:</label>` +
+           `<input type="${type}" id="${name}" name="${name}" />`;
+  }
+
+  public addBasicField(type: ScreenBasicFieldTypes, name: string, caption: string): void
+  {
+    const fieldHtml = this.buildFieldHtml(type, name, caption);
+    this.addHtml(`<div class="field-group">${fieldHtml}</div>`);
+  }
+
+  private addHtml(html: string): void {
     this.areaToWrite.insertAdjacentHTML('beforeend', html);
   }
 

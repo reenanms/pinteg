@@ -4,6 +4,7 @@ import IScreenReaderWriter from "../contract/IScreenReaderWriter";
 import IParentComponent from '../contract/IParentComponent';
 import IChildComponent from "../contract/IChildComponent";
 import HtmlDocumentReaderWriter from "../HtmlDocumentReaderWriter";
+import { ScreenBasicFieldTypes } from "../contract/IScreenWriter";
 
 export default class ListComponent extends BasicComponent
   implements IChildComponent {  
@@ -13,15 +14,15 @@ export default class ListComponent extends BasicComponent
   private static NO_SELECT_CAPTION = "< select >"
     
   constructor(readerWriter: IScreenReaderWriter) {
-    super(readerWriter, "list");
+    super(readerWriter, ScreenBasicFieldTypes.List);
   }
 
   public override build(): void {
-    const html =
-      `<label for="${this.name}">${this.caption}:</label>` +
-      `<select name="${this.name}" id="${this.name}" ></select>`;
+    // const html =
+    //   `<label for="${this.name}">${this.caption}:</label>` +
+    //   `<select name="${this.name}" id="${this.name}" ></select>`;
     
-    this.readerWriter.addHtml(html);
+    this.readerWriter.addBasicField(this.type, this.name, this.caption);
     this.readerWriter.addListener(this.name,
       () => this.valueChangedCallbacks.forEach(callback => callback(this))
     );
