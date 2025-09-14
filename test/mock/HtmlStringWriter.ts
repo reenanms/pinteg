@@ -1,4 +1,5 @@
 import IScreenReaderWriter from "../../src/contract/IScreenReaderWriter";
+import { ScreenBasicFieldTypes } from "../../src/contract/IScreenWriter";
 
 export default class HtmlStringWriter implements IScreenReaderWriter{
   private html: string;
@@ -8,7 +9,11 @@ export default class HtmlStringWriter implements IScreenReaderWriter{
     this.html = "";
     this.values = [];
   }
-  addListener(name: string, callback: (name: string, newValue: any) => void): void {    
+  public addBasicField(type: ScreenBasicFieldTypes, name: string, caption: string): void {
+    this.html += `<label for="${name}">${caption}:</label><input type="${type}" id="${name}" name="${name}" />`;
+  }
+  
+  public addListener(name: string, callback: (name: string, newValue: any) => void): void {    
   }
   
   getValueByElementName(name: string) {
@@ -20,10 +25,6 @@ export default class HtmlStringWriter implements IScreenReaderWriter{
 
   public addNewLine(): void {
     this.html += "<br />";
-  }
-
-  public addHtml(html: string): void {
-    this.html += html;
   }
 
   public getHtml(): string {
