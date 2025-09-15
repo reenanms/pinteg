@@ -11,9 +11,7 @@ export default class ScreenLoader {
   }
   
   public load(): void {
-    for (const component of this.components) {
+    for (const component of this.components)
       component.build();
-      this.screenWriter.addNewLine();
-    }
   }
 }

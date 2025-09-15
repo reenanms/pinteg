@@ -1,3 +1,5 @@
+import IComponentSize from "./IComponentSize";
+
 export enum ScreenBasicFieldTypes {
   Integer = 'integer',
   Double = 'double',
@@ -6,8 +8,7 @@ export enum ScreenBasicFieldTypes {
 }
 
 export default interface IScreenWriter {
-
-  addNewLine(): void;
-  addBasicField(type: ScreenBasicFieldTypes, name: string, caption: string): void;
+  addBasicField(type: ScreenBasicFieldTypes, name: string, caption: string, size: IComponentSize): void;
   setValueByElementName(name: string, value: any): void;
+  setOptionsByElementName(name: string, options: { key: string; caption: string; }[], defaultSelectedKey?: string): void;
 }

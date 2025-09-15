@@ -1,7 +1,7 @@
 import IScreenReaderWriter from "../../src/contract/IScreenReaderWriter";
 import { ScreenBasicFieldTypes } from "../../src/contract/IScreenWriter";
 
-export default class HtmlStringWriter implements IScreenReaderWriter{
+export default class StringScreenReaderWriter implements IScreenReaderWriter{
   private html: string;
   private values: any[];
 
@@ -9,6 +9,7 @@ export default class HtmlStringWriter implements IScreenReaderWriter{
     this.html = "";
     this.values = [];
   }
+  
   public addBasicField(type: ScreenBasicFieldTypes, name: string, caption: string): void {
     this.html += `<label for="${name}">${caption}:</label><input type="${type}" id="${name}" name="${name}" />`;
   }
@@ -22,9 +23,7 @@ export default class HtmlStringWriter implements IScreenReaderWriter{
   setValueByElementName(name: string, value: any): void {
     this.values.push(value);
   }
-
-  public addNewLine(): void {
-    this.html += "<br />";
+  setOptionsByElementName(name: string, options: { key: string; caption: string; }[], defaultSelectedKey?: string): void {
   }
 
   public getHtml(): string {

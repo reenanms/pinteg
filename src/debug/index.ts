@@ -12,8 +12,8 @@ const configuration = {
           { key: "keyC", caption: "caption C" }
         ]
       },
-    param3: { type:"double", caption:"Sample with double:", size: "P" },
-    param4: { type:"integer", caption:"Sample with integer:", size: "P" },
+    param3: { type:"double", caption:"Sample with double:", size: "M" },
+    param4: { type:"integer", caption:"Sample with integer:", size: "G" },
     param5: {
       type:"list",
       caption:"Sample with list:",
@@ -28,7 +28,7 @@ const configuration = {
     },
   };
 
-const initialObject = {
+const initialObjectA = {
     param1: "keyB",
     param2: "keyB",
     param3: 9.9,
@@ -37,11 +37,30 @@ const initialObject = {
   };
 
 
+  //appA
 pinteg
-  .setDivId("app")
+  .setDivId("appA")
   .setConfiguration(configuration)
   .buildScreen()
-  .writeObject(initialObject);
+  .writeObject(initialObjectA);
+
+
+
+const initialObjectB = {
+    param1: "keyB",
+    param2: "keyB",
+    param3: 9.9,
+    param4: 9,
+    param5: "keyB_A",
+  };
+
+//appB
+pinteg
+  .setDivId("appB")
+  .setConfiguration(configuration)
+  .buildScreen()
+  .writeObject(initialObjectB);
+
 
 const finalObject = pinteg.readObject();
 console.log(finalObject);

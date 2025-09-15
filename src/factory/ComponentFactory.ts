@@ -6,6 +6,7 @@ import ListComponent from '../component/ListComponent';
 import IScreenReaderWriter from '../contract/IScreenReaderWriter';
 import IComponentDefinition from '../contract/IComponentDefinition';
 import ComponentSizeFactory from './ComponentSizeFactory';
+import { UnsupportedComponentTypeError } from '../error/Errors';
 
 export default class ComponentFactory {
   private static types: { [_: string]: (screenReaderWriter : IScreenReaderWriter) => IComponent } = {
@@ -16,6 +17,9 @@ export default class ComponentFactory {
   };
 
   public static create(name: string, componentDefinition: IComponentDefinition, screenReaderWriter : IScreenReaderWriter): IComponent {
+    if (!this.types[componentDefinition.type])
+      throw new UnsupportedComponentTypeError(componentDefinition.type);
+    
     const component = this.types[componentDefinition.type](screenReaderWriter);
     component.size = ComponentSizeFactory.create(componentDefinition.size);
     component.name = name;

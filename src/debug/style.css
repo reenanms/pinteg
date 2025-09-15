@@ -58,7 +58,7 @@ h2 {
 
 form {
     display: flex;
-    flex-direction: column;
+    flex-direction: row; /* row: for horizontal layout / column: for vertical layout */
     gap: 15px;
     padding: 20px;
     border-radius: 12px;
@@ -72,8 +72,8 @@ label {
 
 /* Inputs e selects alinhados */
 input {
-    width: var(--input-width);
     height: var(--input-height);
+    /* width: var(--input-width); */
     border-radius: var(--input-radius);
     border: 1px solid var(--input-border);
     padding: var(--input-padding);
@@ -87,8 +87,8 @@ input {
 }
 
 select {
-    width: var(--input-width);
     height: var(--input-height);
+    /* width: var(--input-width); */
     border-radius: var(--input-radius);
     border: 1px solid var(--input-border);
     padding: var(--input-padding);

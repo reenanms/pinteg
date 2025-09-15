@@ -1,3 +1,4 @@
+import IComponentSize from "./contract/IComponentSize";
 import IScreenReaderWriter from "./contract/IScreenReaderWriter";
 import { ScreenBasicFieldTypes } from "./contract/IScreenWriter";
 
@@ -10,24 +11,37 @@ export default class HtmlDocumentReaderWriter implements IScreenReaderWriter {
     this.areaToWrite = document.getElementById(elementId) as Element;
   }
 
-  public addNewLine(): void {
-    var lineBreak = this.document.createElement("br");
-    this.areaToWrite.appendChild(lineBreak);
+  private addStyle(id: string, content: string) {
+    // verifica se já existe um style com esse id
+    if (!this.document.getElementById(id)) {
+      const style = this.document.createElement("style");
+      style.id = id;             // define um id único
+      style.textContent = content; // adiciona CSS
+      this.document.head.appendChild(style);
+    }
   }
 
   private buildFieldHtml(type: ScreenBasicFieldTypes, name: string, caption: string): string {
     if (type === ScreenBasicFieldTypes.List)
       return `<label for="${name}">${caption}:</label>` +
-             `<select name="${name}" id="${name}" ></select>`;
-    
+             `<select name="${name}" id="${name}"></select>`;
+
     return `<label for="${name}">${caption}:</label>` +
            `<input type="${type}" id="${name}" name="${name}" />`;
   }
 
-  public addBasicField(type: ScreenBasicFieldTypes, name: string, caption: string): void
+  
+
+  public addBasicField(type: ScreenBasicFieldTypes, name: string, caption: string, size: IComponentSize): void
   {
+    const styleName = `input-width-${size.name}`;
+    this.addStyle(styleName, `
+      .${styleName} {
+          width: calc(var(--input-width) * ${size.width});
+      }
+    `); 
     const fieldHtml = this.buildFieldHtml(type, name, caption);
-    this.addHtml(`<div class="field-group">${fieldHtml}</div>`);
+    this.addHtml(`<div class="field-group ${styleName}">${fieldHtml}</div>`);
   }
 
   private addHtml(html: string): void {

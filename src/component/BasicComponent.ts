@@ -25,7 +25,7 @@ export default class BasicComponent implements IComponent, IParentComponent {
   }
 
   public build(): void {
-    this.readerWriter.addBasicField(this.type, this.name, this.caption);
+    this.readerWriter.addBasicField(this.type, this.name, this.caption, this.size);
     this.readerWriter.addListener(
       this.name, () => this.valueChangedCallbacks.forEach(callback => callback(this))
     );

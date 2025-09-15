@@ -3,7 +3,6 @@ import BasicComponent from "./BasicComponent";
 import IScreenReaderWriter from "../contract/IScreenReaderWriter";
 import IParentComponent from '../contract/IParentComponent';
 import IChildComponent from "../contract/IChildComponent";
-import HtmlDocumentReaderWriter from "../HtmlDocumentReaderWriter";
 import { ScreenBasicFieldTypes } from "../contract/IScreenWriter";
 
 export default class ListComponent extends BasicComponent
@@ -22,7 +21,7 @@ export default class ListComponent extends BasicComponent
     //   `<label for="${this.name}">${this.caption}:</label>` +
     //   `<select name="${this.name}" id="${this.name}" ></select>`;
     
-    this.readerWriter.addBasicField(this.type, this.name, this.caption);
+    this.readerWriter.addBasicField(this.type, this.name, this.caption, this.size);
     this.readerWriter.addListener(this.name,
       () => this.valueChangedCallbacks.forEach(callback => callback(this))
     );
@@ -55,7 +54,7 @@ export default class ListComponent extends BasicComponent
     const parentValue = parent?.readValue();
     const options = this.getOptions(parentValue);
 
-    new HtmlDocumentReaderWriter("app")
+    this.readerWriter
       .setOptionsByElementName(this.name, options, ListComponent.NO_SELECT_KEY);
   }
 
