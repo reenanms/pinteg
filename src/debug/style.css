@@ -1,48 +1,93 @@
 /* Variáveis padrão (claro) */
 :root {
-    --bg-color: #ffffff;
-    --text-color: #222222;
-    --input-bg: #f5f5f5;
-    --input-border: #cccccc;
+    /* Core Palette */
+    --color-primary: #007bff;
+    --color-background: #ffffff;
+    --color-text: #222222;
 
-    --input-width: 400px;
-    --input-height: 90px;
-    --input-radius: 8px;
-    --font-size: 16px;
-    --input-padding: 8px 10px;
+    /* Surfaces */
+    --color-surface: #f5f5f5;
+    --color-surface-alt: #f5f5f5;
+    --color-surface-hover: #f9f9f9;
+
+    /* Borders */
+    --color-border: #cccccc;
+    --color-border-subtle: #e0e0e0;
+
+    /* Focus States */
+    --color-focus-border: var(--color-primary);
+    --color-focus-background: rgba(0, 123, 255, 0.1);
+
+    /* Sizing & Layout */
+    --input-width: 500px;
+    --input-height: 30px;
+    --input-radius: 6px;
+    --table-radius: 6px;
+    --font-size: 14px;
+    --input-padding: 6px 8px;
 }
 
 /* Tema escuro */
 .dark-theme {
-    --bg-color: #121212;
-    --text-color: #f1f1f1;
-    --input-bg: #1e1e1e;
-    --input-border: #444;
+    /* Core Palette */
+    --color-primary: #009dff;
+    --color-background: #121212;
+    --color-text: #f1f1f1;
 
-    --input-width: 320px;
-    --input-height: 42px;
-    --input-radius: 10px;
-    --font-size: 16px;
-    --input-padding: 8px 10px;
+    /* Surfaces */
+    --color-surface: #1e1e1e;
+    --color-surface-alt: #1e1e1e;
+    --color-surface-hover: #2a2a2a;
+
+    /* Borders */
+    --color-border: #444;
+    --color-border-subtle: #333;
+
+    /* Focus States */
+    --color-focus-border: var(--color-primary);
+    --color-focus-background: rgba(0, 157, 255, 0.15);
+
+    /* Sizing & Layout */
+    --input-width: 500px;
+    --input-height: 40px;
+    --input-radius: 6px;
+    --table-radius: 6px;
+    --font-size: 14px;
+    --input-padding: 6px 8px;
 }
 
 /* Tema compacto */
 .compact-theme {
-    --bg-color: #fdf6e3;
-    --text-color: #333333;
-    --input-bg: #fff8dc;
-    --input-border: #aaa;
+    /* Core Palette */
+    --color-primary: #d33682;
+    --color-background: #fdf6e3;
+    --color-text: #333333;
 
-    --input-width: 220px;
-    --input-height: 30px;
+    /* Surfaces */
+    --color-surface: #fff8dc;
+    --color-surface-alt: #f0eada;
+    --color-surface-hover: #f7f1e3;
+
+    /* Borders */
+    --color-border: #aaa;
+    --color-border-subtle: #dcdcdc;
+
+    /* Focus States */
+    --color-focus-border: var(--color-primary);
+    --color-focus-background: rgba(211, 54, 130, 0.1);
+
+    /* Sizing & Layout */
+    --input-width: 500px;
+    --input-height: 50px;
     --input-radius: 6px;
+    --table-radius: 6px;
     --font-size: 14px;
     --input-padding: 6px 8px;
 }
 
 body {
-    background: var(--bg-color);
-    color: var(--text-color);
+    background: var(--color-background);
+    color: var(--color-text);
     font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
@@ -56,9 +101,9 @@ h2 {
     margin-bottom: 20px;
 }
 
-form {
+.form {
     display: flex;
-    flex-direction: row; /* row: for horizontal layout / column: for vertical layout */
+    flex-direction: column; /* row: for horizontal layout / column: for vertical layout */
     gap: 15px;
     padding: 20px;
     border-radius: 12px;
@@ -75,11 +120,12 @@ input {
     height: var(--input-height);
     /* width: var(--input-width); */
     border-radius: var(--input-radius);
-    border: 1px solid var(--input-border);
+    border: 1px solid var(--color-border);
+    margin: 1px;
     padding: var(--input-padding);
     font-size: var(--font-size);
-    background: var(--input-bg);
-    color: var(--text-color);
+    background: var(--color-surface);
+    color: var(--color-text);
     box-sizing: border-box;      /* inclui padding e border na largura/altura */
     appearance: none;            /* remove estilo padrão de select */
     -webkit-appearance: none;
@@ -90,12 +136,13 @@ select {
     height: var(--input-height);
     /* width: var(--input-width); */
     border-radius: var(--input-radius);
-    border: 1px solid var(--input-border);
+    border: 1px solid var(--color-border);
+    margin: 1px;
     padding: var(--input-padding);
     font-size: var(--font-size);
-    background: var(--input-bg) url('data:image/svg+xml;utf8,<svg fill="%23333" height="10" viewBox="0 0 10 10" width="10" xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 10,0 5,6"/></svg>') no-repeat right 10px center;
+    background: var(--color-surface) url('data:image/svg+xml;utf8,<svg fill="%23333" height="10" viewBox="0 0 10 10" width="10" xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 10,0 5,6"/></svg>') no-repeat right 10px center;
     background-size: 10px;
-    color: var(--text-color);
+    color: var(--color-text);
     box-sizing: border-box;
     appearance: none;
     -webkit-appearance: none;
@@ -115,8 +162,8 @@ button {
     border-radius: var(--input-radius);
     border: none;
     cursor: pointer;
-    background: var(--text-color);
-    color: var(--bg-color);
+    background: var(--color-text);
+    color: var(--color-background);
     font-size: var(--font-size);
     font-weight: bold;
     transition: 0.3s;
@@ -126,18 +173,53 @@ button:hover {
     opacity: 0.8;
 }
 
-.theme-switcher {
+/* Table Styles */
+table {
+    width: 100%;
+    border-radius: var(--table-radius);
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
     margin-top: 20px;
-    display: flex;
-    gap: 10px;
+    font-size: var(--font-size);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.theme-switcher button {
-    width: auto;
-    padding: 8px 12px;
+thead {
+    background-color: var(--color-surface-alt);
 }
 
-.field-group {
-    display: flex;
-    flex-direction: column;
+th {
+    text-align: left;
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--color-border-subtle);
+}
+
+th {
+    font-weight: bold;
+}
+
+tbody tr:hover {
+    background-color: var(--color-surface-hover);
+}
+
+tbody tr:hover td {
+    border-bottom-color: transparent; /* Remove border on hover for seamless look */
+}
+
+td div input,
+td div select {
+    border: none; /* Remove all borders by default */
+    border-bottom: 0px solid var(--color-border-subtle); /* Re-apply bottom border here */
+    background-color: transparent;
+    border-radius: 0;
+    font-size: inherit;
+    color: inherit;    
+}
+
+td div input:focus,
+td div select:focus {
+    outline: none;
+    border: 0px solid var(--color-focus-border); /* A distinct focus color */
+    background-color: var(--color-focus-background);
 }

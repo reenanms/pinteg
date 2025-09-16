@@ -5,20 +5,23 @@
     <link rel="stylesheet" href="./style.css">
   </head>
   <body>
-    <form id="appA">
-      <!-- <div id="app"></div>-->
-    </form>
+    <div id="app0"></div>
+    
+    <hr />
 
-    <form id="appB"></form>
-    <hr>
+    <div id="app1"></div>
 
-    <button type="submit">Enviar</button>
+    <hr />
 
     <div class="theme-switcher">
       <button onclick="setTheme('default')">Claro</button>
       <button onclick="setTheme('dark-theme')">Escuro</button>
       <button onclick="setTheme('compact-theme')">Compacto</button>
     </div>
+
+    <hr />
+
+    <button onclick="printObj()">Read object</button>
 
     <script>
       function setTheme(theme) {

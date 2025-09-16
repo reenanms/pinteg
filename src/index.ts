@@ -1,52 +1,87 @@
-import ScreenBuilder from "./builder/ScreenBuilder";
-import IComponent from "./contract/IComponent";
-import IComponentDefinition from "./contract/IComponentDefinition";
-import IScreenReaderWriter from "./contract/IScreenReaderWriter";
-import ComponentLoader from "./loader/ComponentLoader";
-import ObjectReader from "./reader/ObjectReader";
-import HtmlDocumentReaderWriter from "./HtmlDocumentReaderWriter";
-import ObjectWriter from "./writer/ObjectWriter";
+import { ScreenBuilder } from "./builder/ScreenBuilder";
+import { HtmlDocumentReaderWriter } from "./HtmlDocumentReaderWriter";
+import { ComponentFactory } from "./factory/ComponentFactory";
+import { ComponentSchema } from './component/ComponentSchema';
+import { BuildConfig, ViewMode, IComponent } from "./contract/IComponent";
+import { ComponentMultipleValue } from "./component/ComponentMultipleValue";
 
 export class PInteg {
-  private configuration: Record<string, IComponentDefinition>
-  private htmlDivId: string;
-  private screenReaderWriter?: IScreenReaderWriter;
-  private components?: IComponent[];
+  private schema: ComponentSchema | null = null;
+  private schemaName: string = "main";
+  private htmlDivId: string = "app";
+  private component: IComponent | null = null;
+  private buildConfig: BuildConfig = new BuildConfig();
 
   public constructor() {
-    this.htmlDivId = "app"
   }
 
   public setDivId(htmlDivId: string): PInteg {
     this.htmlDivId = htmlDivId;
+
     return this;
   }
 
-  public setConfiguration(configuration: Record<string, IComponentDefinition>): PInteg {
-    this.configuration = configuration;
+   public setSchemaName(name: string) : PInteg {
+    this.schemaName = name;
+
     return this;
   }
 
-  public buildScreen() : PInteg {
-    this.screenReaderWriter = new HtmlDocumentReaderWriter(this.htmlDivId);
+  public registerSchema(name: string, schema: ComponentSchema): PInteg {
+    ComponentFactory.registerTypeBySchema(name, schema);
 
-    const componentLoader = new ComponentLoader(this.configuration, this.screenReaderWriter!);
-    this.components = componentLoader.load();
-
-    const builder = new ScreenBuilder(this.components!, this.screenReaderWriter!);
-    builder.build();
     return this;
   }
 
-  public writeObject(object: Object) : PInteg {
-    const writer = new ObjectWriter(this.components!);
-    writer.write(object);
+  public setMainSchema(schema: ComponentSchema): PInteg {
+    this.schema = schema;
     return this;
   }
 
-  public readObject() : Object {
-    const reader = new ObjectReader(this.components!);
-    return reader.read();
+  public setReadOnly(): PInteg {
+    this.buildConfig.readonly = true;
+    return this;
+  }
+
+  public setViewMultiple(): PInteg {
+    this.buildConfig.mode = ViewMode.Multiple;
+    return this;
+  }
+
+  public buildForm() : PInteg {
+    const screenReaderWriter = new HtmlDocumentReaderWriter(this.htmlDivId);
+
+    this.component = this.schema != null ?
+        ComponentFactory.createFromSchema(this.schema!, screenReaderWriter) :
+        ComponentFactory.createFromTypeName(this.schemaName, screenReaderWriter);
+    new ScreenBuilder(this.component!)
+      .build(this.buildConfig);
+    
+    return this;
+  }
+
+  ///ComponentMultipleValue
+  public buildList() : PInteg {
+    const screenReaderWriter = new HtmlDocumentReaderWriter(this.htmlDivId);
+
+    this.buildConfig.mode = ViewMode.Multiple;
+    this.component = new ComponentMultipleValue(screenReaderWriter, this.schema!, false);
+        // ComponentFactory.createFromSchema(this.schema!, screenReaderWriter) :
+        // ComponentFactory.createFromTypeName(this.schemaName, screenReaderWriter);
+    new ScreenBuilder(this.component!)
+      .build(this.buildConfig);
+    
+    return this;
+  }
+
+  public writeObject(value: any) : PInteg {
+    this.component?.writeValue(value);
+
+    return this;
+  }
+
+  public readObject() : any {
+    return this.component?.readValue();
   }
 }
 

@@ -1,4 +1,4 @@
-import ComponentSizeFactory from "../../src/factory/ComponentSizeFactory";
+import { ComponentSizeFactory } from "../../src/factory/ComponentSizeFactory";
 
 describe("ComponentSizeFactory", () => {
 	it("should return a P size", () => {

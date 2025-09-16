@@ -1,37 +1,39 @@
-import IChildComponent from '../contract/IChildComponent';
-import IComponent from '../contract/IComponent'
-import IComponentDefinition from '../contract/IComponentDefinition'
-import IParentComponent from '../contract/IParentComponent';
-import IScreenReaderWriter from '../contract/IScreenReaderWriter';
-import ComponentFactory from '../factory/ComponentFactory';
+import { IChildComponent } from '../contract/IChildComponent';
+import { IParentComponent } from '../contract/IParentComponent';
+import { IScreenReaderWriter } from '../contract/IScreenReaderWriter';
+import { ComponentFactory } from '../factory/ComponentFactory';
+import { ComponentSchema } from '../component/ComponentSchema';
+import { IComponent } from '../contract/IComponent';
 
-export default class ComponentLoader {
-  private configuration : Record<string, IComponentDefinition>;
-  private screenReaderWriter : IScreenReaderWriter;
+export class ComponentLoader {
+  private schema : ComponentSchema;
+  private getScreenReaderWriters : (index: number) => IScreenReaderWriter;
 
-  public constructor(configuration : Record<string, IComponentDefinition>, screenReaderWriter : IScreenReaderWriter) {
-    this.configuration = configuration;
-    this.screenReaderWriter = screenReaderWriter;
+  public constructor(schema : ComponentSchema, getScreenReaderWriters: (index: number) => IScreenReaderWriter) {
+    this.schema = schema;
+    this.getScreenReaderWriters = getScreenReaderWriters;
   }
 
-  private loadComponent(propertyName: string) {
-    const propertyConfig = this.configuration[propertyName];
-    const component = ComponentFactory.create(propertyName, propertyConfig, this.screenReaderWriter);
+  private loadComponent(propertyName: string, screenReaderWriter: IScreenReaderWriter) {
+    const propertyConfig = this.schema[propertyName];
+    const component = ComponentFactory.createFromProperty([propertyName, propertyConfig], screenReaderWriter);
     return component;
   }
 
-  public load() : IComponent[] {
-    const components: IComponent[] = [];
+  public load() : Map<string, IComponent> {
     const componentsMapping: Map<string, IComponent> = new Map();
 
-    for (const propertyName in this.configuration) {
-      const component = this.loadComponent(propertyName);
+    let index = 0;
+    for (const propertyName in this.schema) {
+      const screenReaderWriter = this.getScreenReaderWriters(index);
+      const component = this.loadComponent(propertyName, screenReaderWriter);
       componentsMapping.set(propertyName, component);
-      components.push(component);
+
+      index++;
     }
 
-    for (const propertyName in this.configuration) {
-      const propertyConfig = this.configuration[propertyName];
+    for (const propertyName in this.schema) {
+      const propertyConfig = this.schema[propertyName];
       if (propertyConfig.parent == null)
         continue;
 
@@ -40,6 +42,6 @@ export default class ComponentLoader {
       chieldComponent.parent = parentComponent;
     }
     
-    return components;
+    return componentsMapping;
   }
 }

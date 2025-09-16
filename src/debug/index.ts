@@ -1,6 +1,6 @@
 import pinteg from "../index"
 
-const configuration = {
+const userSchema = {
     param1: { type:"text", caption:"Sample with text:", size: "P" },
     param2: {
       type:"list",
@@ -28,39 +28,70 @@ const configuration = {
     },
   };
 
-const initialObjectA = {
-    param1: "keyB",
+const mainSchema = {
+  param0: { type:"user" },
+  param1: { type:"user" },
+  param2: { type:"user" },
+};
+
+
+const initialObject0 =
+{
+  param0: {
+    param1: "user A",
+    param2: "keyA",
+    param3: 1.1,
+    param4: 1,
+    param5: "keyA_B",
+  },
+  param1: {
+    param1: "user B",
     param2: "keyB",
-    param3: 9.9,
-    param4: 9,
-    param5: "keyB_A",
-  };
+    param3: 2.2,
+    param4: 2,
+    param5: "keyB_B",
+  },
+  param2: {
+    param1: "user C",
+    param2: "keyC",
+    param3: 3.3,
+    param4: 3,
+    param5: "",
+  }
+};
 
-
-  //appA
+//complex object
 pinteg
-  .setDivId("appA")
-  .setConfiguration(configuration)
-  .buildScreen()
-  .writeObject(initialObjectA);
+  .setDivId("app0")
+  .registerSchema("user", userSchema)
+  .setMainSchema(mainSchema)
+  .setReadOnly()
+  .setViewMultiple()
+  .buildForm()
+  .writeObject(initialObject0);
 
 
+const schema = {
+  username: { type:"text", caption:"Username:", size: "P" },
+  name:     { type:"text", caption:"Name:",     size: "G" },
+  email:    { type:"text", caption:"E-mail:",   size: "M" }
+};
+const initialObject = [
+  { username: "username0",  name: "User name 0",  email: "username0@user.com" },
+  { username: "username1",  name: "User name 1",  email: "username1@user.com" },
+  { username: "username2",  name: "User name 2",  email: "username2@user.com" }
+];
 
-const initialObjectB = {
-    param1: "keyB",
-    param2: "keyB",
-    param3: 9.9,
-    param4: 9,
-    param5: "keyB_A",
-  };
-
-//appB
+//list object
 pinteg
-  .setDivId("appB")
-  .setConfiguration(configuration)
-  .buildScreen()
-  .writeObject(initialObjectB);
+  .setDivId("app1")
+  .setMainSchema(schema)
+  .setReadOnly()
+  .setViewMultiple()
+  .buildList()
+  .writeObject(initialObject);
 
-
-const finalObject = pinteg.readObject();
-console.log(finalObject);
+(window as any).printObj = () => {
+  const obj = pinteg.readObject();
+  console.log(obj);
+}

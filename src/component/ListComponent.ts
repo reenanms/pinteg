@@ -1,27 +1,24 @@
 
-import BasicComponent from "./BasicComponent";
-import IScreenReaderWriter from "../contract/IScreenReaderWriter";
-import IParentComponent from '../contract/IParentComponent';
-import IChildComponent from "../contract/IChildComponent";
+import { BasicComponent } from "./BasicComponent";
+import { IScreenReaderWriter } from "../contract/IScreenReaderWriter";
+import { IParentComponent } from '../contract/IParentComponent';
+import { IChildComponent } from "../contract/IChildComponent";
 import { ScreenBasicFieldTypes } from "../contract/IScreenWriter";
+import { ComponentSchemaProperty } from "./ComponentSchema";
+import { BuildConfig, ViewMode } from "../contract/IComponent";
 
-export default class ListComponent extends BasicComponent
-  implements IChildComponent {  
+export class ListComponent extends BasicComponent implements IChildComponent {  
   public parent: IParentComponent;
 
   private static NO_SELECT_KEY = "";
-  private static NO_SELECT_CAPTION = "< select >"
+  private static NO_SELECT_CAPTION = "< Select >"
     
-  constructor(readerWriter: IScreenReaderWriter) {
-    super(readerWriter, ScreenBasicFieldTypes.List);
+  constructor(readerWriter: IScreenReaderWriter, property: ComponentSchemaProperty) {
+    super(readerWriter, property, ScreenBasicFieldTypes.List);
   }
 
-  public override build(): void {
-    // const html =
-    //   `<label for="${this.name}">${this.caption}:</label>` +
-    //   `<select name="${this.name}" id="${this.name}" ></select>`;
-    
-    this.readerWriter.addBasicField(this.type, this.name, this.caption, this.size);
+  public override build(config: BuildConfig): void {
+    this.readerWriter.createBasicField(this.screenBasicType, this.name, config.mode == ViewMode.Single ? this.caption : "", this.size, config.readonly);
     this.readerWriter.addListener(this.name,
       () => this.valueChangedCallbacks.forEach(callback => callback(this))
     );
@@ -34,7 +31,7 @@ export default class ListComponent extends BasicComponent
 
   public override writeValue(value: any): void {
     const validValue = this.getValidValue(value);
-    this.readerWriter.setValueByElementName(this.name, validValue);
+    this.readerWriter.setValueByName(this.name, validValue);
     this.valueChangedCallbacks.forEach(callback => callback(this));
   }
 
@@ -55,7 +52,7 @@ export default class ListComponent extends BasicComponent
     const options = this.getOptions(parentValue);
 
     this.readerWriter
-      .setOptionsByElementName(this.name, options, ListComponent.NO_SELECT_KEY);
+      .setOptionsByName(this.name, options, ListComponent.NO_SELECT_KEY);
   }
 
   private getOptions(filter?: string): { key: string; caption: string; }[] {
