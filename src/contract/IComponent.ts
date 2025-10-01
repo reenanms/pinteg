@@ -1,13 +1,15 @@
-import IComponentSize from "./IComponentSize";
+export enum ViewMode {
+  Multiple = 'multiple',
+  Single = 'single',
+}
 
-export default interface IComponent {
-  readonly type: string;
-  name: string;
-  caption: string;
-  size: IComponentSize;
-  props: Map<string, any>;
-  build(): void;
+export class BuildConfig {
+  readonly: boolean = false;
+  mode: ViewMode = ViewMode.Single;
+}
+
+export interface IComponent {
+  build(config: BuildConfig): void;
   writeValue(value: any): void;
   readValue(): any;
 }
-

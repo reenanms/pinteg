@@ -29,7 +29,7 @@ npm i pinteg
 ```typescript
 import pinteg from "pinteg";
 
-const configuration = {
+const schema = {
 	param1: { type: "string", caption: "Sample with string:", size: "P" },
 	param2: {
 		type: "list",
@@ -45,9 +45,8 @@ const configuration = {
 
 pinteg
 	.setDivId("app")
-	.setConfiguration(configuration)
-
-	.buildScreen();
+	.setMainSchema(schema)
+	.buildForm();
 ```
 
 ### Writing Values to the Screen

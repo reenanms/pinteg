@@ -1,18 +1,14 @@
-import IComponent from "../contract/IComponent";
-import IScreenWriter from "../contract/IScreenWriter";
-import ScreenLoader from "../loader/ScreenLoader";
+import { BuildConfig, IComponent } from "../contract/IComponent";
 
-export default class ScreenBuilder {
+export class ScreenBuilder {
   private components : IComponent[];
-  private screenWriter: IScreenWriter;
 
-  public constructor(components: IComponent[], screenWriter: IScreenWriter) {
+  public constructor(...components: IComponent[]) {
     this.components = components;
-    this.screenWriter = screenWriter;
   }
 
-  public build(): void {
-    const screenLoader = new ScreenLoader(this.components, this.screenWriter);
-    screenLoader.load();
+  public build(config: BuildConfig): void {
+    for (const component of this.components)
+      component.build(config);
   }
 }

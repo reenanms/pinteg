@@ -1,6 +1,6 @@
 
-import IScreenReader from "./IScreenReader";
-import IScreenWriter from "./IScreenWriter";
+import { IScreenReader } from "./IScreenReader";
+import { IScreenWriter } from "./IScreenWriter";
 
-export default interface IScreenReaderWriter extends IScreenReader, IScreenWriter {
+export interface IScreenReaderWriter extends IScreenReader, IScreenWriter {
 }

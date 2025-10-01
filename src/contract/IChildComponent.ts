@@ -1,6 +1,6 @@
-import IComponent from "./IComponent";
-import IParentComponent from "./IParentComponent";
+import { IComponent } from "./IComponent";
+import { IParentComponent } from "./IParentComponent";
 
-export default interface IChildComponent extends IComponent {
+export interface IChildComponent extends IComponent {
   parent: IParentComponent;
 }

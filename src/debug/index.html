@@ -2,11 +2,35 @@
 <html>
   <head>
     <title>Page Title</title>
+    <link rel="stylesheet" href="./style.css">
   </head>
   <body>
-    <div></div>
-    <div>
-      <div id="app"></span>
+    <div id="app0"></div>
+    
+    <hr />
+
+    <div id="app1"></div>
+
+    <hr />
+
+    <div class="theme-switcher">
+      <button onclick="setTheme('default')">Claro</button>
+      <button onclick="setTheme('dark-theme')">Escuro</button>
+      <button onclick="setTheme('compact-theme')">Compacto</button>
     </div>
+
+    <hr />
+
+    <button onclick="printObj()">Read object</button>
+
+    <script>
+      function setTheme(theme) {
+        document.body.classList.remove("dark-theme", "compact-theme");
+
+        if (theme !== "default") {
+          document.body.classList.add(theme);
+        }
+      }
+    </script>
   </body>
 </html>

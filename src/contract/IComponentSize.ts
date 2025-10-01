@@ -1,4 +1,4 @@
-export default interface IComponentSize {
+export interface IComponentSize {
   name: string;
-  width: number;
+  width: number; /* 0 - 1 */
 }

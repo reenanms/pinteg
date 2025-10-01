@@ -1,6 +1,9 @@
-export default interface IComponentDefinition {
-  type: string;
-  caption: string;
-  size: string;
+export interface IBasicComponentDefinition {
+  caption?: string;
+  size?: string;
   parent?: string;
+}
+
+export interface IComponentDefinition extends IBasicComponentDefinition {
+  type: string;
 }
