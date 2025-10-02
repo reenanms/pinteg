@@ -20,5 +20,7 @@ jobs:
   publish:
     needs: test
     uses: ./.github/workflows/publish.yml
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     with:
       node-version: 24.x
