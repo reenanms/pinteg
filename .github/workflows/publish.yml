@@ -39,8 +39,6 @@ jobs:
 
       - name: Push to repository
         run: git push --follow-tags
-        env:
-          GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
 
       - name: Publish to npm
         run: npm publish
