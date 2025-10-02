@@ -1,9 +1,12 @@
 {
   "name": "pinteg",
-  "version": "2.0.0",
+  "version": "2.0.7",
   "description": "Crie telas de CRUD de maneira simples",
   "main": "./out/index.js",
   "types": "./out/index.d.ts",
+  "files": [
+    "out"
+  ],
   "license": "MIT",
   "directories": {
     "doc": "docs"
@@ -18,13 +21,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/reenanms/ProjetoIntegrado.git"
+    "url": "git+https://github.com/reenanms/pinteg.git"
   },
   "author": "Renan Martins",
   "bugs": {
-    "url": "https://github.com/reenanms/ProjetoIntegrado/issues"
+    "url": "https://github.com/reenanms/pinteg/issues"
   },
-  "homepage": "https://github.com/reenanms/ProjetoIntegrado#readme",
+  "homepage": "https://github.com/reenanms/pinteg#readme",
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "clean-webpack-plugin": "^4.0.0",
