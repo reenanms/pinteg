@@ -40,7 +40,7 @@ jobs:
       - name: Push to repository
         run: git push --follow-tags
 
-      - name: Publish to npm
+      - name: Publish to npm ${{ secrets.NPM_TOKEN }}
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
