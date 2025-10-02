@@ -5,7 +5,7 @@ PInteg is a TypeScript/JavaScript library designed to dynamically generate HTML 
 
 ## Features
 - Generate HTML screens for CRUD operations from JSON configuration
-- Supports multiple component types: string, list, double, integer, text, etc.
+- Supports multiple component types: text, list, double, integer, text, etc.
 - Read and write objects to/from the screen
 - Easy integration with any web project
 - Extensible and customizable
@@ -30,7 +30,7 @@ npm i pinteg
 import pinteg from "pinteg";
 
 const schema = {
-	param1: { type: "string", caption: "Sample with string:", size: "P" },
+	param1: { type: "text", caption: "Sample with text:", size: "P" },
 	param2: {
 		type: "list",
 		caption: "Sample with list:",
@@ -52,7 +52,7 @@ pinteg
 ### Writing Values to the Screen
 ```typescript
 const initialObject = {
-	param1: "string value",
+	param1: "text value",
 	param2: "keyB",
 	param3: 9.9,
 };
