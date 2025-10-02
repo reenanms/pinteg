@@ -1,4 +1,4 @@
-name: Publish to npm
+name: Publish new version to npm
 
 on:
   push:
@@ -24,10 +24,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build project
-        run: npm run build
-
-      - name: Configure Git
+      - name: Configure repository for pushing
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
@@ -35,10 +32,15 @@ jobs:
       - name: Bump version
         run: npm version patch
 
+      - name: Build project
+        run: npm run build
+
+      - name: Push to repository
+        run: git push --follow-tags
+        env:
+          GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
       - name: Publish to npm
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      
-      - name: Push changes
-        run: git push --follow-tags
