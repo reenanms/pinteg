@@ -1,0 +1,21 @@
+name: CI/CD Pipeline - release/* branches
+
+on:
+  push:
+    branches: [ "release/*" ]
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+    with:
+      node-version: 24.x
+
+  test:
+    needs: build
+    uses: ./.github/workflows/test.yml
+    with:
+      node-version: 24.x
+
+  publish:
+    needs: test
+    uses: ./.github/workflows/publish.yml

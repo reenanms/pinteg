@@ -1,0 +1,21 @@
+name: CI Pipeline - All branches
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x, 24.x]
+    uses: ./.github/workflows/build.yml
+
+  test:
+    needs: build
+    uses: ./.github/workflows/test.yml
+    with:
+      node-version: ${{ matrix.node-version }}
+    

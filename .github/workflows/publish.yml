@@ -1,9 +1,11 @@
-name: Publish new version to npm
+name: CD - Publish new version to npm
 
 on:
-  push:
-    branches:
-      - main
+  workflow_call:
+    inputs:
+      node-version:
+        required: true
+        type: string
 
 jobs:
   publish:
@@ -18,7 +20,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'
+          node-version: ${{ inputs.node-version }}
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
