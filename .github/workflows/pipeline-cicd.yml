@@ -19,3 +19,5 @@ jobs:
   publish:
     needs: test
     uses: ./.github/workflows/publish.yml
+    with:
+      node-version: 24.x
