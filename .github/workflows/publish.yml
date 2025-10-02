@@ -6,6 +6,9 @@ on:
       node-version:
         required: true
         type: string
+    secrets:
+      NPM_TOKEN:
+        required: true
 
 jobs:
   publish:
