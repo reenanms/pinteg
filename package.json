@@ -11,6 +11,10 @@
   "directories": {
     "doc": "docs"
   },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "scripts": {
     "debug": "webpack-dev-server",
     "build": "tsc -p tsconfig.production.json",
