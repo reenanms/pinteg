@@ -9,6 +9,9 @@ on:
 
 jobs:
   publish:
+    permissions:
+      contents: write # for pushing patches and tags
+      id-token: write # for NPM provenance
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
