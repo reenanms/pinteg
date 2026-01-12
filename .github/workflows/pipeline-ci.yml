@@ -2,8 +2,7 @@ name: CI Pipeline - All branches
 
 on:
   push:
-    branches: [ "**" ]
-    branches-ignore: [ "release/*" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "**" ]
 

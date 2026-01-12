@@ -1,11 +1,11 @@
 import pinteg from "../index"
 
 const userSchema = {
-    param1: { type:"text", caption:"Sample with text:", size: "P" },
+    param1: { type:"text", caption:"Sample with text:", size: "S" },
     param2: {
       type:"list",
       caption:"Sample with list:",
-      size: "P",
+      size: "S",
       options: [
           { key: "keyA", caption: "caption A" },
           { key: "keyB", caption: "caption B" },
@@ -13,11 +13,11 @@ const userSchema = {
         ]
       },
     param3: { type:"double", caption:"Sample with double:", size: "M" },
-    param4: { type:"integer", caption:"Sample with integer:", size: "G" },
+    param4: { type:"integer", caption:"Sample with integer:", size: "L" },
     param5: {
       type:"list",
       caption:"Sample with list:",
-      size: "P",
+      size: "S",
       parent: "param2",
       options: [
           { key: "keyA_A", caption: "caption A.A", filter: "keyA" },
@@ -72,9 +72,9 @@ pinteg
 
 
 const schema = {
-  username: { type:"text", caption:"Username:", size: "P" },
-  name:     { type:"text", caption:"Name:",     size: "G" },
-  email:    { type:"text", caption:"E-mail:",   size: "M" }
+  username: { type:"text", caption:"Username", size: "S" },
+  name:     { type:"text", caption:"Name",     size: "L" },
+  email:    { type:"text", caption:"E-mail",   size: "M" }
 };
 const initialObject = [
   { username: "username0",  name: "User name 0",  email: "username0@user.com" },
@@ -91,6 +91,7 @@ pinteg
   .buildList()
   .writeObject(initialObject);
 
+  
 (window as any).printObj = () => {
   const obj = pinteg.readObject();
   console.log(obj);

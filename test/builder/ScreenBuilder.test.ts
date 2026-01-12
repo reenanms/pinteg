@@ -5,7 +5,7 @@ import { BuildConfig } from '../../src/contract/IComponent';
 
 describe("ScreenBuilder", () => {
   const schema = {
-    param1: { type:"text", caption:"Param", size: "P" },
+    param1: { type:"text", caption:"Param", size: "S" },
   }
   
   it("should return an html", () => {

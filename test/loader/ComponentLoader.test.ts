@@ -5,8 +5,8 @@ import { StringScreenReaderWriter } from '../mock/StringScreenReaderWriter'
 
 describe("ComponentLoader", () => {
   let schema = {
-    param1: { type:"text", caption:"Param 1:", size: "P" },
-    param2: { type:"text", caption:"Param 2:", size: "P" },
+    param1: { type:"text", caption:"Param 1:", size: "S" },
+    param2: { type:"text", caption:"Param 2:", size: "S" },
   }
   
   it("should return a list of 2 components", () => {
@@ -41,11 +41,11 @@ describe("ComponentLoader", () => {
     expect((components.get("param1") as any).name).toBe("param1");
   });
 
-  it("should return a component with size P", () => {
+  it("should return a component with size S", () => {
     const htmlReaderWriter = new StringScreenReaderWriter();
     const loader = new ComponentLoader(schema, i => htmlReaderWriter);
     const components = loader.load();
 
-    expect((components.get("param1") as any).size.name).toBe("P");
+    expect((components.get("param1") as any).size.name).toBe("S");
   });
 });

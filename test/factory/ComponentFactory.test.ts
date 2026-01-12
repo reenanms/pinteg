@@ -6,7 +6,7 @@ import { StringScreenReaderWriter } from '../mock/StringScreenReaderWriter'
 describe("ComponentFactory", () => {
 	it("should return a string type", () => {
 		const typeName = "text";
-		const componentDefinition = { type: typeName, caption: "text", size: "P" };
+		const componentDefinition = { type: typeName, caption: "text", size: "S" };
 		const htmlReaderWriter = new StringScreenReaderWriter();
 
 		const component = ComponentFactory.createFromProperty([typeName, componentDefinition], htmlReaderWriter);
@@ -18,7 +18,7 @@ describe("ComponentFactory", () => {
 describe("ComponentFactory", () => {
 	it("Unsupported component type", () => {
 		const typeName = "invalidType";
-		const componentDefinition = { type: typeName, caption: "text", size: "P" };
+		const componentDefinition = { type: typeName, caption: "text", size: "S" };
 		const htmlReaderWriter = new StringScreenReaderWriter();
 
 		const callbackThrowError = () => ComponentFactory.createFromTypeName(typeName, htmlReaderWriter);
