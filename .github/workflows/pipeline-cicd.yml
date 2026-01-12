@@ -18,10 +18,10 @@ jobs:
       node-version: 24.x
 
   publish:
-    needs: test
     permissions:
       contents: write
       id-token: write
+    needs: test
     uses: ./.github/workflows/publish.yml
     with:
       node-version: 24.x
