@@ -1,5 +1,5 @@
 import { ScreenBuilder } from "./builder/ScreenBuilder";
-import { HtmlDocumentReaderWriter } from "./HtmlDocumentReaderWriter";
+import { HtmlDocumentReaderWriter } from "./implementations/HtmlDocumentReaderWriter";
 import { ComponentFactory } from "./factory/ComponentFactory";
 import { ComponentSchema } from './component/ComponentSchema';
 import { BuildConfig, ViewMode, IComponent } from "./contract/IComponent";
@@ -49,7 +49,7 @@ export class PInteg {
   }
 
   public buildForm() : PInteg {
-    const screenReaderWriter = new HtmlDocumentReaderWriter(this.htmlDivId);
+    const screenReaderWriter = HtmlDocumentReaderWriter.create(this.htmlDivId);
 
     this.component = this.schema != null ?
         ComponentFactory.createFromSchema(this.schema!, screenReaderWriter) :
@@ -62,12 +62,12 @@ export class PInteg {
 
   ///ComponentMultipleValue
   public buildList() : PInteg {
-    const screenReaderWriter = new HtmlDocumentReaderWriter(this.htmlDivId);
+    const screenReaderWriter = HtmlDocumentReaderWriter.create(this.htmlDivId);
 
     this.buildConfig.mode = ViewMode.Multiple;
     this.component = new ComponentMultipleValue(screenReaderWriter, this.schema!, false);
-        // ComponentFactory.createFromSchema(this.schema!, screenReaderWriter) :
-        // ComponentFactory.createFromTypeName(this.schemaName, screenReaderWriter);
+    // ComponentFactory.createFromSchema(this.schema!, screenReaderWriter) :
+    // ComponentFactory.createFromTypeName(this.schemaName, screenReaderWriter);
     new ScreenBuilder(this.component!)
       .build(this.buildConfig);
     
