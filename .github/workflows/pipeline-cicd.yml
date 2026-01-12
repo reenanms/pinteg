@@ -3,7 +3,7 @@ name: CI/CD Pipeline - release/* branches
 on:
   push:
     branches: [ "release/*" ]
-
+  workflow_dispatch: #to run manually
 
 jobs:
   build:
@@ -18,9 +18,10 @@ jobs:
       node-version: 24.x
 
   publish:
+    permissions:
+      contents: write # for pushing patches and tags
+      id-token: write # for NPM provenance
     needs: test
     uses: ./.github/workflows/publish.yml
-    secrets:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     with:
       node-version: 24.x
