@@ -6,9 +6,6 @@ on:
       node-version:
         required: true
         type: string
-    secrets:
-      NPM_TOKEN:
-        required: true
 
 jobs:
   publish:
@@ -44,6 +41,4 @@ jobs:
         run: git push --follow-tags
 
       - name: Publish to npm
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --provenance --access public
