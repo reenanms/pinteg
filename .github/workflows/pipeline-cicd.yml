@@ -3,6 +3,7 @@ name: CI/CD Pipeline - release/* branches
 on:
   push:
     branches: [ "release/*" ]
+  workflow_dispatch: #to run manually
 
 jobs:
   build:
