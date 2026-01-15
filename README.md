@@ -30,17 +30,17 @@ npm i pinteg
 import pinteg from "pinteg";
 
 const schema = {
-	param1: { type: "text", caption: "Sample with text:", size: "P" },
+	param1: { type: "text", caption: "Sample with text:", size: "S" },
 	param2: {
 		type: "list",
 		caption: "Sample with list:",
-		size: "P",
+		size: "S",
 		options: [
 			{ key: "keyA", caption: "caption A" },
 			{ key: "keyB", caption: "caption B" }
 		]
 	},
-	param3: { type: "double", caption: "Sample with double:", size: "P" },
+	param3: { type: "double", caption: "Sample with double:", size: "S" },
 };
 
 pinteg
