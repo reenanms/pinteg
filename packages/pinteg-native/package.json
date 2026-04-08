@@ -1,0 +1,7 @@
+{
+    "name": "pinteg-native",
+    "version": "1.0.0",
+    "dependencies": {
+        "pinteg-core": "*"
+    }
+}

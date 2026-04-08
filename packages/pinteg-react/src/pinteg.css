@@ -1,0 +1,180 @@
+.pinteg-root {
+  font-family: inherit;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  font-size: var(--font-size);
+}
+
+.pinteg-field {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  /* no margin — spacing handled by gap on the parent container */
+}
+
+.pinteg-label {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.pinteg-input {
+  border: 1px solid var(--color-border);
+  border-radius: var(--input-radius);
+  height: var(--input-height);
+  padding: var(--input-padding);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.pinteg-input:focus {
+  outline: none;
+  border-color: var(--color-focus-border);
+  box-shadow: 0 0 0 3px var(--color-focus-background);
+}
+
+.pinteg-input[readonly] {
+  background-color: var(--color-surface-alt);
+  color: var(--color-text-readonly);
+  cursor: text;
+}
+
+.pinteg-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--color-surface);
+  border-radius: var(--table-radius);
+  border: 1px solid var(--color-border-subtle);
+  overflow: hidden;
+  table-layout: fixed;
+}
+
+.pinteg-table th {
+  padding: 8px 16px;
+  text-align: left;
+  background-color: var(--color-surface-alt);
+  font-weight: 600;
+  border-bottom: 2px solid var(--color-border-subtle);
+}
+
+.pinteg-table td {
+  padding: 0;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.pinteg-table-data-row:last-child td {
+  border-bottom: none;
+}
+
+
+
+.pinteg-mobile-label {
+  display: none;
+  font-weight: 500;
+  font-size: 0.85em;
+  margin-bottom: 4px;
+  color: var(--color-text-subtle);
+}
+
+@media (max-width: 768px) {
+  .pinteg-table {
+    border: none;
+    background: transparent;
+    display: block;
+  }
+
+  .pinteg-table thead {
+    display: none;
+  }
+
+  .pinteg-table tbody {
+    display: block;
+  }
+
+  .pinteg-table-data-row {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--table-radius);
+    margin-bottom: 12px;
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .pinteg-table td {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    border-bottom: none;
+    width: 100% !important;
+    /* Override column widths on mobile */
+  }
+
+  .pinteg-mobile-label {
+    display: block;
+  }
+}
+
+
+/* ------------------------------------------------------------------ */
+/*  Form area layout — responsive: fields sit side-by-side by default  */
+/*  and wrap naturally when the viewport / container is too narrow.    */
+/*                                                                      */
+/*  --pinteg-col-gap is the single source of truth for column spacing. */
+/*  sizeToStyle() reads it via var() inside calc() so fractional sizes */
+/*  tile perfectly: 4×S = 1 row, 2×S + 1×M = 1 row, etc.             */
+/* ------------------------------------------------------------------ */
+
+.pinteg-form {
+  --pinteg-col-gap: 12px;
+  /* change here to adjust all field gaps */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px var(--pinteg-col-gap);
+  /* row-gap | column-gap */
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* On mobile and tablet screens, stack fields vertically using a column layout */
+@media (max-width: 768px) {
+  .pinteg-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pinteg-form .pinteg-field,
+  .pinteg-nested-section {
+    flex: none !important;
+    width: 100% !important;
+  }
+}
+
+.pinteg-nested-section {
+  flex: 1 1 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+button {
+  width: var(--input-width);
+  height: calc(var(--input-height) + 5px);
+  border-radius: var(--input-radius);
+  border: none;
+  cursor: pointer;
+  background: var(--color-text);
+  color: var(--color-background);
+  font-size: var(--font-size);
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+button:hover {
+  opacity: 0.8;
+}

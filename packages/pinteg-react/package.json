@@ -1,0 +1,61 @@
+{
+  "name": "pinteg-react",
+  "version": "2.0.26",
+  "description": "Crie telas de CRUD de maneira simples",
+  "main": "dist/pinteg.js",
+  "module": "dist/pinteg.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "out"
+  ],
+  "license": "MIT",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "debug": "webpack-dev-server",
+    "build": "tsc && vite build",
+    "test": "vitest run",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm install && npm test",
+    "publishVersion": "npm version patch && npm publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reenanms/pinteg.git"
+  },
+  "author": "Renan Martins",
+  "bugs": {
+    "url": "https://github.com/reenanms/pinteg/issues"
+  },
+  "homepage": "https://github.com/reenanms/pinteg#readme",
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/jest": "^30.0.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^13.0.1",
+    "html-webpack-plugin": "^5.6.4",
+    "jest": "^30.1.3",
+    "jsdom": "^29.0.2",
+    "ts-jest": "^29.4.1",
+    "ts-loader": "^9.5.4",
+    "typescript": "^5.9.2",
+    "vite": "^5.0.0",
+    "vitest": "^4.1.3",
+    "webpack": "^5.101.3",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.2"
+  },
+  "dependencies": {
+    "pinteg-core": "*"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  }
+}
