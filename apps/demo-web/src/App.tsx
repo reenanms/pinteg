@@ -8,6 +8,39 @@ import {
     useTheme,
     SchemaRegistry
 } from 'pinteg-react';
+import { DataSourceManager } from 'pinteg-data-source';
+
+DataSourceManager.register('demoCountrySource', async () => {
+    return [
+        { key: "BR", caption: "Brazil" },
+        { key: "US", caption: "United States" },
+        { key: "CA", caption: "Canada" },
+    ];
+});
+
+DataSourceManager.register('demoStateSource', async (params) => {
+    const states: Record<string, any[]> = {
+        "BR": [{ key: "SP", caption: "São Paulo" }, { key: "RJ", caption: "Rio de Janeiro" }],
+        "US": [{ key: "NY", caption: "New York" }, { key: "CA", caption: "California" }]
+    };
+    if (params?.filter && states[params.filter]) {
+        return states[params.filter];
+    }
+    return [];
+});
+
+DataSourceManager.register('demoCitySource', async (params) => {
+    const cities: Record<string, any[]> = {
+        "SP": [{ key: "SAO", caption: "São Paulo (City)" }, { key: "CMP", caption: "Campinas" }],
+        "RJ": [{ key: "RIO", caption: "Rio de Janeiro (City)" }, { key: "NIT", caption: "Niterói" }],
+        "NY": [{ key: "NYC", caption: "New York City" }, { key: "BUF", caption: "Buffalo" }],
+        "CA": [{ key: "LA", caption: "Los Angeles" }, { key: "SF", caption: "San Francisco" }]
+    };
+    if (params?.filter && cities[params.filter]) {
+        return cities[params.filter];
+    }
+    return [];
+});
 
 // 1. Define Schames from legacy project
 const userSchema: ComponentSchema = {
@@ -36,6 +69,26 @@ const userSchema: ComponentSchema = {
             { key: "keyB_B", caption: "caption B.B", filter: "keyB" }
         ]
     },
+    param6: {
+        type: "list",
+        caption: "Country (Data Source):",
+        size: "S",
+        source: "demoCountrySource"
+    },
+    param7: {
+        type: "list",
+        caption: "State (Child of Country):",
+        size: "S",
+        source: "demoStateSource",
+        parent: "param6"
+    },
+    param8: {
+        type: "list",
+        caption: "City (Child of State):",
+        size: "S",
+        source: "demoCitySource",
+        parent: "param7"
+    }
 
 };
 
@@ -54,15 +107,15 @@ const tableSchema = userSchema;
 
 // 2. Initial Data
 const initialObject0 = {
-    param0: { param1: "user A", param2: "keyA", param3: 1.1, param4: 1, param5: "keyA_B" },
-    param1: { param1: "user B", param2: "keyB", param3: 2.2, param4: 2, param5: "keyB_B" },
-    param2: { param1: "user C", param2: "keyC", param3: 3.3, param4: 3, param5: "" }
+    param0: { param1: "user A", param2: "keyA", param3: 1.1, param4: 1, param5: "keyA_B", param6: "BR", param7: "SP", param8: "SAO" },
+    param1: { param1: "user B", param2: "keyB", param3: 2.2, param4: 2, param5: "keyB_B", param6: "US", param7: "NY", param8: "NYC" },
+    param2: { param1: "user C", param2: "keyC", param3: 3.3, param4: 3, param5: "", param6: "", param7: "", param8: "" }
 };
 
 const initialTableRows = [
-    { param1: "user A", param2: "keyA", param3: 1.1, param4: 1, param5: "keyA_B" },
-    { param1: "user B", param2: "keyB", param3: 2.2, param4: 2, param5: "keyB_B" },
-    { param1: "user C", param2: "keyC", param3: 3.3, param4: 3, param5: "" }
+    { param1: "user A", param2: "keyA", param3: 1.1, param4: 1, param5: "keyA_B", param6: "BR", param7: "SP", param8: "SAO" },
+    { param1: "user B", param2: "keyB", param3: 2.2, param4: 2, param5: "keyB_B", param6: "US", param7: "NY", param8: "NYC" },
+    { param1: "user C", param2: "keyC", param3: 3.3, param4: 3, param5: "", param6: "", param7: "", param8: "" }
 ];
 // const initialTableRows = [
 //     { username: "username0", name: "User name 0", email: "username0@user.com" },

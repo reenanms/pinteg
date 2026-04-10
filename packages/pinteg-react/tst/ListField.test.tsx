@@ -55,11 +55,11 @@ describe('ListField', () => {
         expect(onChange).toHaveBeenCalledWith('myList', 'X');
     });
 
-    it('is disabled when readOnly=true', () => {
+    it('renders as a readOnly text input when readOnly=true', () => {
         const { getByLabelText } = render(
             <ListField name="myList" caption="My List" value="" readOnly={true} tableMode={false} onChange={() => { }} props={{ options: ['A'] }} />
         );
-        expect((getByLabelText('My List') as HTMLSelectElement).disabled).toBe(true);
+        expect((getByLabelText('My List') as HTMLInputElement).readOnly).toBe(true);
     });
 
     it('hides the label in tableMode', () => {
@@ -81,5 +81,20 @@ describe('ListField', () => {
             <ListField name="myList" caption="My List" value="" readOnly={false} tableMode={false} onChange={() => { }} props={{ options: ['A'] }} />
         );
         expect(getByText('Select...')).toBeDefined();
+    });
+
+    it('clears its value when parentValue changes', async () => {
+        const onChange = vi.fn();
+        const options = [{ key: '1', filter: 'parent1' }];
+        const { rerender } = render(
+            <ListField name="child" caption="Child" value="1" readOnly={false} tableMode={false} onChange={onChange} formValues={{ parentField: 'parent1' }} props={{ options, parent: 'parentField' }} />
+        );
+
+        // re-render with new parentValue
+        rerender(
+            <ListField name="child" caption="Child" value="1" readOnly={false} tableMode={false} onChange={onChange} formValues={{ parentField: 'parent2' }} props={{ options, parent: 'parentField' }} />
+        );
+
+        expect(onChange).toHaveBeenCalledWith('child', undefined);
     });
 });

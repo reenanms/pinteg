@@ -1,23 +1,55 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FieldRendererProps } from 'pinteg-core';
 import { resolveSizeStyle } from '../../utils/ComponentSizeUtils';
+import { DataSourceManager } from 'pinteg-data-source';
+
+function useDataSourceOptions(source?: string, parentValue?: any) {
+    const [dynamicOptions, setDynamicOptions] = useState<any[]>([]);
+
+    useEffect(() => {
+        if (source) {
+            let isMounted = true;
+            const params = parentValue !== undefined ? { filter: parentValue } : undefined;
+            DataSourceManager.resolve(source, params)
+                .then((data: any) => {
+                    if (isMounted) setDynamicOptions(Array.isArray(data) ? data : []);
+                })
+                .catch(console.error);
+            return () => { isMounted = false; };
+        }
+    }, [source, parentValue]);
+
+    return dynamicOptions;
+}
+
+function resolveHardcodedOptions(options: any[], parentValue?: any) {
+    if (parentValue === undefined) return options;
+    return options.filter((opt: any) => {
+        if (typeof opt === 'object') {
+            return !opt.filter || opt.filter === parentValue;
+        }
+        return true;
+    });
+}
 
 export const ListField: React.FC<FieldRendererProps> = ({
     name, caption, value, size, readOnly, tableMode, onChange, props, formValues
 }) => {
     const style = resolveSizeStyle(size);
-    let options = props?.options || [];
+    const parentValue = (props?.parent && formValues) ? formValues[props.parent] : undefined;
 
-    // Apply filtering if a parent is defined
-    if (props?.parent && formValues) {
-        const parentValue = formValues[props.parent];
-        options = options.filter((opt: any) => {
-            if (typeof opt === 'object') {
-                return !opt.filter || opt.filter === parentValue;
-            }
-            return true;
-        });
-    }
+    const prevParentValue = React.useRef(parentValue);
+    React.useEffect(() => {
+        if (prevParentValue.current !== parentValue) {
+            onChange(name, undefined);
+            prevParentValue.current = parentValue;
+        }
+    }, [parentValue, name, onChange]);
+
+    const dynamicOptions = useDataSourceOptions(props?.source, parentValue);
+    const options = props?.source
+        ? dynamicOptions
+        : resolveHardcodedOptions(props?.options || [], parentValue);
 
     if (readOnly) {
         const activeOption = options.find((opt: any) => {

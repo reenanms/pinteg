@@ -12,4 +12,5 @@ export interface IBasicComponentDefinition {
 export interface IComponentDefinition extends IBasicComponentDefinition {
   type: string;
   options?: any[];
+  source?: string;
 }
