@@ -1,4 +1,4 @@
-import { themes } from '../src/themes/themes';
+import { themes } from '../src/themes';
 
 describe('themes', () => {
     it('exports at least 4 themes', () => {

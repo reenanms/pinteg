@@ -163,6 +163,7 @@ function AppContent() {
                     <h1 style={{ margin: 0 }}>PInteg Complex Schema Demo</h1>
                     <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
                         <button
+                            className="pinteg-btn"
                             onClick={() => setIsReadOnly(!isReadOnly)}
                             style={{
                                 padding: '8px 16px',
@@ -190,7 +191,7 @@ function AppContent() {
                             readOnly={isReadOnly}
                         />
                         <div style={{ marginTop: '2rem' }}>
-                            <button onClick={handlePrint}>Read Object</button>
+                            <button className="pinteg-btn" onClick={handlePrint}>Read Object</button>
                         </div>
                     </div>
                 </section>

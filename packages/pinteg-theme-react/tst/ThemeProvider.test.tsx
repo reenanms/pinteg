@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { ThemeProvider } from '../src/themes/ThemeProvider';
-import { themes } from '../src/themes/themes';
+import { ThemeProvider } from '../src/ThemeProvider';
+import { themes } from '../src/themes';
 
 describe('ThemeProvider', () => {
     it('applies light-theme CSS variables by default', () => {

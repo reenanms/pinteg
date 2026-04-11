@@ -1,5 +1,5 @@
 import React from 'react';
-import { ThemeProvider, ThemeProviderProps } from '../themes/ThemeProvider';
+import { ThemeProvider, ThemeProviderProps } from 'pinteg-theme-react';
 import '../pinteg.css';
 
 export interface PIntegRootProps extends ThemeProviderProps { }

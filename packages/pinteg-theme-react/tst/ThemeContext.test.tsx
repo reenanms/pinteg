@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, fireEvent, act } from '@testing-library/react';
 import { renderHook } from '@testing-library/react';
-import { ThemeProvider } from '../src/themes/ThemeProvider';
-import { useTheme } from '../src/themes/ThemeContext';
+import { ThemeProvider } from '../src/ThemeProvider';
+import { useTheme } from '../src/ThemeContext';
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
     <ThemeProvider>{children}</ThemeProvider>

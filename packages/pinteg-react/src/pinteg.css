@@ -162,7 +162,7 @@
   box-sizing: border-box;
 }
 
-button {
+.pinteg-btn {
   width: var(--input-width);
   height: calc(var(--input-height) + 5px);
   border-radius: var(--input-radius);
@@ -175,6 +175,6 @@ button {
   transition: 0.3s;
 }
 
-button:hover {
+.pinteg-btn:hover {
   opacity: 0.8;
 }
