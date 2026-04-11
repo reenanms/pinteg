@@ -7,8 +7,8 @@ export interface ThemeProviderProps {
     children: React.ReactNode;
 }
 
-export const ThemeProvider: React.FC<ThemeProviderProps> = ({ theme = 'light-theme', children }) => {
-    const [currentThemeId, setCurrentThemeId] = useState(theme);
+export const ThemeProvider: React.FC<ThemeProviderProps> = ({ theme, children }) => {
+    const [currentThemeId, setCurrentThemeId] = useState(theme || themes[0].id);
 
     const activeTheme = useMemo(() => {
         return themes.find(t => t.id === currentThemeId) || themes[0];

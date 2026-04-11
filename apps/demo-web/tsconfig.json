@@ -1,36 +1,22 @@
 {
     "compilerOptions": {
-        "target": "ESNext",
+        "target": "ES2020",
         "useDefineForClassFields": true,
-        "lib": [
-            "DOM",
-            "DOM.Iterable",
-            "ESNext"
-        ],
-        "allowJs": false,
-        "skipLibCheck": true,
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "strict": true,
-        "forceConsistentCasingInFileNames": true,
         "module": "ESNext",
-        "moduleResolution": "Node",
+        "lib": [
+            "ES2020",
+            "DOM",
+            "DOM.Iterable"
+        ],
+        "skipLibCheck": true,
+        "moduleResolution": "node",
         "resolveJsonModule": true,
         "isolatedModules": true,
         "noEmit": true,
-        "jsx": "react-jsx",
-        "baseUrl": ".",
-        "paths": {
-            "pinteg-core": [
-                "../../packages/pinteg-core/src/index.ts"
-            ],
-            "pinteg-react": [
-                "../../packages/pinteg-react/src/index.ts"
-            ]
-        }
+        "rootDir": "src",
+        "strict": true
     },
     "include": [
         "src"
-    ],
-    "references": []
+    ]
 }

@@ -222,7 +222,7 @@ function AppContent() {
 
 function App() {
     return (
-        <ThemeProvider theme="dark-theme">
+        <ThemeProvider>
             <AppContent />
         </ThemeProvider>
     );
