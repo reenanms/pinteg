@@ -12,23 +12,32 @@ This document outlines the coding and structural conventions for the PInteg mono
 ### Inside Projects
 - **Source Code**: All application and package source code must reside strictly in the `src/` folder.
 - **Tests**: All tests must be located in a `tst/` directory at the project/package root. It must be a sibling to the `src/` directory. 
-  - *Example*: `packages/pinteg-react/src/` (Source) and `packages/pinteg-react/tst/` (Tests).
-- **Scripts**: Auxiliary scripts, automations, and build helpers should be housed in a `scripts/` folder.
-- **Distribution**: All compiled build artifacts must be emitted to a `dist/` directory. Avoid using `out/` or emitting files directly into development paths.
+- **Test Coverage**: **Mandatory.** All packages in `packages/` must have 100% of their code covered by unit tests.
+- **Exception for Demos**: Demo projects (`apps/`) are exempt from mandatory tests as they serve solely as consumption samples and debug environments.
+- **Scripts**: Auxiliary scripts and build helpers should be housed in a `scripts/` folder.
+- **Distribution**: All build artifacts must be emitted to a `dist/` directory. 
 
 ## 💻 Engineering Principles
 
+### Coding Best Practices
+- **Early Returns**: All functions should use the "Early Return" pattern to improve readability and reduce nested logic.
+- **Parameter Validation**: If an expected parameter is not received or is invalid, the function must throw an explicit exception or error immediately.
+- **Dependency Management**: **Critical.** Dependencies must be managed via the root `package.json` in this monorepo. Never run `npm install` inside individual package or app folders to avoid breaking local workspace links and symlinks.
+
 ### SOLID Principles
-All code within the monorepo must strictly adhere to the SOLID principles of software design:
-1. **Single Responsibility**: Each module, function, or React component should tackle a single aspect of functionality.
-2. **Open/Closed**: Software entities must be open for extension (e.g., via the Data Source Manager or Plugins) but closed for core modification.
-3. **Liskov Substitution**: Interfaces and base classes must be substitutable by their implementations without breaking expectations.
-4. **Interface Segregation**: Create focused, granular interfaces (e.g., separate CRUD operations when not all are required) rather than large, monolithic ones.
-5. **Dependency Inversion**: High-level systems (like UI components) should rely on abstractions (like the `DataSource` interface) instead of importing concrete low-level implementations directly.
+All code must strictly adhere to SOLID:
+1. **Single Responsibility**: Each module/function/component handles one functionality.
+2. **Open/Closed**: Open for extension (data sources/plugins), closed for core modification.
+3. **Liskov Substitution**: Interfaces must be substitutable by implementations.
+4. **Interface Segregation**: Use granular interfaces rather than monolithic ones.
+5. **Dependency Inversion**: High-level systems rely on abstractions.
 
 ### Usability Principles
-For all user-facing interfaces (React components, apps, etc.), high usability standards must be applied:
-- **Feedback & State**: Always provide immediate, clear feedback for user actions (loading spinners, error banners, success modals).
-- **Safety & Forgiveness**: Destructive actions (like delete) must require confirmation. Provide clear paths for users to "Cancel" or "Go Back."
-- **Consistency**: Utilize the centralized theming and standardized size constraints so the entire ecosystem feels cohesive.
-- **Clarity**: Keep forms, tables, and actions intuitive. Use standard icons and clear typography for read-only vs. editable states.
+- **No Popups**: **Strict Rule.** Do not use browser-native `confirm()`, `alert()`, or intrusive popups for UI interactions. Use in-place confirmation buttons or in-app modals.
+- **Feedback & State**: Provide immediate feedback (loading, errors, success).
+- **Consistency**: Use centralized theming and standardized size constraints.
+- **Safety**: Destructive actions must require non-intrusive confirmation (e.g., two-stage buttons).
+
+## 📄 Documentation
+- **README.md**: Must be kept up to date with the latest features, installation steps, and architectural changes.
+- **CONVENTIONS.md**: Must be updated as the project evolves to capture all necessary conversions and future standards.

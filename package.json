@@ -1,6 +1,10 @@
 {
     "name": "pinteg-monorepo",
     "private": true,
+    "scripts": {
+        "build": "npm run build --workspaces --if-present",
+        "dev": "npm run dev --workspace @pinteg/demo-crud-react"
+    },
     "workspaces": [
         "packages/*",
         "apps/*"
