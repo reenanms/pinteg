@@ -1,11 +1,12 @@
 {
-    "name": "pinteg-theme-react",
-    "version": "2.0.26",
+    "name": "pinteg-crud-react",
+    "version": "1.0.0",
     "type": "module",
     "main": "dist/index.js",
     "module": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
+        "dev": "npm run dev --workspace=@pinteg/demo-crud-react",
         "build": "tsc",
         "test": "vitest run"
     },
@@ -17,6 +18,11 @@
         "jsdom": "^29.0.2",
         "typescript": "^5.9.2",
         "vitest": "^4.1.3"
+    },
+    "dependencies": {
+        "pinteg-core": "*",
+        "pinteg-react": "*",
+        "pinteg-data-source": "*"
     },
     "peerDependencies": {
         "react": "^18.0.0 || ^19.0.0",

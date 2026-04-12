@@ -8,6 +8,9 @@ export * from './hooks/useFormState';
 export * from './hooks/useTableState';
 export * from './components/PIntegForm';
 export * from './components/PIntegTable';
+export * from './components/PIntegButton';
+export * from './components/ConfirmActionButton';
+export * from './components/SemanticButtons';
 export * from './utils/ComponentSizeUtils';
 
 // Auto-register ReactRenderer when the package is imported

@@ -4,7 +4,7 @@
   "description": "Crie telas de CRUD de maneira simples",
   "main": "dist/pinteg.js",
   "module": "dist/pinteg.mjs",
-  "types": "dist/index.d.ts",
+  "types": "dist/src/index.d.ts",
   "files": [
     "dist",
     "out"
@@ -15,7 +15,7 @@
   },
   "scripts": {
     "debug": "webpack-dev-server",
-    "build": "tsc && vite build",
+    "build": "vite build && tsc",
     "test": "vitest run",
     "prepare": "npm run build",
     "prepublishOnly": "npm install && npm test",
@@ -34,8 +34,8 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@types/jest": "^30.0.0",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^6.0.1",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^13.0.1",

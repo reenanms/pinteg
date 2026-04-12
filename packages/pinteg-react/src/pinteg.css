@@ -178,3 +178,45 @@
 .pinteg-btn:hover {
   opacity: 0.8;
 }
+
+.pinteg-btn--primary {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.pinteg-btn--secondary {
+  background: var(--color-secondary);
+  color: #fff;
+}
+
+.pinteg-btn--danger {
+  background: var(--color-danger);
+  color: #fff;
+}
+
+/* Confirmation State Feedback */
+@keyframes pinteg-btn-pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.015);
+    opacity: 0.9;
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.pinteg-btn--confirming {
+  animation: pinteg-btn-pulse 1.5s infinite ease-in-out;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.pinteg-btn--confirming.pinteg-btn--danger {
+  background: var(--color-danger);
+  filter: saturate(1.2) brightness(0.95);
+  /* Slightly deeper red, less flashy */
+}

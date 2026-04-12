@@ -4,42 +4,49 @@ import {
     ThemeProvider,
     PIntegForm,
     PIntegTable,
+    PIntegButton,
     ComponentSchema,
     useTheme,
     SchemaRegistry
 } from 'pinteg-react';
 import { DataSourceManager } from 'pinteg-data-source';
 
-DataSourceManager.register('demoCountrySource', async () => {
-    return [
-        { key: "BR", caption: "Brazil" },
-        { key: "US", caption: "United States" },
-        { key: "CA", caption: "Canada" },
-    ];
+DataSourceManager.register('demoCountrySource', {
+    read: async () => {
+        return [
+            { key: "BR", caption: "Brazil" },
+            { key: "US", caption: "United States" },
+            { key: "CA", caption: "Canada" },
+        ];
+    }
 });
 
-DataSourceManager.register('demoStateSource', async (params) => {
-    const states: Record<string, any[]> = {
-        "BR": [{ key: "SP", caption: "São Paulo" }, { key: "RJ", caption: "Rio de Janeiro" }],
-        "US": [{ key: "NY", caption: "New York" }, { key: "CA", caption: "California" }]
-    };
-    if (params?.filter && states[params.filter]) {
-        return states[params.filter];
+DataSourceManager.register('demoStateSource', {
+    read: async (params) => {
+        const states: Record<string, any[]> = {
+            "BR": [{ key: "SP", caption: "São Paulo" }, { key: "RJ", caption: "Rio de Janeiro" }],
+            "US": [{ key: "NY", caption: "New York" }, { key: "CA", caption: "California" }]
+        };
+        if (params?.filter && states[params.filter]) {
+            return states[params.filter];
+        }
+        return [];
     }
-    return [];
 });
 
-DataSourceManager.register('demoCitySource', async (params) => {
-    const cities: Record<string, any[]> = {
-        "SP": [{ key: "SAO", caption: "São Paulo (City)" }, { key: "CMP", caption: "Campinas" }],
-        "RJ": [{ key: "RIO", caption: "Rio de Janeiro (City)" }, { key: "NIT", caption: "Niterói" }],
-        "NY": [{ key: "NYC", caption: "New York City" }, { key: "BUF", caption: "Buffalo" }],
-        "CA": [{ key: "LA", caption: "Los Angeles" }, { key: "SF", caption: "San Francisco" }]
-    };
-    if (params?.filter && cities[params.filter]) {
-        return cities[params.filter];
+DataSourceManager.register('demoCitySource', {
+    read: async (params) => {
+        const cities: Record<string, any[]> = {
+            "SP": [{ key: "SAO", caption: "São Paulo (City)" }, { key: "CMP", caption: "Campinas" }],
+            "RJ": [{ key: "RIO", caption: "Rio de Janeiro (City)" }, { key: "NIT", caption: "Niterói" }],
+            "NY": [{ key: "NYC", caption: "New York City" }, { key: "BUF", caption: "Buffalo" }],
+            "CA": [{ key: "LA", caption: "Los Angeles" }, { key: "SF", caption: "San Francisco" }]
+        };
+        if (params?.filter && cities[params.filter]) {
+            return cities[params.filter];
+        }
+        return [];
     }
-    return [];
 });
 
 // 1. Define Schames from legacy project
@@ -162,21 +169,16 @@ function AppContent() {
                 <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
                     <h1 style={{ margin: 0 }}>PInteg Complex Schema Demo</h1>
                     <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-                        <button
-                            className="pinteg-btn"
+                        <PIntegButton
                             onClick={() => setIsReadOnly(!isReadOnly)}
                             style={{
-                                padding: '8px 16px',
-                                borderRadius: '4px',
                                 background: isReadOnly ? 'var(--color-primary)' : 'transparent',
                                 color: isReadOnly ? 'white' : 'var(--color-text)',
                                 border: '1px solid var(--color-border)',
-                                cursor: 'pointer',
-                                fontWeight: 'bold'
                             }}
                         >
                             {isReadOnly ? 'Mode: Read-Only' : 'Mode: Editable'}
-                        </button>
+                        </PIntegButton>
                         <ThemeSelector />
                     </div>
                 </header>
@@ -191,7 +193,7 @@ function AppContent() {
                             readOnly={isReadOnly}
                         />
                         <div style={{ marginTop: '2rem' }}>
-                            <button className="pinteg-btn" onClick={handlePrint}>Read Object</button>
+                            <PIntegButton variant="primary" onClick={handlePrint}>Read Object</PIntegButton>
                         </div>
                     </div>
                 </section>

@@ -20,6 +20,8 @@ export interface PIntegTableProps {
     readOnly?: boolean;
     listOptions?: Record<string, any[]>;
     style?: React.CSSProperties;
+    onRowClick?: (rowIndex: number, rowData: any) => void;
+    actions?: (rowData: any, rowIndex: number) => React.ReactNode;
 }
 
 export const PIntegTable = React.forwardRef<PIntegTableRef, PIntegTableProps>((props, ref) => {
@@ -54,11 +56,17 @@ export const PIntegTable = React.forwardRef<PIntegTableRef, PIntegTableProps>((p
                             {def.caption}
                         </th>
                     ))}
+                    {props.actions && <th style={{ width: '100px' }}>Actions</th>}
                 </tr>
             </thead>
             <tbody>
                 {values.map((row, rowIndex) => (
-                    <tr key={rowIndex} className="pinteg-table-data-row">
+                    <tr
+                        key={rowIndex}
+                        className="pinteg-table-data-row"
+                        onClick={() => props.onRowClick?.(rowIndex, row)}
+                        style={{ cursor: props.onRowClick ? 'pointer' : 'default' }}
+                    >
                         {columns.map(([name, definition]) => (
                             <td key={name}>
                                 <PIntegField
@@ -73,6 +81,11 @@ export const PIntegTable = React.forwardRef<PIntegTableRef, PIntegTableProps>((p
                                 />
                             </td>
                         ))}
+                        {props.actions && (
+                            <td style={{ textAlign: 'center', padding: '8px' }}>
+                                {props.actions(row, rowIndex)}
+                            </td>
+                        )}
                     </tr>
                 ))}
             </tbody>
