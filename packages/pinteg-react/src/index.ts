@@ -11,6 +11,7 @@ export * from './components/PIntegTable';
 export * from './components/PIntegButton';
 export * from './components/ConfirmActionButton';
 export * from './components/SemanticButtons';
+export * from './components/Icons';
 export * from './utils/ComponentSizeUtils';
 
 // Auto-register ReactRenderer when the package is imported

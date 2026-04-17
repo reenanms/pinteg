@@ -22,10 +22,23 @@ export interface PIntegTableProps {
     style?: React.CSSProperties;
     onRowClick?: (rowIndex: number, rowData: any) => void;
     actions?: (rowData: any, rowIndex: number) => React.ReactNode;
+    /** Optional render prop for the content of an expanded row */
+    expandedRow?: (rowData: any, rowIndex: number) => React.ReactNode;
+    /** List of indices of rows that are currently expanded */
+    expandedRowIndices?: number[];
 }
 
 export const PIntegTable = React.forwardRef<PIntegTableRef, PIntegTableProps>((props, ref) => {
-    const { schema, value, defaultValue, onChange, readOnly, listOptions } = props;
+    const {
+        schema,
+        value,
+        defaultValue,
+        onChange,
+        readOnly,
+        listOptions,
+        expandedRow,
+        expandedRowIndices = []
+    } = props;
     const isControlled = value !== undefined;
     const [internalValues, setInternalValues] = useTableState(defaultValue);
     const values = isControlled ? value : internalValues;
@@ -60,34 +73,56 @@ export const PIntegTable = React.forwardRef<PIntegTableRef, PIntegTableProps>((p
                 </tr>
             </thead>
             <tbody>
-                {values.map((row, rowIndex) => (
-                    <tr
-                        key={rowIndex}
-                        className="pinteg-table-data-row"
-                        onClick={() => props.onRowClick?.(rowIndex, row)}
-                        style={{ cursor: props.onRowClick ? 'pointer' : 'default' }}
-                    >
-                        {columns.map(([name, definition]) => (
-                            <td key={name}>
-                                <PIntegField
-                                    name={name}
-                                    definition={definition}
-                                    value={row[name]}
-                                    formValues={row}
-                                    readOnly={readOnly ?? false}
-                                    tableMode={true}
-                                    listOptions={listOptions}
-                                    onChange={(n: string, v: any) => handleRowChange(rowIndex, n, v)}
-                                />
-                            </td>
-                        ))}
-                        {props.actions && (
-                            <td style={{ textAlign: 'center', padding: '8px' }}>
-                                {props.actions(row, rowIndex)}
-                            </td>
-                        )}
-                    </tr>
-                ))}
+                {values.map((row, rowIndex) => {
+                    const isExpanded = expandedRowIndices.includes(rowIndex);
+
+                    if (isExpanded && expandedRow) {
+                        // Content fills data columns; actions column is rendered separately
+                        return (
+                            <tr key={rowIndex} className="pinteg-table-expanded-row">
+                                <td colSpan={columns.length} style={{ padding: 0 }}>
+                                    <div className="pinteg-table-expanded-content">
+                                        {expandedRow(row, rowIndex)}
+                                    </div>
+                                </td>
+                                {props.actions && (
+                                    <td style={{ textAlign: 'center', padding: '8px', verticalAlign: 'top' }}>
+                                        {props.actions(row, rowIndex)}
+                                    </td>
+                                )}
+                            </tr>
+                        );
+                    }
+
+                    return (
+                        <tr
+                            key={rowIndex}
+                            className="pinteg-table-data-row"
+                            onClick={() => props.onRowClick?.(rowIndex, row)}
+                            style={{ cursor: props.onRowClick ? 'pointer' : 'default' }}
+                        >
+                            {columns.map(([name, definition]) => (
+                                <td key={name}>
+                                    <PIntegField
+                                        name={name}
+                                        definition={definition}
+                                        value={row[name]}
+                                        formValues={row}
+                                        readOnly={readOnly ?? false}
+                                        tableMode={true}
+                                        listOptions={listOptions}
+                                        onChange={(n: string, v: any) => handleRowChange(rowIndex, n, v)}
+                                    />
+                                </td>
+                            ))}
+                            {props.actions && (
+                                <td style={{ textAlign: 'center', padding: '8px' }}>
+                                    {props.actions(row, rowIndex)}
+                                </td>
+                            )}
+                        </tr>
+                    );
+                })}
             </tbody>
         </table>
     );

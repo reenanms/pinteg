@@ -1,29 +1,114 @@
-import React, { useEffect, useState } from 'react';
-import { PIntegTable, CreateButton, EditButton } from 'pinteg-react';
+import React, { useEffect, useState, useCallback } from 'react';
+import {
+    PIntegTable,
+    CreateButton,
+    PIntegButton,
+    ChevronDownIcon,
+    ChevronUpIcon,
+    PIntegForm,
+    SaveButton,
+    CancelButton,
+    DeleteButton,
+    EditButton
+} from 'pinteg-react';
 import { DataSourceManager } from 'pinteg-data-source';
 import { useCrudContext } from './CrudContext';
-import { CrudBreadcrumbs, CrudHeader, CrudErrorDisplay } from './components';
+import { CrudBreadcrumbs, CrudHeader, CrudErrorDisplay, RecordAccordionDetails } from './components';
+
+import { RecordStatus } from './components/RecordStatus';
 
 export const ListagePage = () => {
     const { config, navigate } = useCrudContext();
     const [data, setData] = useState<any[]>([]);
     const [error, setError] = useState<string>('');
+    const [expandedRowKey, setExpandedRowKey] = useState<string | null>(null);
+    const [editData, setEditData] = useState<any>({});
+    const [recordStatus, setRecordStatus] = useState<RecordStatus>('viewing');
 
-    useEffect(() => {
+    const NEW_RECORD_KEY = '__creating__';
+
+    const refreshData = useCallback(() => {
         const source = DataSourceManager.resolve(config.dataSourceName);
         source.read()
             .then(res => setData(Array.isArray(res) ? res : (res ? [res] : [])))
             .catch(e => setError(e.message));
     }, [config.dataSourceName]);
 
-    const handleRowClick = (rowIndex: number, rowData: any) => {
-        const key = rowData[config.primaryKeyField];
-        if (key !== undefined) {
-            navigate({ path: '/update', key: String(key) });
+    useEffect(() => {
+        refreshData();
+    }, [refreshData]);
+
+    const toggleRow = (rowData: any) => {
+        const key = String(rowData[config.primaryKeyField]);
+        if (key === NEW_RECORD_KEY || recordStatus === 'creating') return;
+        if (expandedRowKey === key) {
+            setExpandedRowKey(null);
+            setEditData({});
+            setRecordStatus('viewing');
         } else {
-            console.error("Missing primary key in row data.");
+            setExpandedRowKey(key);
+            setEditData({ ...rowData });
+            setRecordStatus('viewing'); // Default to read-only
         }
     };
+
+    const handleSave = async () => {
+        if (!expandedRowKey) return;
+        setError('');
+        try {
+            const source = DataSourceManager.resolve(config.dataSourceName);
+            if (recordStatus === 'creating') {
+                const createdRecord = await source.create(editData);
+                setData(prev => [createdRecord, ...prev]);
+            } else {
+                const updatedRecord = await source.update(expandedRowKey, editData);
+                setData(prev => prev.map(item =>
+                    String(item[config.primaryKeyField]) === expandedRowKey
+                        ? { ...item, ...editData, ...(updatedRecord || {}) }
+                        : item
+                ));
+            }
+            setExpandedRowKey(null);
+            setRecordStatus('viewing');
+            setEditData({});
+        } catch (e: any) {
+            setError(e.message);
+        }
+    };
+
+    const handleDelete = async () => {
+        if (!expandedRowKey) return;
+        try {
+            const source = DataSourceManager.resolve(config.dataSourceName);
+            await source.delete(expandedRowKey);
+            setData(prev => prev.filter(item => String(item[config.primaryKeyField]) !== expandedRowKey));
+            setRecordStatus('viewing');
+            setExpandedRowKey(null);
+        } catch (e: any) {
+            setError(e.message);
+        }
+    };
+
+    const handleStartCreate = () => {
+        setRecordStatus('creating');
+        setExpandedRowKey(NEW_RECORD_KEY);
+        setEditData({});
+    };
+
+    const handleCancelCreate = () => {
+        setRecordStatus('viewing');
+        setExpandedRowKey(null);
+        setEditData({});
+    };
+
+    const isCreating = recordStatus === 'creating';
+    const displayData = isCreating
+        ? [{ [config.primaryKeyField]: NEW_RECORD_KEY }, ...data]
+        : data;
+
+    const expandedIndex = expandedRowKey
+        ? displayData.findIndex((r: any) => String(r[config.primaryKeyField]) === expandedRowKey)
+        : -1;
 
     return (
         <div className="pinteg-crud-listage">
@@ -34,7 +119,8 @@ export const ListagePage = () => {
 
             <CrudHeader title={config.title} description={config.description}>
                 <CreateButton
-                    onClick={() => navigate({ path: '/create' })}
+                    onClick={handleStartCreate}
+                    disabled={isCreating}
                     style={{ padding: '12px 24px', borderRadius: '8px', boxShadow: '0 4px 12px rgba(var(--color-primary-rgb), 0.2)' }}
                 />
             </CrudHeader>
@@ -49,29 +135,53 @@ export const ListagePage = () => {
             }}>
                 <PIntegTable
                     schema={config.schema}
-                    value={data}
+                    value={displayData}
                     readOnly={true}
-                    actions={(row) => (
-                        <div style={{ display: 'flex', justifyContent: 'center' }}>
-                            <EditButton
-                                style={{
-                                    padding: '6px 16px',
-                                    fontSize: '0.85rem',
-                                    borderRadius: '6px',
-                                    border: '1px solid var(--color-primary)',
-                                    color: 'var(--color-primary)',
-                                    background: 'transparent',
-                                    fontWeight: 600
-                                }}
-                                onClick={(e: React.MouseEvent) => {
-                                    e.stopPropagation();
-                                    handleRowClick(0, row);
-                                }}
-                            >
-                                Open
-                            </EditButton>
-                        </div>
+                    onRowClick={(row: any) => toggleRow(row)}
+                    expandedRowIndices={expandedIndex >= 0 ? [expandedIndex] : []}
+                    expandedRow={() => (
+                        <RecordAccordionDetails
+                            recordKey={expandedRowKey || ''}
+                            schema={config.schema}
+                            editData={editData}
+                            setEditData={setEditData}
+                            status={recordStatus}
+                            onStatusChange={setRecordStatus}
+                            handleSave={handleSave}
+                            handleDelete={handleDelete}
+                            onCancelCreate={handleCancelCreate}
+                        />
                     )}
+                    actions={(row: any) => {
+                        const key = String(row[config.primaryKeyField]);
+                        const isNew = key === NEW_RECORD_KEY;
+                        const isActive = isNew || expandedRowKey === key;
+                        const handleClick = isNew ? handleCancelCreate : () => toggleRow(row);
+                        const title = isNew
+                            ? 'Cancel creation'
+                            : isActive ? 'Close Details' : 'View/Edit Details';
+
+                        return (
+                            <div style={{ display: 'flex', justifyContent: 'center', width: '40px' }}>
+                                <PIntegButton
+                                    icon={isActive ? <ChevronUpIcon size={20} /> : <ChevronDownIcon size={20} />}
+                                    onClick={(e: React.MouseEvent) => { e.stopPropagation(); handleClick(); }}
+                                    style={{
+                                        padding: '8px',
+                                        minWidth: 'auto',
+                                        borderRadius: '50%',
+                                        background: isActive ? 'var(--color-primary-light, rgba(var(--color-primary-rgb), 0.1))' : 'transparent',
+                                        color: isActive ? 'var(--color-primary)' : 'var(--color-text-subtle)',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        transition: 'all 0.2s ease',
+                                    }}
+                                    className="pinteg-btn--ghost"
+                                    title={title}
+                                />
+                            </div>
+                        );
+                    }}
                     style={{ margin: 0, border: 'none' }}
                 />
             </div>

@@ -1,15 +1,16 @@
 import React from 'react';
 import { PIntegButton, PIntegButtonProps } from './PIntegButton';
 import { ConfirmActionButton } from './ConfirmActionButton';
+import { PlusIcon, SaveIcon, TrashIcon, XIcon, PencilIcon, CheckIcon } from './Icons';
 
 export const SaveButton: React.FC<PIntegButtonProps> = (props) => (
-    <PIntegButton variant="primary" {...props}>
+    <PIntegButton variant="primary" icon={<SaveIcon />} {...props}>
         {props.children || 'Save'}
     </PIntegButton>
 );
 
 export const CancelButton: React.FC<PIntegButtonProps> = (props) => (
-    <PIntegButton variant="secondary" {...props}>
+    <PIntegButton variant="secondary" icon={<XIcon />} {...props}>
         {props.children || 'Cancel'}
     </PIntegButton>
 );
@@ -25,6 +26,8 @@ export const DeleteButton: React.FC<DeleteButtonProps> = ({ onClick, requireConf
                 variant="danger"
                 onConfirm={() => onClick({} as any)}
                 confirmLabel="Click to confirm delete!"
+                icon={<TrashIcon />}
+                confirmIcon={<CheckIcon />}
                 {...props}
             >
                 {props.children || 'Delete'}
@@ -33,20 +36,20 @@ export const DeleteButton: React.FC<DeleteButtonProps> = ({ onClick, requireConf
     }
 
     return (
-        <PIntegButton variant="danger" onClick={onClick} {...props}>
+        <PIntegButton variant="danger" icon={<TrashIcon />} onClick={onClick} {...props}>
             {props.children || 'Delete'}
         </PIntegButton>
     );
 };
 
 export const EditButton: React.FC<PIntegButtonProps> = (props) => (
-    <PIntegButton variant="primary" {...props}>
+    <PIntegButton variant="secondary" icon={<PencilIcon />} {...props}>
         {props.children || 'Edit'}
     </PIntegButton>
 );
 
 export const CreateButton: React.FC<PIntegButtonProps> = (props) => (
-    <PIntegButton variant="primary" {...props}>
+    <PIntegButton variant="primary" icon={<PlusIcon />} {...props}>
         {props.children || 'Create New'}
     </PIntegButton>
 );

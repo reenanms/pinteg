@@ -6,6 +6,8 @@ export interface ConfirmActionButtonProps extends PIntegButtonProps {
     onConfirm: () => void;
     /** Label to display during the confirmation state */
     confirmLabel?: string;
+    /** Icon to display during the confirmation state. If not provided, the regular icon is used. */
+    confirmIcon?: React.ReactNode;
     /** Time in milliseconds to wait before reverting from confirmation state back to idle. Defaults to 3000ms. */
     timeout?: number;
 }
@@ -17,8 +19,10 @@ export interface ConfirmActionButtonProps extends PIntegButtonProps {
 export const ConfirmActionButton: React.FC<ConfirmActionButtonProps> = ({
     onConfirm,
     confirmLabel = 'Are you sure?',
+    confirmIcon,
     timeout = 3000,
     children,
+    icon,
     ...props
 }) => {
     const [isConfirming, setIsConfirming] = useState(false);
@@ -39,12 +43,11 @@ export const ConfirmActionButton: React.FC<ConfirmActionButtonProps> = ({
         }
     };
 
-    // If we're confirming, we might want to slightly emphasize the state change (e.g. bold or different style)
-    // For now we just swap the children.
     return (
         <PIntegButton
             {...props}
             onClick={handleClick}
+            icon={isConfirming ? (confirmIcon || icon) : icon}
             className={`${props.className || ''} ${isConfirming ? 'pinteg-btn--confirming' : ''}`.trim()}
         >
             {isConfirming ? confirmLabel : children}

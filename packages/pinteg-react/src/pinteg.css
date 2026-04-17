@@ -116,6 +116,19 @@
     /* Override column widths on mobile */
   }
 
+  /* Expanded accordion row must also become block on mobile so it
+     fills the full width instead of being constrained by fixed columns */
+  .pinteg-table-expanded-row {
+    display: block;
+    width: 100%;
+  }
+
+  .pinteg-table-expanded-row td {
+    display: block;
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
   .pinteg-mobile-label {
     display: block;
   }
@@ -164,6 +177,7 @@
 
 .pinteg-btn {
   width: var(--input-width);
+  max-width: 100%;
   height: calc(var(--input-height) + 5px);
   border-radius: var(--input-radius);
   border: none;
@@ -177,6 +191,19 @@
 
 .pinteg-btn:hover {
   opacity: 0.8;
+}
+
+.pinteg-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(0.5);
+  box-shadow: none;
+}
+
+.pinteg-btn--small {
+  padding: 0 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
 }
 
 .pinteg-btn--primary {
@@ -219,4 +246,105 @@
   background: var(--color-danger);
   filter: saturate(1.2) brightness(0.95);
   /* Slightly deeper red, less flashy */
+}
+
+/* Expanded Table Rows */
+.pinteg-table-data-row--expanded {
+  background-color: var(--color-surface-alt);
+}
+
+.pinteg-table-data-row--expanded td {
+  border-bottom: none;
+}
+
+.pinteg-table-expanded-row td {
+  background-color: var(--color-surface-alt);
+  border-top: 2px solid var(--color-border-subtle);
+  border-bottom: 2px solid var(--color-border-subtle);
+  padding: 0;
+}
+
+.pinteg-table-expanded-content {
+  padding: 0;
+  /* padding handled by child container for finer control */
+  animation: pinteg-fade-in 0.25s ease-out;
+}
+
+.pinteg-accordion-details {
+  padding: 2rem;
+  background: var(--color-surface-alt);
+  border-radius: 0 0 12px 12px;
+  box-sizing: border-box;
+  width: 100%;
+  overflow: hidden;
+}
+
+@keyframes pinteg-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Danger Zone Component */
+.pinteg-danger-zone {
+  background: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.pinteg-danger-zone__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.pinteg-danger-zone__title {
+  margin: 0 0 0.25rem 0;
+  color: var(--color-danger, #ef4444);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.pinteg-danger-zone__description {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-text-subtle);
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .pinteg-accordion-details {
+    padding: 1.5rem;
+  }
+
+  .pinteg-danger-zone {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .pinteg-danger-zone button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .pinteg-accordion-details {
+    padding: 1rem 0.75rem;
+  }
+
+  .pinteg-danger-zone {
+    padding: 0.75rem;
+  }
 }
