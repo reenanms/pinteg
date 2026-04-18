@@ -33,6 +33,13 @@ function resolveHardcodedOptions(options: any[], parentValue?: any) {
     });
 }
 
+function resolveOption(opt: any): { val: any; label: any } {
+    if (typeof opt === 'object') {
+        return { val: opt.key, label: opt.caption };
+    }
+    return { val: opt, label: opt };
+}
+
 export const ListField: React.FC<FieldRendererProps> = ({
     name, caption, value, size, readOnly, tableMode, onChange, props, formValues
 }) => {
@@ -53,13 +60,8 @@ export const ListField: React.FC<FieldRendererProps> = ({
         : resolveHardcodedOptions(props?.options || [], parentValue);
 
     if (readOnly) {
-        const activeOption = options.find((opt: any) => {
-            const val = typeof opt === 'object' ? (opt.key ?? opt.value ?? opt.id) : opt;
-            return String(val) === String(value);
-        });
-        const label = activeOption
-            ? (typeof activeOption === 'object' ? (activeOption.caption ?? activeOption.label ?? activeOption.name) : activeOption)
-            : (value ?? '');
+        const activeOption = options.find((opt: any) => String(resolveOption(opt).val) === String(value));
+        const label = activeOption ? resolveOption(activeOption).label : (value ?? '');
 
         return (
             <div className="pinteg-field" style={style}>
@@ -88,8 +90,7 @@ export const ListField: React.FC<FieldRendererProps> = ({
             >
                 <option value="">Select...</option>
                 {options.map((opt: any, i: number) => {
-                    const val = typeof opt === 'object' ? (opt.key ?? opt.value ?? opt.id) : opt;
-                    const lbl = typeof opt === 'object' ? (opt.caption ?? opt.label ?? opt.name) : opt;
+                    const { val, label: lbl } = resolveOption(opt);
                     return <option key={val ?? i} value={val}>{lbl}</option>;
                 })}
             </select>
