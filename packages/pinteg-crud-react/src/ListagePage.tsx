@@ -28,17 +28,16 @@ export const ListagePage = () => {
     const NEW_RECORD_KEY = '__creating__';
 
     const refreshData = useCallback(() => {
-        const source = DataSourceManager.resolve(config.dataSourceName);
-        source.read()
+        DataSourceManager.resolve(config.dataSource.list)()
             .then(res => setData(Array.isArray(res) ? res : (res ? [res] : [])))
-            .catch(e => setError(e.message));
-    }, [config.dataSourceName]);
+            .catch((e: any) => setError(e.message));
+    }, [config.dataSource.list]);
 
     useEffect(() => {
         refreshData();
     }, [refreshData]);
 
-    const toggleRow = (rowData: any) => {
+    const toggleRow = async (rowData: any) => {
         const key = String(rowData[config.primaryKeyField]);
         if (key === NEW_RECORD_KEY || recordStatus === 'creating') return;
         if (expandedRowKey === key) {
@@ -47,8 +46,14 @@ export const ListagePage = () => {
             setRecordStatus('viewing');
         } else {
             setExpandedRowKey(key);
-            setEditData({ ...rowData });
-            setRecordStatus('viewing'); // Default to read-only
+            setEditData({});
+            setRecordStatus('viewing');
+            try {
+                const detail = await DataSourceManager.resolve(config.dataSource.get)({ key, ...rowData });
+                setEditData(detail);
+            } catch (e: any) {
+                setError(e.message);
+            }
         }
     };
 
@@ -56,12 +61,11 @@ export const ListagePage = () => {
         if (!expandedRowKey) return;
         setError('');
         try {
-            const source = DataSourceManager.resolve(config.dataSourceName);
             if (recordStatus === 'creating') {
-                const createdRecord = await source.create(editData);
+                const createdRecord = await DataSourceManager.resolve(config.dataSource.create)(editData);
                 setData(prev => [createdRecord, ...prev]);
             } else {
-                const updatedRecord = await source.update(expandedRowKey, editData);
+                const updatedRecord = await DataSourceManager.resolve(config.dataSource.update)({ key: expandedRowKey, ...editData });
                 setData(prev => prev.map(item =>
                     String(item[config.primaryKeyField]) === expandedRowKey
                         ? { ...item, ...editData, ...(updatedRecord || {}) }
@@ -79,8 +83,7 @@ export const ListagePage = () => {
     const handleDelete = async () => {
         if (!expandedRowKey) return;
         try {
-            const source = DataSourceManager.resolve(config.dataSourceName);
-            await source.delete(expandedRowKey);
+            await DataSourceManager.resolve(config.dataSource.delete)({ key: expandedRowKey });
             setData(prev => prev.filter(item => String(item[config.primaryKeyField]) !== expandedRowKey));
             setRecordStatus('viewing');
             setExpandedRowKey(null);

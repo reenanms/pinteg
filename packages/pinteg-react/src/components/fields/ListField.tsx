@@ -10,8 +10,7 @@ function useDataSourceOptions(source?: string, parentValue?: any) {
         if (source) {
             let isMounted = true;
             const params = parentValue !== undefined ? { filter: parentValue } : undefined;
-            const sourceInstance = DataSourceManager.resolve(source);
-            sourceInstance.read(params)
+            DataSourceManager.resolve(source)(params)
                 .then((data: any) => {
                     if (isMounted) setDynamicOptions(Array.isArray(data) ? data : []);
                 })

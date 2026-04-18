@@ -1,33 +1,30 @@
-export interface DataSource<T = any> {
-    read: (params?: Record<string, any>) => Promise<T | T[]>;
-    create: (data: Partial<T>, params?: Record<string, any>) => Promise<T>;
-    update: (key: string, data: Partial<T>, params?: Record<string, any>) => Promise<T>;
-    delete: (key: string, params?: Record<string, any>) => Promise<void>;
-}
+export type DataSourceHandler<TParams = Record<string, any>, TResult = any> =
+    (params?: TParams) => Promise<TResult>;
 
 export const DataSourceManager = {
-    _sources: new Map<string, DataSource>(),
+    _sources: new Map<string, DataSourceHandler>(),
 
-    register(name: string, source: Partial<DataSource>): void {
+    register<TParams = Record<string, any>, TResult = any>(
+        name: string,
+        handler: DataSourceHandler<TParams, TResult>
+    ): void {
         if (this._sources.has(name)) {
             console.warn(`Data source '${name}' is already registered and will be overwritten.`);
         }
-
-        const fullSource: DataSource = {
-            read: source.read ?? (async () => { throw new Error(`'read' operation is not implemented for data source '${name}'`); }),
-            create: source.create ?? (async () => { throw new Error(`'create' operation is not implemented for data source '${name}'`); }),
-            update: source.update ?? (async () => { throw new Error(`'update' operation is not implemented for data source '${name}'`); }),
-            delete: source.delete ?? (async () => { throw new Error(`'delete' operation is not implemented for data source '${name}'`); })
-        };
-
-        this._sources.set(name, fullSource);
+        this._sources.set(name, handler as DataSourceHandler);
     },
 
-    resolve<T = any>(name: string): DataSource<T> {
-        const source = this._sources.get(name);
-        if (!source) {
+    resolve<TParams = Record<string, any>, TResult = any>(
+        name: string
+    ): DataSourceHandler<TParams, TResult> {
+        const handler = this._sources.get(name);
+        if (!handler) {
             throw new Error(`Data source '${name}' is not registered.`);
         }
-        return source as DataSource<T>;
+        return handler as DataSourceHandler<TParams, TResult>;
+    },
+
+    has(name: string): boolean {
+        return this._sources.has(name);
     }
 };

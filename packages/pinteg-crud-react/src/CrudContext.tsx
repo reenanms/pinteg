@@ -6,11 +6,19 @@ export interface CrudRoute {
     key?: string;
 }
 
+export interface CrudDataSource {
+    list:   string;
+    get:    string;
+    create: string;
+    update: string;
+    delete: string;
+}
+
 export interface CrudConfig {
     title: string;
     description?: string;
     schema: ComponentSchema;
-    dataSourceName: string;
+    dataSource: CrudDataSource;
     primaryKeyField: string;
 }
 

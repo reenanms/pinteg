@@ -11,42 +11,34 @@ import {
 } from 'pinteg-react';
 import { DataSourceManager } from 'pinteg-data-source';
 
-DataSourceManager.register('demoCountrySource', {
-    read: async () => {
-        return [
-            { key: "BR", caption: "Brazil" },
-            { key: "US", caption: "United States" },
-            { key: "CA", caption: "Canada" },
-        ];
+DataSourceManager.register('demoCountrySource', async () => [
+    { key: "BR", caption: "Brazil" },
+    { key: "US", caption: "United States" },
+    { key: "CA", caption: "Canada" },
+]);
+
+DataSourceManager.register('demoStateSource', async (params) => {
+    const states: Record<string, any[]> = {
+        "BR": [{ key: "SP", caption: "São Paulo" }, { key: "RJ", caption: "Rio de Janeiro" }],
+        "US": [{ key: "NY", caption: "New York" }, { key: "CA", caption: "California" }]
+    };
+    if (params?.filter && states[params.filter]) {
+        return states[params.filter];
     }
+    return [];
 });
 
-DataSourceManager.register('demoStateSource', {
-    read: async (params) => {
-        const states: Record<string, any[]> = {
-            "BR": [{ key: "SP", caption: "São Paulo" }, { key: "RJ", caption: "Rio de Janeiro" }],
-            "US": [{ key: "NY", caption: "New York" }, { key: "CA", caption: "California" }]
-        };
-        if (params?.filter && states[params.filter]) {
-            return states[params.filter];
-        }
-        return [];
+DataSourceManager.register('demoCitySource', async (params) => {
+    const cities: Record<string, any[]> = {
+        "SP": [{ key: "SAO", caption: "São Paulo (City)" }, { key: "CMP", caption: "Campinas" }],
+        "RJ": [{ key: "RIO", caption: "Rio de Janeiro (City)" }, { key: "NIT", caption: "Niterói" }],
+        "NY": [{ key: "NYC", caption: "New York City" }, { key: "BUF", caption: "Buffalo" }],
+        "CA": [{ key: "LA", caption: "Los Angeles" }, { key: "SF", caption: "San Francisco" }]
+    };
+    if (params?.filter && cities[params.filter]) {
+        return cities[params.filter];
     }
-});
-
-DataSourceManager.register('demoCitySource', {
-    read: async (params) => {
-        const cities: Record<string, any[]> = {
-            "SP": [{ key: "SAO", caption: "São Paulo (City)" }, { key: "CMP", caption: "Campinas" }],
-            "RJ": [{ key: "RIO", caption: "Rio de Janeiro (City)" }, { key: "NIT", caption: "Niterói" }],
-            "NY": [{ key: "NYC", caption: "New York City" }, { key: "BUF", caption: "Buffalo" }],
-            "CA": [{ key: "LA", caption: "Los Angeles" }, { key: "SF", caption: "San Francisco" }]
-        };
-        if (params?.filter && cities[params.filter]) {
-            return cities[params.filter];
-        }
-        return [];
-    }
+    return [];
 });
 
 // 1. Define Schames from legacy project

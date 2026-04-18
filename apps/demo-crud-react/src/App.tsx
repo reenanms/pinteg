@@ -9,24 +9,32 @@ let mockData = [
     { id: 2, name: 'Jane Smith', role: 'user' }
 ];
 
-DataSourceManager.register('userManager', {
-    read: async () => [...mockData],
-    create: async (data: any) => {
-        const newUser: { id: number, name: string, role: string } = { name: '', role: '', ...data, id: Date.now() };
-        mockData.push(newUser);
-        return newUser;
-    },
-    update: async (id: string, data: any) => {
-        const index = mockData.findIndex(u => String(u.id) === id);
-        if (index > -1) {
-            mockData[index] = { ...mockData[index], ...data };
-            return mockData[index];
-        }
-        throw new Error("User not found");
-    },
-    delete: async (id: string) => {
-        mockData = mockData.filter(u => String(u.id) !== id);
+DataSourceManager.register('userManager.list', async () => [...mockData]);
+
+DataSourceManager.register('userManager.get', async (params: any) => {
+    const user = mockData.find(u => String(u.id) === params.key);
+    if (!user) throw new Error('User not found');
+    return user;
+});
+
+DataSourceManager.register('userManager.create', async (data: any) => {
+    const newUser: { id: number, name: string, role: string } = { name: '', role: '', ...data, id: Date.now() };
+    mockData.push(newUser);
+    return newUser;
+});
+
+DataSourceManager.register('userManager.update', async (params: any) => {
+    const { key, ...data } = params;
+    const index = mockData.findIndex(u => String(u.id) === key);
+    if (index > -1) {
+        mockData[index] = { ...mockData[index], ...data };
+        return mockData[index];
     }
+    throw new Error("User not found");
+});
+
+DataSourceManager.register('userManager.delete', async (params: any) => {
+    mockData = mockData.filter(u => String(u.id) !== params.key);
 });
 
 const config: CrudConfig = {
@@ -44,7 +52,13 @@ const config: CrudConfig = {
             ]
         }
     },
-    dataSourceName: 'userManager',
+    dataSource: {
+        list:   'userManager.list',
+        get:    'userManager.get',
+        create: 'userManager.create',
+        update: 'userManager.update',
+        delete: 'userManager.delete',
+    },
     primaryKeyField: 'id'
 };
 
