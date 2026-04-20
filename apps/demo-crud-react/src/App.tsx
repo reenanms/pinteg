@@ -41,15 +41,21 @@ const config: CrudConfig = {
     title: 'User Management',
     description: 'Manage the users in your system using this CRUD interface.',
     schema: {
-        name: { type: 'text', caption: 'Full Name', size: 'L' },
-        role: {
-            type: 'list',
-            caption: 'System Role',
-            size: 'M',
-            options: [
-                { key: 'admin', caption: 'Administrator' },
-                { key: 'user', caption: 'Regular User' }
-            ]
+        list: {
+            name: { type: 'text', caption: 'Full Name', size: 'L' },
+            role: { type: 'text', caption: 'Role', size: 'S' }
+        },
+        detail: {
+            name: { type: 'text', caption: 'Full Name', size: 'L' },
+            role: {
+                type: 'list',
+                caption: 'System Role',
+                size: 'M',
+                options: [
+                    { key: 'admin', caption: 'Administrator' },
+                    { key: 'user', caption: 'Regular User' }
+                ]
+            }
         }
     },
     dataSource: {

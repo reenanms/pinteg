@@ -137,7 +137,7 @@ export const ListagePage = () => {
                 overflow: 'hidden'
             }}>
                 <PIntegTable
-                    schema={config.schema}
+                    schema={config.schema.list}
                     value={displayData}
                     readOnly={true}
                     onRowClick={(row: any) => toggleRow(row)}
@@ -145,7 +145,7 @@ export const ListagePage = () => {
                     expandedRow={() => (
                         <RecordAccordionDetails
                             recordKey={expandedRowKey || ''}
-                            schema={config.schema}
+                            schema={config.schema.detail}
                             editData={editData}
                             setEditData={setEditData}
                             status={recordStatus}

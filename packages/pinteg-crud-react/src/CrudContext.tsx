@@ -14,10 +14,15 @@ export interface CrudDataSource {
     delete: string;
 }
 
+export interface CrudSchemas {
+    list:   ComponentSchema;
+    detail: ComponentSchema;
+}
+
 export interface CrudConfig {
     title: string;
     description?: string;
-    schema: ComponentSchema;
+    schema: CrudSchemas;
     dataSource: CrudDataSource;
     primaryKeyField: string;
 }
