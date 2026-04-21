@@ -53,31 +53,70 @@
 }
 
 .pinteg-table th {
-  padding: 8px 16px;
+  height: var(--input-height);
+  padding: 0 8px;
   text-align: left;
   background-color: var(--color-surface-alt);
   font-weight: 600;
-  border-bottom: 2px solid var(--color-border-subtle);
+  border-bottom: 1px solid var(--color-border-subtle);
+  box-sizing: border-box;
+  vertical-align: middle;
 }
 
 .pinteg-table td {
   padding: 0;
   text-align: left;
   border-bottom: 1px solid var(--color-border-subtle);
+  vertical-align: middle;
+  height: var(--input-height);
+  /* Ensure cells have a rigid height */
 }
 
-.pinteg-table-data-row:last-child td {
-  border-bottom: none;
+.pinteg-table-expanded-row td {
+  height: auto;
+  padding: 16px; /* Add some padding to the expanded form container */
+}
+
+/* Allow inputs to fill the table cell completely (Excel-like), but ONLY for data rows, not expanded detail forms */
+.pinteg-table-data-row>td>.pinteg-field {
+  width: 100%;
+  height: 100%;
+  flex: 1 1 100%;
+  margin: 0;
+}
+
+.pinteg-table-data-row>td>.pinteg-field>.pinteg-input {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.pinteg-table-data-row>td>.pinteg-field>.pinteg-input:focus {
+  outline: none;
+  background-color: var(--color-focus-background);
+  box-shadow: inset 0 0 0 2px var(--color-primary);
+  position: relative;
+  z-index: 1;
+}
+
+.pinteg-table-data-row>td>.pinteg-field>.pinteg-input[readonly] {
+  background-color: transparent;
+  color: var(--color-text-readonly);
 }
 
 
 
 .pinteg-mobile-label {
   display: none;
-  font-weight: 500;
-  font-size: 0.85em;
+  font-weight: 600;
+  font-size: 0.95em;
   margin-bottom: 4px;
-  color: var(--color-text-subtle);
+  color: var(--color-text);
 }
 
 @media (max-width: 768px) {
@@ -112,8 +151,15 @@
     flex-direction: column;
     padding: 0;
     border-bottom: none;
+    border-right: none;
     width: 100% !important;
+    height: auto; /* Reset height restriction on mobile so content expands */
     /* Override column widths on mobile */
+  }
+
+  .pinteg-table-data-row>td>.pinteg-field,
+  .pinteg-table-data-row>td>.pinteg-field>.pinteg-input {
+    height: var(--input-height);
   }
 
   /* Expanded accordion row must also become block on mobile so it
@@ -167,6 +213,11 @@
     flex: none !important;
     width: 100% !important;
   }
+
+  .pinteg-crud-header-action-item {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+  }
 }
 
 .pinteg-nested-section {
@@ -176,9 +227,8 @@
 }
 
 .pinteg-btn {
-  width: var(--input-width);
-  max-width: 100%;
-  height: calc(var(--input-height) + 5px);
+  padding: 0 16px;
+  height: var(--input-height);
   border-radius: var(--input-radius);
   border: none;
   cursor: pointer;
@@ -193,6 +243,13 @@
   opacity: 0.8;
 }
 
+.pinteg-btn:focus {
+  outline: none;
+  /* Using inset shadow so it draws INSIDE the button. 
+     This prevents it from being cut off by the table's overflow: hidden on the last row */
+  box-shadow: inset 0 0 0 0px var(--color-surface), inset 0 0 0 3px var(--color-primary);
+}
+
 .pinteg-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -201,9 +258,18 @@
 }
 
 .pinteg-btn--small {
-  padding: 0 10px;
-  font-size: 0.85rem;
-  font-weight: 600;
+  width: calc(var(--input-width) * 0.5);
+  max-width: 100%;
+}
+
+.pinteg-btn--medium {
+  width: calc(var(--input-width)*0.75);
+  max-width: 100%;
+}
+
+.pinteg-btn--large {
+  width: calc(var(--input-width) * 1.0);
+  max-width: 100%;
 }
 
 .pinteg-btn--primary {

@@ -16,7 +16,7 @@ export const PIntegButton: React.FC<PIntegButtonProps> = ({
     ...props
 }) => {
     const variantClass = variant !== 'default' ? `pinteg-btn--${variant}` : '';
-    const sizeClass = size !== 'medium' ? `pinteg-btn--${size}` : '';
+    const sizeClass = `pinteg-btn--${size}`;
 
     return (
         <button

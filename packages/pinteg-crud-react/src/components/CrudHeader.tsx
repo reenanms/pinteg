@@ -4,18 +4,14 @@ export interface CrudHeaderProps {
     title: string;
     description?: string;
     children?: React.ReactNode;
-    /** Horizontal alignment of the actions row. Defaults to 'start'. */
     actionsAlign?: 'start' | 'end' | 'center';
-    /** If true, actions will expand to fill all available horizontal space. */
-    actionsFullWidth?: boolean;
 }
 
 export const CrudHeader: React.FC<CrudHeaderProps> = ({
     title,
     description,
     children,
-    actionsAlign = 'start',
-    actionsFullWidth = false
+    actionsAlign = 'start'
 }) => {
     return (
         <header style={{ marginBottom: '2.5rem' }}>
@@ -35,18 +31,12 @@ export const CrudHeader: React.FC<CrudHeaderProps> = ({
                     justifyContent: actionsAlign === 'end' ? 'flex-end' : (actionsAlign === 'center' ? 'center' : 'flex-start')
                 }}>
                     {React.Children.map(children, child => (
-                        <div style={{
-                            flex: actionsFullWidth ? '1 1 200px' : 'none',
-                            display: 'flex',
-                            minWidth: actionsFullWidth ? '200px' : 'auto'
-                        }}>
-                            {React.isValidElement(child) ? React.cloneElement(child, {
-                                ...child.props,
-                                style: {
-                                    width: '100%',
-                                    ...child.props.style
-                                }
-                            } as any) : child}
+                        <div className="pinteg-crud-header-action-item"
+                            style={{
+                                flex: 'none',
+                                display: 'flex',
+                            }}>
+                            {child}
                         </div>
                     ))}
                 </div>

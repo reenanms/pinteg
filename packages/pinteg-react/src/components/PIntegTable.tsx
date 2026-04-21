@@ -69,7 +69,7 @@ export const PIntegTable = React.forwardRef<PIntegTableRef, PIntegTableProps>((p
                             {def.caption}
                         </th>
                     ))}
-                    {props.actions && <th style={{ width: '100px' }}>Actions</th>}
+                    {props.actions && <th style={{ width: '50px' }}></th>}
                 </tr>
             </thead>
             <tbody>
@@ -86,7 +86,7 @@ export const PIntegTable = React.forwardRef<PIntegTableRef, PIntegTableProps>((p
                                     </div>
                                 </td>
                                 {props.actions && (
-                                    <td style={{ textAlign: 'center', padding: '8px', verticalAlign: 'top' }}>
+                                    <td style={{ textAlign: 'center', padding: '0 4px', verticalAlign: 'top' }}>
                                         {props.actions(row, rowIndex)}
                                     </td>
                                 )}
@@ -116,7 +116,7 @@ export const PIntegTable = React.forwardRef<PIntegTableRef, PIntegTableProps>((p
                                 </td>
                             ))}
                             {props.actions && (
-                                <td style={{ textAlign: 'center', padding: '8px' }}>
+                                <td style={{ textAlign: 'center', padding: '0 4px' }}>
                                     {props.actions(row, rowIndex)}
                                 </td>
                             )}

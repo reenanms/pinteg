@@ -125,6 +125,7 @@ export const ListagePage = () => {
                     onClick={handleStartCreate}
                     disabled={isCreating}
                     style={{ padding: '12px 24px', borderRadius: '8px', boxShadow: '0 4px 12px rgba(var(--color-primary-rgb), 0.2)' }}
+                    size='small'
                 />
             </CrudHeader>
 

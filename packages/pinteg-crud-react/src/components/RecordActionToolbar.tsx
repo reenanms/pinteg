@@ -27,14 +27,14 @@ export const RecordActionToolbar: React.FC<RecordActionToolbarProps> = ({
         }}>
             {status === 'creating' ? (
                 <>
-                    <SaveButton size="small" onClick={onSave}>Save New Record</SaveButton>
-                    <CancelButton size="small" onClick={onCancelCreate}>Cancel</CancelButton>
+                    <CancelButton size="medium" onClick={onCancelCreate}>Cancel</CancelButton>
+                    <SaveButton size="medium" onClick={onSave}>Save New</SaveButton>
                 </>
             ) : (
                 <>
-                    {status === 'viewing' && <EditButton size="small" onClick={onEdit}>Edit Record</EditButton>}
-                    {status === 'editing' && <CancelButton size="small" onClick={onCancelEdit}>Cancel</CancelButton>}
-                    <SaveButton size="small" onClick={onSave} disabled={status !== 'editing'}>Save Changes</SaveButton>
+                    {status === 'viewing' && <EditButton size="medium" onClick={onEdit}>Edit</EditButton>}
+                    {status === 'editing' && <CancelButton size="medium" onClick={onCancelEdit}>Cancel</CancelButton>}
+                    <SaveButton size="medium" onClick={onSave} disabled={status !== 'editing'}>Save Changes</SaveButton>
                 </>
             )}
         </div>
