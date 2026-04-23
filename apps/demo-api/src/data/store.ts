@@ -1,0 +1,42 @@
+export const store = {
+    departments: [
+        { id: 1, name: 'Engineering' },
+        { id: 2, name: 'Human Resources' },
+        { id: 3, name: 'Marketing' },
+        { id: 4, name: 'Sales' },
+        { id: 5, name: 'Finance' },
+        { id: 6, name: 'Operations' },
+        { id: 7, name: 'Legal' },
+        { id: 8, name: 'IT Support' }
+    ],
+    nextDeptId: 9,
+    users: [
+        { id: 1, name: 'Alice Smith', email: 'alice@example.com', role: 'admin', departmentId: 1 },
+        { id: 2, name: 'Bob Johnson', email: 'bob@example.com', role: 'user', departmentId: 1 },
+        { id: 3, name: 'Charlie Brown', email: 'charles@example.com', role: 'user', departmentId: 2 },
+        { id: 4, name: 'Diana Prince', email: 'diana@example.com', role: 'admin', departmentId: 7 },
+        { id: 5, name: 'Evan Wright', email: 'evan@example.com', role: 'user', departmentId: 3 },
+        { id: 6, name: 'Fiona Gallagher', email: 'fiona@example.com', role: 'user', departmentId: 4 },
+        { id: 7, name: 'George Miller', email: 'george@example.com', role: 'user', departmentId: 5 },
+        { id: 8, name: 'Hannah Abbott', email: 'hannah@example.com', role: 'user', departmentId: 6 },
+        { id: 9, name: 'Ian Malcolm', email: 'ian@example.com', role: 'user', departmentId: 8 },
+        { id: 10, name: 'Julia Roberts', email: 'julia@example.com', role: 'admin', departmentId: 2 },
+        { id: 11, name: 'Kevin Hart', email: 'kevin@example.com', role: 'user', departmentId: 4 },
+        { id: 12, name: 'Laura Dern', email: 'laura@example.com', role: 'user', departmentId: 8 },
+        { id: 13, name: 'Michael Scott', email: 'michael@example.com', role: 'admin', departmentId: 4 },
+        { id: 14, name: 'Nina Simone', email: 'nina@example.com', role: 'user', departmentId: 3 },
+        { id: 15, name: 'Oscar Wilde', email: 'oscar@example.com', role: 'user', departmentId: 7 },
+        { id: 16, name: 'Pam Beesly', email: 'pam@example.com', role: 'user', departmentId: 2 },
+        { id: 17, name: 'Quincy Jones', email: 'quincy@example.com', role: 'user', departmentId: 5 },
+        { id: 18, name: 'Rachel Green', email: 'rachel@example.com', role: 'user', departmentId: 3 },
+        { id: 19, name: 'Steve Jobs', email: 'steve@example.com', role: 'admin', departmentId: 1 },
+        { id: 20, name: 'Tina Fey', email: 'tina@example.com', role: 'user', departmentId: 6 },
+        { id: 21, name: 'Uma Thurman', email: 'uma@example.com', role: 'user', departmentId: 7 },
+        { id: 22, name: 'Victor Hugo', email: 'victor@example.com', role: 'user', departmentId: 5 },
+        { id: 23, name: 'Walter White', email: 'walter@example.com', role: 'user', departmentId: 1 },
+        { id: 24, name: 'Xena Warrior', email: 'xena@example.com', role: 'admin', departmentId: 6 },
+        { id: 25, name: 'Yoda Master', email: 'yoda@example.com', role: 'admin', departmentId: 8 },
+        { id: 26, name: 'Zack Snyder', email: 'zack@example.com', role: 'user', departmentId: 3 }
+    ],
+    nextUserId: 27
+};
