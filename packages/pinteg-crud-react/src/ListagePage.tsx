@@ -141,7 +141,7 @@ export const ListagePage = () => {
                     schema={config.schema.list}
                     value={displayData}
                     readOnly={true}
-                    onRowClick={(row: any) => toggleRow(row)}
+                    // onRowClick={(_, row: any) => toggleRow(row)}
                     expandedRowIndices={expandedIndex >= 0 ? [expandedIndex] : []}
                     expandedRow={() => (
                         <RecordAccordionDetails
