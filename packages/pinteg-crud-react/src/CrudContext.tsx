@@ -15,8 +15,8 @@ export interface CrudDataSource {
 }
 
 export interface CrudSchemas {
-    list:   ComponentSchema;
-    detail: ComponentSchema;
+    list:   string;
+    detail: string;
 }
 
 export interface CrudConfig {

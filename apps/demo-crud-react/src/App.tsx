@@ -37,26 +37,30 @@ DataSourceManager.register('userManager.delete', async (params: any) => {
     mockData = mockData.filter(u => String(u.id) !== params.key);
 });
 
+DataSourceManager.register('userManager.schema.list', async () => ({
+    name: { type: 'text', caption: 'Full Name', size: 'L' },
+    role: { type: 'text', caption: 'Role', size: 'S' }
+}));
+
+DataSourceManager.register('userManager.schema.detail', async () => ({
+    name: { type: 'text', caption: 'Full Name', size: 'L' },
+    role: {
+        type: 'list',
+        caption: 'System Role',
+        size: 'M',
+        options: [
+            { key: 'admin', caption: 'Administrator' },
+            { key: 'user', caption: 'Regular User' }
+        ]
+    }
+}));
+
 const config: CrudConfig = {
     title: 'User Management',
     description: 'Manage the users in your system using this CRUD interface.',
     schema: {
-        list: {
-            name: { type: 'text', caption: 'Full Name', size: 'L' },
-            role: { type: 'text', caption: 'Role', size: 'S' }
-        },
-        detail: {
-            name: { type: 'text', caption: 'Full Name', size: 'L' },
-            role: {
-                type: 'list',
-                caption: 'System Role',
-                size: 'M',
-                options: [
-                    { key: 'admin', caption: 'Administrator' },
-                    { key: 'user', caption: 'Regular User' }
-                ]
-            }
-        }
+        list:   'userManager.schema.list',
+        detail: 'userManager.schema.detail',
     },
     dataSource: {
         list:   'userManager.list',

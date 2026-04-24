@@ -4,18 +4,14 @@ import {
     CreateButton,
     PIntegButton,
     ChevronDownIcon,
-    ChevronUpIcon,
-    PIntegForm,
-    SaveButton,
-    CancelButton,
-    DeleteButton,
-    EditButton
+    ChevronUpIcon
 } from 'pinteg-react';
+import { ComponentSchema } from 'pinteg-core';
 import { DataSourceManager } from 'pinteg-data-source';
 import { useCrudContext } from './CrudContext';
 import { CrudBreadcrumbs, CrudHeader, CrudErrorDisplay, RecordAccordionDetails } from './components';
-
 import { RecordStatus } from './components/RecordStatus';
+
 
 export const ListagePage = () => {
     const { config, navigate } = useCrudContext();
@@ -24,6 +20,7 @@ export const ListagePage = () => {
     const [expandedRowKey, setExpandedRowKey] = useState<string | null>(null);
     const [editData, setEditData] = useState<any>({});
     const [recordStatus, setRecordStatus] = useState<RecordStatus>('viewing');
+    const [schemas, setSchemas] = useState<{ list: ComponentSchema; detail: ComponentSchema } | null>(null);
 
     const NEW_RECORD_KEY = '__creating__';
 
@@ -32,6 +29,15 @@ export const ListagePage = () => {
             .then(res => setData(Array.isArray(res) ? res : (res ? [res] : [])))
             .catch((e: any) => setError(e.message));
     }, [config.dataSource.list]);
+
+    useEffect(() => {
+        Promise.all([
+            DataSourceManager.resolve<void, ComponentSchema>(config.schema.list)(),
+            DataSourceManager.resolve<void, ComponentSchema>(config.schema.detail)(),
+        ]).then(([list, detail]) => {
+            setSchemas({ list, detail });
+        }).catch((e: any) => setError(e.message));
+    }, [config.schema.list, config.schema.detail]);
 
     useEffect(() => {
         refreshData();
@@ -113,6 +119,8 @@ export const ListagePage = () => {
         ? displayData.findIndex((r: any) => String(r[config.primaryKeyField]) === expandedRowKey)
         : -1;
 
+    if (!schemas) return null;
+
     return (
         <div className="pinteg-crud-listage">
             <CrudBreadcrumbs items={[
@@ -138,7 +146,7 @@ export const ListagePage = () => {
                 overflow: 'hidden'
             }}>
                 <PIntegTable
-                    schema={config.schema.list}
+                    schema={schemas.list}
                     value={displayData}
                     readOnly={true}
                     // onRowClick={(_, row: any) => toggleRow(row)}
@@ -146,7 +154,7 @@ export const ListagePage = () => {
                     expandedRow={() => (
                         <RecordAccordionDetails
                             recordKey={expandedRowKey || ''}
-                            schema={config.schema.detail}
+                            schema={schemas.detail}
                             editData={editData}
                             setEditData={setEditData}
                             status={recordStatus}
