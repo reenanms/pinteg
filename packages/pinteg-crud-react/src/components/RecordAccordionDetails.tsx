@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { ComponentSchema } from 'pinteg-core';
 import { RecordEditor } from './RecordEditor';
 import { DangerZone } from './DangerZone';
@@ -29,6 +29,22 @@ export const RecordAccordionDetails: React.FC<RecordAccordionDetailsProps> = ({
     handleDelete,
     onCancelCreate,
 }) => {
+    // Snapshot of data captured when entering edit mode — used to revert on cancel
+    const originalDataRef = useRef<any>(null);
+
+    const handleStartEdit = () => {
+        originalDataRef.current = { ...editData };
+        onStatusChange('editing');
+    };
+
+    const handleCancelEdit = () => {
+        if (originalDataRef.current !== null) {
+            setEditData(originalDataRef.current);
+            originalDataRef.current = null;
+        }
+        onStatusChange('viewing');
+    };
+
     return (
         <div className="pinteg-accordion-details">
 
@@ -46,8 +62,8 @@ export const RecordAccordionDetails: React.FC<RecordAccordionDetailsProps> = ({
 
             <RecordActionToolbar
                 status={status}
-                onEdit={() => onStatusChange('editing')}
-                onCancelEdit={() => onStatusChange('viewing')}
+                onEdit={handleStartEdit}
+                onCancelEdit={handleCancelEdit}
                 onSave={handleSave}
                 onCancelCreate={onCancelCreate}
             />
