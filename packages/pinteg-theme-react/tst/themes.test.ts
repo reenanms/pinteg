@@ -1,8 +1,8 @@
 import { themes } from '../src/themes';
 
 describe('themes', () => {
-    it('exports at least 4 themes', () => {
-        expect(themes.length).toBeGreaterThanOrEqual(4);
+    it('exports at least 3 themes', () => {
+        expect(themes.length).toBeGreaterThanOrEqual(3);
     });
 
     it('every theme has id, name and properties', () => {

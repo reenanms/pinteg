@@ -59,17 +59,24 @@ const config: CrudConfig = {
     title: 'User Management',
     description: 'Manage the users in your system using this CRUD interface.',
     schema: {
-        list:   'userManager.schema.list',
+        list: 'userManager.schema.list',
         detail: 'userManager.schema.detail',
     },
     dataSource: {
-        list:   'userManager.list',
-        get:    'userManager.get',
+        list: 'userManager.list',
+        get: 'userManager.get',
         create: 'userManager.create',
         update: 'userManager.update',
         delete: 'userManager.delete',
     },
-    primaryKeyField: 'id'
+    primaryKeyField: 'id',
+    accessControl: {
+        readList: true,
+        readDetail: true,
+        create: true,
+        update: true,
+        delete: true,
+    },
 };
 
 function ThemeSelector() {

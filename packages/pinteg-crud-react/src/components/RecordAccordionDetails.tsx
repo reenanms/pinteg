@@ -16,6 +16,8 @@ export interface RecordAccordionDetailsProps {
     handleSave: () => void;
     handleDelete: () => void;
     onCancelCreate?: () => void;
+    canUpdate?: boolean;
+    canDelete?: boolean;
 }
 
 export const RecordAccordionDetails: React.FC<RecordAccordionDetailsProps> = ({
@@ -28,6 +30,8 @@ export const RecordAccordionDetails: React.FC<RecordAccordionDetailsProps> = ({
     handleSave,
     handleDelete,
     onCancelCreate,
+    canUpdate,
+    canDelete,
 }) => {
     // Snapshot of data captured when entering edit mode — used to revert on cancel
     const originalDataRef = useRef<any>(null);
@@ -66,9 +70,10 @@ export const RecordAccordionDetails: React.FC<RecordAccordionDetailsProps> = ({
                 onCancelEdit={handleCancelEdit}
                 onSave={handleSave}
                 onCancelCreate={onCancelCreate}
+                canUpdate={canUpdate}
             />
 
-            {status !== 'creating' && (
+            {status !== 'creating' && canDelete && (
                 <div style={{ marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid var(--color-border-subtle)' }}>
                     <DangerZone
                         onDelete={handleDelete}

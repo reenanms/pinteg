@@ -15,6 +15,7 @@ import { RecordStatus } from './components/RecordStatus';
 
 export const ListagePage = () => {
     const { config, navigate } = useCrudContext();
+    const { accessControl } = config;
     const [data, setData] = useState<any[]>([]);
     const [error, setError] = useState<string>('');
     const [expandedRowKey, setExpandedRowKey] = useState<string | null>(null);
@@ -121,6 +122,38 @@ export const ListagePage = () => {
 
     if (!schemas) return null;
 
+    if (!accessControl.readList) {
+        return (
+            <div className="pinteg-crud-listage">
+                <CrudBreadcrumbs items={[
+                    { label: 'Apps' },
+                    { label: config.title, active: true }
+                ]} />
+                <CrudHeader title={config.title} description={config.description} />
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '4rem 2rem',
+                    background: 'var(--color-surface)',
+                    borderRadius: '12px',
+                    border: '1px solid var(--color-border-subtle)',
+                    gap: '1rem',
+                }}>
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ color: 'var(--color-text-subtle)' }}>
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+                    </svg>
+                    <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 600, color: 'var(--color-text)' }}>Access Denied</h3>
+                    <p style={{ margin: 0, color: 'var(--color-text-subtle)', textAlign: 'center' }}>
+                        You do not have permission to view this list.
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="pinteg-crud-listage">
             <CrudBreadcrumbs items={[
@@ -129,12 +162,14 @@ export const ListagePage = () => {
             ]} />
 
             <CrudHeader title={config.title} description={config.description}>
-                <CreateButton
-                    onClick={handleStartCreate}
-                    disabled={isCreating}
-                    style={{ padding: '12px 24px', borderRadius: '8px', boxShadow: '0 4px 12px rgba(var(--color-primary-rgb), 0.2)' }}
-                    size='small'
-                />
+                {accessControl.create && (
+                    <CreateButton
+                        onClick={handleStartCreate}
+                        disabled={isCreating}
+                        style={{ padding: '12px 24px', borderRadius: '8px', boxShadow: '0 4px 12px rgba(var(--color-primary-rgb), 0.2)' }}
+                        size='small'
+                    />
+                )}
             </CrudHeader>
 
             <CrudErrorDisplay error={error} />
@@ -162,6 +197,8 @@ export const ListagePage = () => {
                             handleSave={handleSave}
                             handleDelete={handleDelete}
                             onCancelCreate={handleCancelCreate}
+                            canUpdate={accessControl.update}
+                            canDelete={accessControl.delete}
                         />
                     )}
                     actions={(row: any) => {
@@ -172,6 +209,10 @@ export const ListagePage = () => {
                         const title = isNew
                             ? 'Cancel creation'
                             : isActive ? 'Close Details' : 'View/Edit Details';
+
+                        if (!accessControl.readDetail && !isNew) {
+                            return <div style={{ width: '40px' }} />;
+                        }
 
                         return (
                             <div style={{ display: 'flex', justifyContent: 'center', width: '40px' }}>

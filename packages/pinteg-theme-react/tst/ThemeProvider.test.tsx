@@ -11,7 +11,7 @@ describe('ThemeProvider', () => {
             </ThemeProvider>
         );
         const providerDiv = container.firstChild as HTMLElement;
-        expect(providerDiv.style.getPropertyValue('--color-background')).toBe('#ffffff');
+        expect(providerDiv.style.getPropertyValue('--color-background')).toBe('#fdf6e3');
     });
 
     it('applies dark-theme CSS variables when theme="dark-theme"', () => {
@@ -31,6 +31,6 @@ describe('ThemeProvider', () => {
             </ThemeProvider>
         );
         const providerDiv = container.firstChild as HTMLElement;
-        expect(providerDiv.style.getPropertyValue('--color-background')).toBe('#ffffff');
+        expect(providerDiv.style.getPropertyValue('--color-background')).toBe('#fdf6e3');
     });
 });

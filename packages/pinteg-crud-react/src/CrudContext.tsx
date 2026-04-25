@@ -19,12 +19,21 @@ export interface CrudSchemas {
     detail: string;
 }
 
+export interface CrudAccessControl {
+    readList:   boolean;
+    readDetail: boolean;
+    create:     boolean;
+    update:     boolean;
+    delete:     boolean;
+}
+
 export interface CrudConfig {
     title: string;
     description?: string;
     schema: CrudSchemas;
     dataSource: CrudDataSource;
     primaryKeyField: string;
+    accessControl: CrudAccessControl;
 }
 
 export interface CrudContextType {

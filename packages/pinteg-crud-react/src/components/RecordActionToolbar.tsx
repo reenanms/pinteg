@@ -8,6 +8,7 @@ export interface RecordActionToolbarProps {
     onCancelEdit: () => void;
     onSave: () => void;
     onCancelCreate?: () => void;
+    canUpdate?: boolean;
 }
 
 export const RecordActionToolbar: React.FC<RecordActionToolbarProps> = ({
@@ -16,6 +17,7 @@ export const RecordActionToolbar: React.FC<RecordActionToolbarProps> = ({
     onCancelEdit,
     onSave,
     onCancelCreate,
+    canUpdate = true,
 }) => {
     return (
         <div style={{
@@ -32,9 +34,9 @@ export const RecordActionToolbar: React.FC<RecordActionToolbarProps> = ({
                 </>
             ) : (
                 <>
-                    {status === 'viewing' && <EditButton size="medium" onClick={onEdit}>Edit</EditButton>}
-                    {status === 'editing' && <CancelButton size="medium" onClick={onCancelEdit}>Cancel</CancelButton>}
-                    <SaveButton size="medium" onClick={onSave} disabled={status !== 'editing'}>Save Changes</SaveButton>
+                    {canUpdate && status === 'viewing' && <EditButton size="medium" onClick={onEdit}>Edit</EditButton>}
+                    {canUpdate && status === 'editing' && <CancelButton size="medium" onClick={onCancelEdit}>Cancel</CancelButton>}
+                    {canUpdate && <SaveButton size="medium" onClick={onSave} disabled={status !== 'editing'}>Save Changes</SaveButton>}
                 </>
             )}
         </div>
