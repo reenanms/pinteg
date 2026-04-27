@@ -18,7 +18,7 @@ export interface SideNavProps {
  * R6: Responsive – side-bar on desktop, hamburger drawer on mobile.
  */
 export const SideNav = ({ mobileOpen = false, onClose }: SideNavProps) => {
-    const { pages, activePage, setActivePage } = useAppShell();
+    const { portals, activePortal, setActivePortal, pages, activePage, setActivePage } = useAppShell();
     const [search, setSearch] = useState('');
 
     const filtered = useMemo(() => filterPages(pages, search), [pages, search]);
@@ -70,31 +70,53 @@ export const SideNav = ({ mobileOpen = false, onClose }: SideNavProps) => {
                     )}
                 </div>
 
-                {/* Grouped page list (R2) */}
-                <div className="pinteg-shell-nav-list">
-                    {groups.length === 0 && (
-                        <div className="pinteg-shell-nav-empty">
-                            No pages match your search.
-                        </div>
-                    )}
-                    {groups.map(group => (
-                        <div key={group.label} className="pinteg-shell-nav-group">
-                            <div className="pinteg-shell-nav-group-label">{group.label}</div>
-                            {group.pages.map(page => {
-                                const isActive = activePage?.id === page.id;
-                                return (
-                                    <button
-                                        key={page.id}
-                                        className={`pinteg-shell-nav-item${isActive ? ' pinteg-shell-nav-item--active' : ''}`}
-                                        onClick={() => handleSelect(page)}
-                                        title={page.title}
-                                    >
-                                        {page.title}
-                                    </button>
-                                );
-                            })}
-                        </div>
-                    ))}
+                {/* Portals List & Grouped page list (R2) */}
+                <div className="pinteg-shell-nav-list" style={{ marginTop: '16px' }}>
+                    {portals.map(portal => {
+                        const isPortalActive = activePortal?.id === portal.id;
+                        return (
+                            <div key={portal.id} className="pinteg-shell-portal-section" style={{ marginBottom: '8px' }}>
+                                <button
+                                    className={`pinteg-shell-nav-item${isPortalActive ? ' pinteg-shell-nav-item--active' : ''}`}
+                                    onClick={() => setActivePortal(portal.id)}
+                                    title={portal.title}
+                                    style={{ fontWeight: isPortalActive ? 600 : 500, display: 'flex', alignItems: 'center', gap: '8px' }}
+                                >
+                                    {portal.icon && <span>{portal.icon}</span>}
+                                    {portal.title}
+                                </button>
+                                
+                                {/* Only load/show pages menu when this portal is active */}
+                                {isPortalActive && (
+                                    <div className="pinteg-shell-portal-pages" style={{ paddingLeft: '16px', marginTop: '8px' }}>
+                                        {groups.length === 0 && (
+                                            <div className="pinteg-shell-nav-empty">
+                                                No pages match your search.
+                                            </div>
+                                        )}
+                                        {groups.map(group => (
+                                            <div key={group.label} className="pinteg-shell-nav-group">
+                                                <div className="pinteg-shell-nav-group-label">{group.label}</div>
+                                                {group.pages.map(page => {
+                                                    const isActive = activePage?.id === page.id;
+                                                    return (
+                                                        <button
+                                                            key={page.id}
+                                                            className={`pinteg-shell-nav-item${isActive ? ' pinteg-shell-nav-item--active' : ''}`}
+                                                            onClick={() => handleSelect(page)}
+                                                            title={page.title}
+                                                        >
+                                                            {page.title}
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
                 </div>
             </nav>
         </>

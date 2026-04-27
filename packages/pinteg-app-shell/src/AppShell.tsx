@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { ThemeProvider, PIntegRoot } from 'pinteg-react';
 import { AppShellProvider } from './AppShellContext';
 import { AppShellHeader } from './AppShellHeader';
-import { SideNav } from './SideNav';
 import { PageContent } from './PageContent';
+import { PortalSelector } from './PortalSelector';
+import { SideNav } from './SideNav';
+import { useAppShell } from './AppShellContext';
 import { AppShellConfig } from './types';
 import './app-shell.css';
 
@@ -17,31 +19,42 @@ export interface AppShellProps {
  * Provides theming via PIntegRoot, initialises the AppShellProvider
  * for page-registry resolution, and lays out the header + side-nav + content.
  */
-export const AppShell = ({ config }: AppShellProps) => {
+const AppShellLayout = () => {
+    const { activePortal } = useAppShell();
     const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
     const toggleMobileNav = () => setMobileNavOpen(prev => !prev);
     const closeMobileNav = () => setMobileNavOpen(false);
 
     return (
+        <div className="pinteg-shell">
+            <AppShellHeader
+                mobileNavOpen={mobileNavOpen}
+                onToggleMobileNav={toggleMobileNav}
+            />
+            <div className="pinteg-shell-body">
+                <SideNav
+                    mobileOpen={mobileNavOpen}
+                    onClose={closeMobileNav}
+                />
+                <main className="pinteg-shell-main" style={{ padding: activePortal ? undefined : 0 }}>
+                    {activePortal ? (
+                        <PageContent />
+                    ) : (
+                        <PortalSelector />
+                    )}
+                </main>
+            </div>
+        </div>
+    );
+};
+
+export const AppShell = ({ config }: AppShellProps) => {
+    return (
         <ThemeProvider>
             <PIntegRoot>
                 <AppShellProvider config={config}>
-                    <div className="pinteg-shell">
-                        <AppShellHeader
-                            mobileNavOpen={mobileNavOpen}
-                            onToggleMobileNav={toggleMobileNav}
-                        />
-                        <div className="pinteg-shell-body">
-                            <SideNav
-                                mobileOpen={mobileNavOpen}
-                                onClose={closeMobileNav}
-                            />
-                            <main className="pinteg-shell-main">
-                                <PageContent />
-                            </main>
-                        </div>
-                    </div>
+                    <AppShellLayout />
                 </AppShellProvider>
             </PIntegRoot>
         </ThemeProvider>

@@ -13,7 +13,7 @@ export interface AppShellHeaderProps {
  * AppShellHeader – top bar with hamburger (mobile), logo, title, and theme selector.
  */
 export const AppShellHeader = ({ mobileNavOpen, onToggleMobileNav }: AppShellHeaderProps) => {
-    const { config, clearActivePage } = useAppShell();
+    const { config, activePortal, clearActivePortal, clearActivePage } = useAppShell();
     const { themeId, setTheme, availableThemes } = useTheme();
 
     return (
@@ -34,17 +34,37 @@ export const AppShellHeader = ({ mobileNavOpen, onToggleMobileNav }: AppShellHea
                 )}
                 <div 
                     className="pinteg-shell-header-brand" 
-                    onClick={clearActivePage}
-                    style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}
+                    style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
                 >
-                    {config.logoUrl && (
-                        <img
-                            src={config.logoUrl}
-                            alt={config.title || 'Logo'}
-                            className="pinteg-shell-logo"
-                        />
+                    <div 
+                        onClick={clearActivePortal}
+                        style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
+                        title="Voltar para a lista de portais"
+                    >
+                        {config.logoUrl && (
+                            <img
+                                src={config.logoUrl}
+                                alt={config.title || 'Logo'}
+                                className="pinteg-shell-logo"
+                            />
+                        )}
+                        <h1 className="pinteg-shell-title" style={{ margin: 0 }}>
+                            {config.title || 'PInteg Gateway'}
+                        </h1>
+                    </div>
+                    {activePortal && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <span style={{ color: 'var(--color-text-secondary, #666)', fontSize: '18px', fontWeight: 300 }}>/</span>
+                            <h1 
+                                className="pinteg-shell-title" 
+                                style={{ margin: 0, cursor: 'pointer', color: 'var(--color-primary, #007bff)' }}
+                                onClick={clearActivePage}
+                                title={`Ir para a página inicial do portal ${activePortal.title}`}
+                            >
+                                {activePortal.title}
+                            </h1>
+                        </div>
                     )}
-                    <h1 className="pinteg-shell-title">{config.title || 'PInteg'}</h1>
                 </div>
             </div>
             <div className="pinteg-shell-header-right">

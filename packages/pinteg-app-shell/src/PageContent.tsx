@@ -9,12 +9,13 @@ import { CrudProvider, CrudRouter } from 'pinteg-crud-react';
  * The app title is clickable and navigates back to the home (deselects page).
  */
 const ShellBreadcrumbs = () => {
-    const { config, activePage, clearActivePage } = useAppShell();
+    const { config, activePortal, clearActivePortal, activePage, clearActivePage } = useAppShell();
 
-    if (!activePage) return null;
+    if (!activePage || !activePortal) return null;
 
-    const items: { label: string; clickable: boolean }[] = [
-        { label: config.title || 'Home', clickable: true },
+    const items: { label: string; clickable: boolean; action?: () => void }[] = [
+        { label: config.title || 'Portals', clickable: true, action: clearActivePortal },
+        { label: activePortal.title, clickable: true, action: clearActivePage },
     ];
 
     if (activePage.group) {
@@ -41,7 +42,7 @@ const ShellBreadcrumbs = () => {
                             opacity: index === items.length - 1 ? 1 : 0.6,
                             cursor: item.clickable ? 'pointer' : 'default',
                         }}
-                        onClick={item.clickable ? clearActivePage : undefined}
+                        onClick={item.clickable ? item.action : undefined}
                     >
                         {item.label}
                     </span>

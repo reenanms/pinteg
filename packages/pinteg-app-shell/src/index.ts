@@ -5,3 +5,4 @@ export * from './AppShellHeader';
 export * from './SideNav';
 export * from './PageContent';
 export * from './AppShell';
+export * from './PortalSelector';

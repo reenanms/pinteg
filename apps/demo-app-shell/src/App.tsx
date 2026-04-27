@@ -1,7 +1,6 @@
 import React from 'react';
 import { DataSourceManager } from 'pinteg-data-source';
-import { AppShell, AppShellConfig } from 'pinteg-app-shell';
-import { PageDefinition } from 'pinteg-app-shell';
+import { AppShell, AppShellConfig, PageDefinition, PortalDefinition } from 'pinteg-app-shell';
 import { CrudConfig } from 'pinteg-crud-react';
 
 // ================================================================
@@ -77,14 +76,14 @@ registerCrud('orders', () => ordersData, d => { ordersData = d; });
 // ================================================================
 
 DataSourceManager.register('users.schema.list', async () => ({
-    name:  { type: 'text', caption: 'Full Name', size: 'L' },
-    role:  { type: 'text', caption: 'Role', size: 'S' },
+    name: { type: 'text', caption: 'Full Name', size: 'L' },
+    role: { type: 'text', caption: 'Role', size: 'S' },
     email: { type: 'text', caption: 'Email', size: 'M' },
 }));
 
 DataSourceManager.register('users.schema.detail', async () => ({
-    name:  { type: 'text', caption: 'Full Name', size: 'L' },
-    role:  {
+    name: { type: 'text', caption: 'Full Name', size: 'L' },
+    role: {
         type: 'list', caption: 'System Role', size: 'M',
         options: [
             { key: 'admin', caption: 'Administrator' },
@@ -96,12 +95,12 @@ DataSourceManager.register('users.schema.detail', async () => ({
 }));
 
 DataSourceManager.register('roles.schema.list', async () => ({
-    name:  { type: 'text', caption: 'Role Name', size: 'L' },
+    name: { type: 'text', caption: 'Role Name', size: 'L' },
     level: { type: 'text', caption: 'Access Level', size: 'M' },
 }));
 
 DataSourceManager.register('roles.schema.detail', async () => ({
-    name:  { type: 'text', caption: 'Role Name', size: 'L' },
+    name: { type: 'text', caption: 'Role Name', size: 'L' },
     level: {
         type: 'list', caption: 'Access Level', size: 'M',
         options: [
@@ -113,13 +112,13 @@ DataSourceManager.register('roles.schema.detail', async () => ({
 }));
 
 DataSourceManager.register('products.schema.list', async () => ({
-    name:     { type: 'text', caption: 'Product Name', size: 'L' },
+    name: { type: 'text', caption: 'Product Name', size: 'L' },
     category: { type: 'text', caption: 'Category', size: 'M' },
-    price:    { type: 'text', caption: 'Price ($)', size: 'S' },
+    price: { type: 'text', caption: 'Price ($)', size: 'S' },
 }));
 
 DataSourceManager.register('products.schema.detail', async () => ({
-    name:     { type: 'text', caption: 'Product Name', size: 'L' },
+    name: { type: 'text', caption: 'Product Name', size: 'L' },
     category: {
         type: 'list', caption: 'Category', size: 'M',
         options: [
@@ -133,14 +132,14 @@ DataSourceManager.register('products.schema.detail', async () => ({
 
 DataSourceManager.register('orders.schema.list', async () => ({
     customer: { type: 'text', caption: 'Customer', size: 'L' },
-    product:  { type: 'text', caption: 'Product', size: 'M' },
-    status:   { type: 'text', caption: 'Status', size: 'S' },
+    product: { type: 'text', caption: 'Product', size: 'M' },
+    status: { type: 'text', caption: 'Status', size: 'S' },
 }));
 
 DataSourceManager.register('orders.schema.detail', async () => ({
     customer: { type: 'text', caption: 'Customer Name', size: 'L' },
-    product:  { type: 'text', caption: 'Product', size: 'M' },
-    status:   {
+    product: { type: 'text', caption: 'Product', size: 'M' },
+    status: {
         type: 'list', caption: 'Order Status', size: 'M',
         options: [
             { key: 'pending', caption: 'Pending' },
@@ -210,13 +209,39 @@ DataSourceManager.register('app.pages', async (): Promise<PageDefinition[]> => [
     { id: 'orders', title: 'Orders', group: 'Catalog', configSource: 'page.orders.config' },
 ]);
 
+DataSourceManager.register('app.store.pages', async (): Promise<PageDefinition[]> => [
+    { id: 'products', title: 'Products', group: 'Catalog', configSource: 'page.products.config' },
+    { id: 'orders', title: 'Orders', group: 'Catalog', configSource: 'page.orders.config' },
+]);
+
+// ================================================================
+// Portal Registry
+// ================================================================
+
+DataSourceManager.register('app.portals', async (): Promise<PortalDefinition[]> => [
+    {
+        id: 'corp',
+        title: 'Corporate Management',
+        description: 'Internal tool for managing users and roles.',
+        icon: '🏢',
+        pageRegistry: 'app.pages'
+    },
+    {
+        id: 'store',
+        title: 'Store Operations',
+        description: 'Manage product catalog and customer orders.',
+        icon: '🏪',
+        pageRegistry: 'app.store.pages'
+    }
+]);
+
 // ================================================================
 // App Shell Configuration
 // ================================================================
 
 const shellConfig: AppShellConfig = {
-    pageRegistry: 'app.pages',
-    title: 'PInteg Corporate Portal',
+    portalRegistry: 'app.portals',
+    title: 'PInteg Gateway',
     logoUrl: '/logo.svg',
 };
 

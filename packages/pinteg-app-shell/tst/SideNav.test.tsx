@@ -13,8 +13,12 @@ const mockPages: PageDefinition[] = [
     { id: 'dashboard', title: 'Dashboard', configSource: 'nav.dashboard.config' },
 ];
 
+const mockPortals = [
+    { id: 'portal1', title: 'Portal 1', pageRegistry: 'nav.test.pages' },
+];
+
 const config: AppShellConfig = {
-    pageRegistry: 'nav.test.pages',
+    portalRegistry: 'nav.test.portals',
     title: 'Nav Test',
 };
 
@@ -30,7 +34,11 @@ describe('SideNav', () => {
     beforeEach(() => {
         DataSourceManager._sources.clear();
         window.location.hash = '';
+        DataSourceManager.register('nav.test.portals', async () => mockPortals);
         DataSourceManager.register('nav.test.pages', async () => mockPages);
+        
+        // Let's set the hash so that AppShellProvider automatically loads portal1 on mount
+        window.location.hash = '#/portal1';
     });
 
     it('renders grouped pages with group labels (R2)', async () => {
