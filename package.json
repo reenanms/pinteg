@@ -4,7 +4,7 @@
     "scripts": {
         "build": "npm run build --workspaces --if-present",
         "test": "npm run test --workspaces --if-present",
-        "dev": "npm run dev --workspace @pinteg/demo-crud-react"
+        "dev": "npm run dev --workspace @pinteg/demo-app-shell"
     },
     "workspaces": [
         "packages/*",

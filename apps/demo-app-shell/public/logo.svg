@@ -1,0 +1,15 @@
+<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+  <!-- A contained 'app-icon' style logo works across all themes as it maintains its own internal contrast -->
+  <rect width="40" height="40" rx="10" fill="#1e1b4b" />
+  
+  <!-- Modern Geometric 'Integration' Symbol -->
+  <path d="M12 20 L20 12 L28 20 L20 28 Z" fill="#818cf8" />
+  <path d="M20 12 L28 20 L20 28 L12 20 Z" fill="white" opacity="0.2" />
+  
+  <!-- Central Core Node -->
+  <circle cx="20" cy="20" r="4" fill="white" />
+  <circle cx="20" cy="20" r="2" fill="#4f46e5" />
+  
+  <!-- Subtle Inner Glow/Border -->
+  <rect x="1" y="1" width="38" height="38" rx="9" fill="none" stroke="white" stroke-width="1.5" opacity="0.1" />
+</svg>

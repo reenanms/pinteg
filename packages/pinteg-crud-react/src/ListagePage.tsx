@@ -9,7 +9,7 @@ import {
 import { ComponentSchema } from 'pinteg-core';
 import { DataSourceManager } from 'pinteg-data-source';
 import { useCrudContext } from './CrudContext';
-import { CrudBreadcrumbs, CrudHeader, CrudErrorDisplay, RecordAccordionDetails } from './components';
+import { CrudHeader, CrudErrorDisplay, RecordAccordionDetails } from './components';
 import { RecordStatus } from './components/RecordStatus';
 
 
@@ -125,10 +125,6 @@ export const ListagePage = () => {
     if (!accessControl.readList) {
         return (
             <div className="pinteg-crud-listage">
-                <CrudBreadcrumbs items={[
-                    { label: 'Apps' },
-                    { label: config.title, active: true }
-                ]} />
                 <CrudHeader title={config.title} description={config.description} />
                 <div style={{
                     display: 'flex',
@@ -156,10 +152,6 @@ export const ListagePage = () => {
 
     return (
         <div className="pinteg-crud-listage">
-            <CrudBreadcrumbs items={[
-                { label: 'Apps' },
-                { label: config.title, active: true }
-            ]} />
 
             <CrudHeader title={config.title} description={config.description}>
                 {accessControl.create && (

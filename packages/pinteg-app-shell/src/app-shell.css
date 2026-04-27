@@ -1,0 +1,341 @@
+/* ================================================================== */
+/*  PInteg App Shell – Layout & Component Styles                       */
+/*  Uses the same CSS custom-property design tokens as pinteg-react.   */
+/* ================================================================== */
+
+/* --- Reset browser defaults --------------------------------------- */
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+/* --- Full-page shell container ------------------------------------ */
+.pinteg-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: var(--color-background);
+    color: var(--color-text);
+    transition: background 0.3s;
+}
+
+/* --- Top header bar ----------------------------------------------- */
+.pinteg-shell-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    height: 56px;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border-subtle);
+    flex-shrink: 0;
+    z-index: 20;
+}
+
+.pinteg-shell-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pinteg-shell-logo {
+    height: 28px;
+    width: auto;
+    object-fit: contain;
+}
+
+.pinteg-shell-title {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.pinteg-shell-header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pinteg-shell-theme-select {
+    padding: 4px 10px;
+    border-radius: var(--input-radius);
+    background: var(--color-surface-alt);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.pinteg-shell-theme-select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px var(--color-focus-background);
+}
+
+/* --- Body: sidenav + main ----------------------------------------- */
+.pinteg-shell-body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* --- Side navigation ---------------------------------------------- */
+.pinteg-shell-sidenav {
+    width: 260px;
+    min-width: 260px;
+    background: var(--color-surface);
+    border-right: 1px solid var(--color-border-subtle);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+    z-index: 30;
+}
+
+/* Search input */
+.pinteg-shell-search {
+    padding: 12px;
+    border-bottom: 1px solid var(--color-border-subtle);
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.pinteg-shell-search-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--input-radius);
+    background: var(--color-background);
+    color: var(--color-text);
+    font-size: 0.9rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.pinteg-shell-search-input::placeholder {
+    color: var(--color-secondary);
+}
+
+.pinteg-shell-search-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-focus-background);
+}
+
+.pinteg-shell-search-clear {
+    position: absolute;
+    right: 20px;
+    background: none;
+    border: none;
+    padding: 4px;
+    color: var(--color-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.2s, color 0.2s;
+}
+
+.pinteg-shell-search-clear:hover {
+    background: var(--color-surface-hover);
+    color: var(--color-text);
+}
+
+/* Nav list & groups */
+.pinteg-shell-nav-list {
+    flex: 1;
+    padding: 8px 0;
+    overflow-y: auto;
+}
+
+.pinteg-shell-nav-group {
+    margin-bottom: 4px;
+}
+
+.pinteg-shell-nav-group-label {
+    padding: 12px 16px 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-secondary);
+    user-select: none;
+}
+
+.pinteg-shell-nav-item {
+    display: block;
+    width: 100%;
+    padding: 10px 16px 10px 24px;
+    border: none;
+    background: none;
+    color: var(--color-text);
+    font-size: 0.9rem;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    border-left: 3px solid transparent;
+}
+
+.pinteg-shell-nav-item:hover {
+    background: var(--color-surface-hover);
+}
+
+.pinteg-shell-nav-item--active {
+    background: var(--color-focus-background);
+    color: var(--color-primary);
+    font-weight: 600;
+    border-left-color: var(--color-primary);
+}
+
+.pinteg-shell-nav-empty {
+    padding: 24px 16px;
+    text-align: center;
+    color: var(--color-secondary);
+    font-size: 0.9rem;
+}
+
+/* --- Main content area -------------------------------------------- */
+.pinteg-shell-main {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+    min-width: 0;
+}
+
+.pinteg-shell-page-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    animation: pinteg-shell-fade-in 0.25s ease-out;
+}
+
+/* Empty state */
+.pinteg-shell-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem 2rem;
+    text-align: center;
+    animation: pinteg-shell-fade-in 0.4s ease-out;
+}
+
+/* Loading */
+.pinteg-shell-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem 2rem;
+    gap: 1rem;
+    color: var(--color-secondary);
+    font-size: 0.95rem;
+    animation: pinteg-shell-fade-in 0.3s ease-out;
+}
+
+.pinteg-shell-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--color-border-subtle);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: pinteg-shell-spin 0.8s linear infinite;
+}
+
+/* Error */
+.pinteg-shell-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    text-align: center;
+    animation: pinteg-shell-fade-in 0.3s ease-out;
+}
+
+/* --- Hamburger (mobile only) -------------------------------------- */
+.pinteg-shell-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    width: 36px;
+    height: 36px;
+    padding: 6px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    z-index: 40;
+    flex-shrink: 0;
+}
+
+.pinteg-shell-hamburger-line {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: var(--color-text);
+    border-radius: 2px;
+    transition: transform 0.2s;
+}
+
+/* --- Backdrop (mobile overlay) ------------------------------------ */
+.pinteg-shell-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 25;
+}
+
+/* --- Animations --------------------------------------------------- */
+@keyframes pinteg-shell-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pinteg-shell-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ================================================================== */
+/*  Responsive: mobile (R6)                                            */
+/* ================================================================== */
+@media (max-width: 768px) {
+    .pinteg-shell-hamburger {
+        display: flex;
+    }
+
+    .pinteg-shell-sidenav {
+        position: fixed;
+        top: 56px; /* below the header */
+        left: 0;
+        bottom: 0;
+        width: 280px;
+        transform: translateX(-100%);
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .pinteg-shell-sidenav--open {
+        transform: translateX(0);
+    }
+
+    .pinteg-shell-backdrop {
+        display: block;
+    }
+
+    .pinteg-shell-main {
+        padding: 1.5rem 1rem;
+    }
+}
