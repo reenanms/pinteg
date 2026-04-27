@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAppShell } from './AppShellContext';
 import { CrudProvider, CrudRouter } from 'pinteg-crud-react';
+import { ErrorState } from './ErrorState';
 
 /**
  * ShellBreadcrumbs – displays the navigation path within the app shell.
@@ -64,7 +65,22 @@ const ShellBreadcrumbs = () => {
  * concerns inside the app shell.
  */
 export const PageContent = () => {
-    const { activePage, activePageConfig, loading, error } = useAppShell();
+    const { activePage, activePageConfig, loading, error, clearActivePage } = useAppShell();
+
+    // R5 – Error state has highest priority
+    if (error) {
+        return <ErrorState title="Failed to load page" message={error} onHomeClick={clearActivePage} />;
+    }
+
+    // R5 – Loading state
+    if (loading) {
+        return (
+            <div className="pinteg-shell-loading" role="status">
+                <div className="pinteg-shell-spinner" />
+                <span>Loading {activePage?.title || 'page'}...</span>
+            </div>
+        );
+    }
 
     // No page selected yet
     if (!activePage) {
@@ -80,33 +96,6 @@ export const PageContent = () => {
                 <p style={{ margin: 0, color: 'var(--color-secondary)', maxWidth: '320px', textAlign: 'center', lineHeight: 1.6 }}>
                     Choose a page from the navigation bar to get started.
                 </p>
-            </div>
-        );
-    }
-
-    // R5 – Loading state
-    if (loading) {
-        return (
-            <div className="pinteg-shell-loading" role="status">
-                <div className="pinteg-shell-spinner" />
-                <span>Loading {activePage.title}...</span>
-            </div>
-        );
-    }
-
-    // R5 – Error state
-    if (error) {
-        return (
-            <div className="pinteg-shell-error" role="alert">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: 'var(--color-danger)' }}>
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="12" y1="8" x2="12" y2="12" />
-                    <line x1="12" y1="16" x2="12.01" y2="16" />
-                </svg>
-                <h3 style={{ margin: '0.5rem 0 0.25rem', color: 'var(--color-danger)', fontWeight: 600 }}>
-                    Failed to load page
-                </h3>
-                <p style={{ margin: 0, color: 'var(--color-secondary)' }}>{error}</p>
             </div>
         );
     }

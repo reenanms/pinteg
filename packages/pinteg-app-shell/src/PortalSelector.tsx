@@ -1,11 +1,12 @@
 import React from 'react';
 import { useAppShell } from './AppShellContext';
+import { ErrorState } from './ErrorState';
 
 /**
  * PortalSelector - Home view that displays available portals in a grid.
  */
 export const PortalSelector = () => {
-    const { portals, setActivePortal, loading, error } = useAppShell();
+    const { portals, setActivePortal, clearActivePortal, loading, error } = useAppShell();
 
     if (loading && portals.length === 0) {
         return (
@@ -16,20 +17,8 @@ export const PortalSelector = () => {
         );
     }
 
-    if (error && portals.length === 0) {
-        return (
-            <div className="pinteg-shell-error" role="alert">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: 'var(--color-danger)' }}>
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="12" y1="8" x2="12" y2="12" />
-                    <line x1="12" y1="16" x2="12.01" y2="16" />
-                </svg>
-                <h3 style={{ margin: '0.5rem 0 0.25rem', color: 'var(--color-danger)', fontWeight: 600 }}>
-                    Failed to load portals
-                </h3>
-                <p style={{ margin: 0, color: 'var(--color-secondary)' }}>{error}</p>
-            </div>
-        );
+    if (error) {
+        return <ErrorState title="Access Denied" message={error} onHomeClick={clearActivePortal} />;
     }
 
     if (portals.length === 0) {

@@ -10,7 +10,7 @@ export interface AppShellContextType {
     pages: PageDefinition[];
     activePage: PageDefinition | null;
     activePageConfig: CrudConfig | null;
-    setActivePortal: (portalId: string) => void;
+    setActivePortal: (portalId: string, pageIdToLoad?: string) => void;
     clearActivePortal: () => void;
     setActivePage: (pageId: string) => void;
     clearActivePage: () => void;
@@ -84,16 +84,22 @@ export const AppShellProvider = ({ config, children }: AppShellProviderProps) =>
     const setActivePage = useCallback((pageId: string) => {
         const currentPages = pagesRef.current;
         const page = currentPages.find(p => p.id === pageId);
-        if (!page) return;
+        if (!page) {
+            setError(`Page not found or access denied: "${pageId}"`);
+            setLoading(false);
+            return;
+        }
 
         setActivePageDef(page);
         setActivePageConfig(null);
         setLoading(true);
         setError('');
         
-        // Update hash using current portal ref
-        const portalId = activePortalRef.current?.id;
-        setHashForState(portalId, pageId);
+        // Update hash using current portal ref or fallback to current hash state
+        const portalId = activePortalRef.current?.id || getHashState().portalId;
+        if (portalId) {
+            setHashForState(portalId, pageId);
+        }
 
         DataSourceManager.resolve<void, CrudConfig>(page.configSource)()
             .then(cfg => {
@@ -119,17 +125,26 @@ export const AppShellProvider = ({ config, children }: AppShellProviderProps) =>
         }
     }, []);
 
-    const setActivePortal = useCallback((portalId: string) => {
+    const setActivePortal = useCallback((portalId: string, pageIdToLoad?: string) => {
         const currentPortals = portalsRef.current;
         const portal = currentPortals.find(p => p.id === portalId);
-        if (!portal) return;
+        if (!portal) {
+            setError(`Portal not found or access denied: "${portalId}"`);
+            setActivePortalDef(null);
+            setPages([]);
+            setActivePageDef(null);
+            setActivePageConfig(null);
+            setLoading(false);
+            return;
+        }
 
         setActivePortalDef(portal);
         setPages([]); // Clear previous pages
-        clearActivePage(); // Clear active page and config
+        setActivePageDef(null); // Clear active page internally without touching hash
+        setActivePageConfig(null);
         setLoading(true);
         setError('');
-        setHashForState(portalId);
+        setHashForState(portalId, pageIdToLoad);
 
         // Fetch pages for this portal
         DataSourceManager.resolve<void, PageDefinition[]>(portal.pageRegistry)()
@@ -138,20 +153,27 @@ export const AppShellProvider = ({ config, children }: AppShellProviderProps) =>
                     throw new Error('Page registry must return an array of PageDefinition');
                 }
                 setPages(result);
+                pagesRef.current = result; // Update ref immediately for setActivePage
                 setLoading(false);
+                
+                if (pageIdToLoad) {
+                    setTimeout(() => setActivePage(pageIdToLoad), 0);
+                }
             })
             .catch((e: Error) => {
                 setError(e.message);
                 setLoading(false);
             });
-    }, [clearActivePage]);
+    }, [clearActivePage, setActivePage]);
 
     const clearActivePortal = useCallback(() => {
         setActivePortalDef(null);
         setPages([]);
-        clearActivePage();
+        setActivePageDef(null);
+        setActivePageConfig(null);
+        setError('');
         clearHash();
-    }, [clearActivePage]);
+    }, []);
 
     // R1 – Load portal registry from DSM, then restore from hash
     useEffect(() => {
@@ -169,18 +191,9 @@ export const AppShellProvider = ({ config, children }: AppShellProviderProps) =>
                 // Restore state from URL hash on initial load
                 const hashState = getHashState();
                 if (hashState.portalId) {
-                    const match = result.find(p => p.id === hashState.portalId);
-                    if (match) {
-                        setTimeout(() => {
-                            setActivePortal(hashState.portalId!);
-                            
-                            // If a page is also specified, we need to wait for the pages to load first
-                            // but since setActivePortal is async (fetches pages), we need to chain it.
-                            // To keep it simple, the hash change listener below will catch the initial load
-                            // if we trigger a dummy event or handle it in a separate effect.
-                            // Let's just rely on the hash change listener for deep linking.
-                        }, 0);
-                    }
+                    setTimeout(() => {
+                        setActivePortal(hashState.portalId!, hashState.pageId);
+                    }, 0);
                 }
             })
             .catch((e: Error) => {
@@ -195,13 +208,10 @@ export const AppShellProvider = ({ config, children }: AppShellProviderProps) =>
             const { portalId, pageId } = getHashState();
             
             // Handle Portal Selection
-            const currentPortal = portalsRef.current.find(p => p.id === portalId);
-            if (portalId && currentPortal) {
-                // If portal changed, set it.
+            if (portalId) {
+                // If portal changed, set it. (setActivePortal will handle invalid ones and set error)
                 if (activePortal?.id !== portalId) {
-                     setActivePortal(portalId);
-                     // Note: Deep linking to page right after portal switch is tricky here because pages aren't loaded yet.
-                     // A robust solution handles this inside the portal pages fetch.
+                     setActivePortal(portalId, pageId);
                 } else if (pageId && activePage?.id !== pageId) {
                     setActivePage(pageId);
                 } else if (!pageId && activePage) {
