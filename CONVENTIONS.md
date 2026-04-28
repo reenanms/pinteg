@@ -20,7 +20,9 @@ This document outlines the coding and structural conventions for the PInteg mono
 ## 💻 Engineering Principles
 
 ### Coding Best Practices
-- **Early Returns**: All functions should use the "Early Return" pattern to improve readability and reduce nested logic.
+- **Early Returns**: All functions should use the "Early Return" pattern to improve readability and reduce nested logic. Prefer early returns.
+- **Exceptions for Readability**: Prefer using exceptions to keep code more readable.
+- **Small Contextual Functions**: Keep functions small with names that make sense in the context.
 - **Parameter Validation**: If an expected parameter is not received or is invalid, the function must throw an explicit exception or error immediately.
 - **Dependency Management**: **Critical.** Dependencies must be managed via the root `package.json` in this monorepo. Never run `npm install` inside individual package or app folders to avoid breaking local workspace links and symlinks.
 
