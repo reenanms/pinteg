@@ -13,7 +13,7 @@ import { CrudHeader, CrudErrorDisplay, RecordAccordionDetails } from './componen
 import { RecordStatus } from './components/RecordStatus';
 
 
-export const ListagePage = () => {
+export const ListingPage = () => {
     const { config, navigate } = useCrudContext();
     const { accessControl } = config;
     const [data, setData] = useState<any[]>([]);
@@ -124,7 +124,7 @@ export const ListagePage = () => {
 
     if (!accessControl.readList) {
         return (
-            <div className="pinteg-crud-listage">
+            <div className="pinteg-crud-listing">
                 <CrudHeader title={config.title} description={config.description} />
                 <div style={{
                     display: 'flex',
@@ -151,7 +151,7 @@ export const ListagePage = () => {
     }
 
     return (
-        <div className="pinteg-crud-listage">
+        <div className="pinteg-crud-listing">
 
             <CrudHeader title={config.title} description={config.description}>
                 {accessControl.create && (

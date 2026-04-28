@@ -39,7 +39,7 @@ describe('CrudRouter', () => {
         DataSourceManager.register('router.delete', async () => {});
     });
 
-    it('renders ListagePage by default', async () => {
+    it('renders ListingPage by default', async () => {
         render(
             <CrudProvider config={mockConfig}>
                 <CrudRouter />

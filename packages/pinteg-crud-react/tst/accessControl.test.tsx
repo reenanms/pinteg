@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, cleanup } from '@testing-library/react';
 import { CrudProvider, CrudConfig, CrudAccessControl } from '../src/CrudContext';
 import { DataSourceManager } from 'pinteg-data-source';
-import { ListagePage } from '../src/ListagePage';
+import { ListingPage } from '../src/ListingPage';
 import { RecordAccordionDetails } from '../src/components/RecordAccordionDetails';
 import { RecordActionToolbar } from '../src/components/RecordActionToolbar';
 
@@ -61,10 +61,10 @@ const makeConfig = (ac: CrudAccessControl): CrudConfig => ({
     accessControl:   ac,
 });
 
-const renderListage = (ac: CrudAccessControl) =>
+const renderListing = (ac: CrudAccessControl) =>
     render(
         <CrudProvider config={makeConfig(ac)}>
-            <ListagePage />
+            <ListingPage />
         </CrudProvider>
     );
 
@@ -77,13 +77,13 @@ const waitForHeading = () => screen.findByRole('heading', { level: 2, name: /Tes
 
 describe('accessControl.readList', () => {
     it('renders table when readList is true', async () => {
-        renderListage({ ...ALL_GRANTED, readList: true });
+        renderListing({ ...ALL_GRANTED, readList: true });
         await waitForHeading();
         expect(screen.queryByText('Access Denied')).toBeNull();
     });
 
     it('renders Access Denied message when readList is false', async () => {
-        renderListage({ ...ALL_GRANTED, readList: false });
+        renderListing({ ...ALL_GRANTED, readList: false });
         // The Access Denied heading appears synchronously (no data load needed)
         await waitForHeading();
         expect(await screen.findByText('Access Denied')).toBeDefined();
@@ -97,13 +97,13 @@ describe('accessControl.readList', () => {
 
 describe('accessControl.create', () => {
     it('shows "Create New" button when create is true', async () => {
-        renderListage({ ...ALL_GRANTED, create: true });
+        renderListing({ ...ALL_GRANTED, create: true });
         await waitForHeading();
         expect(screen.queryByText('Create New')).not.toBeNull();
     });
 
     it('hides "Create New" button when create is false', async () => {
-        renderListage({ ...ALL_GRANTED, create: false });
+        renderListing({ ...ALL_GRANTED, create: false });
         await waitForHeading();
         expect(screen.queryByText('Create New')).toBeNull();
     });
@@ -115,14 +115,14 @@ describe('accessControl.create', () => {
 
 describe('accessControl.readDetail', () => {
     it('renders expand chevron buttons when readDetail is true', async () => {
-        renderListage({ ...ALL_GRANTED, readDetail: true });
+        renderListing({ ...ALL_GRANTED, readDetail: true });
         await waitForHeading();
         const btns = screen.queryAllByTitle(/view\/edit details|close details/i);
         expect(btns.length).toBeGreaterThanOrEqual(1);
     });
 
     it('hides expand chevron buttons when readDetail is false', async () => {
-        renderListage({ ...ALL_GRANTED, readDetail: false });
+        renderListing({ ...ALL_GRANTED, readDetail: false });
         await waitForHeading();
         const btns = screen.queryAllByTitle(/view\/edit details|close details/i);
         expect(btns.length).toBe(0);
@@ -194,7 +194,7 @@ describe('accessControl.delete (DangerZone)', () => {
 
 describe('Combined: read-only viewer role', () => {
     it('shows table, hides create button, chevron, edit, and danger zone', async () => {
-        renderListage({
+        renderListing({
             readList:   true,
             readDetail: false,
             create:     false,
