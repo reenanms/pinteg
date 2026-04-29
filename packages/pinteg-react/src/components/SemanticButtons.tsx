@@ -3,11 +3,27 @@ import { PIntegButton, PIntegButtonProps } from './PIntegButton';
 import { ConfirmActionButton } from './ConfirmActionButton';
 import { PlusIcon, SaveIcon, TrashIcon, XIcon, PencilIcon, CheckIcon } from './Icons';
 
-export const SaveButton: React.FC<PIntegButtonProps> = (props) => (
-    <PIntegButton variant="primary" icon={<SaveIcon />} {...props}>
-        {props.children || 'Save'}
-    </PIntegButton>
-);
+export interface SaveButtonProps extends PIntegButtonProps {
+    confirmLabel?: string;
+    shouldConfirm?: () => boolean | Promise<boolean>;
+    onClick: () => void;
+}
+
+export const SaveButton: React.FC<SaveButtonProps> = ({ onClick, confirmLabel = "Click to confirm!", shouldConfirm, ...props }) => {
+    return (
+        <ConfirmActionButton
+            variant="primary"
+            onConfirm={onClick}
+            shouldConfirm={shouldConfirm}
+            confirmLabel={confirmLabel}
+            icon={<SaveIcon />}
+            confirmIcon={<CheckIcon />}
+            {...props}
+        >
+            {props.children || 'Save'}
+        </ConfirmActionButton>
+    );
+};
 
 export const CancelButton: React.FC<PIntegButtonProps> = (props) => (
     <PIntegButton variant="secondary" icon={<XIcon />} {...props}>

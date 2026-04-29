@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FieldRendererProps } from 'pinteg-core';
+import { FieldRendererProps, IFieldRenderer } from 'pinteg-core';
 import { resolveSizeStyle } from '../../utils/ComponentSizeUtils';
 import { DataSourceManager } from 'pinteg-data-source';
 
@@ -39,8 +39,8 @@ function resolveOption(opt: any): { val: any; label: any } {
     return { val: opt, label: opt };
 }
 
-export const ListField: React.FC<FieldRendererProps> = ({
-    name, caption, value, size, readOnly, tableMode, onChange, props, formValues
+export const ListField: React.FC<FieldRendererProps> & IFieldRenderer = ({
+    name, caption, value, size, readOnly, tableMode, onChange, onBlur, validationResult, props, formValues
 }) => {
     const style = resolveSizeStyle(size);
     const parentValue = (props?.parent && formValues) ? formValues[props.parent] : undefined;
@@ -57,6 +57,9 @@ export const ListField: React.FC<FieldRendererProps> = ({
     const options = props?.source
         ? dynamicOptions
         : resolveHardcodedOptions(props?.options || [], parentValue);
+
+    const hasError = validationResult && !validationResult.isValid;
+    const inputClass = `pinteg-input ${hasError ? 'pinteg-input-' + validationResult.severity : ''}`;
 
     if (readOnly) {
         const activeOption = options.find((opt: any) => String(resolveOption(opt).val) === String(value));
@@ -83,9 +86,13 @@ export const ListField: React.FC<FieldRendererProps> = ({
             <select
                 id={name}
                 name={name}
-                className="pinteg-input"
+                className={inputClass}
                 value={value ?? ''}
-                onChange={(e) => onChange(name, e.target.value)}
+                onChange={(e) => {
+                    onChange(name, e.target.value);
+                    if (onBlur) onBlur(name);
+                }}
+                onBlur={() => onBlur && onBlur(name)}
             >
                 <option value="">Select...</option>
                 {options.map((opt: any, i: number) => {
@@ -93,6 +100,11 @@ export const ListField: React.FC<FieldRendererProps> = ({
                     return <option key={val ?? i} value={val}>{lbl}</option>;
                 })}
             </select>
+            {hasError && !tableMode && (
+                <span className={`pinteg-validation-msg pinteg-msg-${validationResult.severity}`}>
+                    {validationResult.severity === 'error' ? '!' : '⚠'} {validationResult.message}
+                </span>
+            )}
         </div>
     );
 };

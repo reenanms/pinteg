@@ -414,3 +414,36 @@
     padding: 0.75rem;
   }
 }
+
+/* Validation Styling */
+.pinteg-input-error {
+  border-color: var(--color-danger, #ef4444);
+  background-color: rgba(239, 68, 68, 0.05);
+}
+
+.pinteg-input-error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+.pinteg-input-warning {
+  border-color: var(--color-warning, #f59e0b);
+  background-color: rgba(245, 158, 11, 0.05);
+}
+
+.pinteg-input-warning:focus {
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+}
+
+.pinteg-validation-msg {
+  font-size: 0.85em;
+  margin-top: 4px;
+  display: block;
+}
+
+.pinteg-msg-error {
+  color: var(--color-danger, #ef4444);
+}
+
+.pinteg-msg-warning {
+  color: var(--color-warning, #f59e0b);
+}

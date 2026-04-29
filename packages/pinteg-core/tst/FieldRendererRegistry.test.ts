@@ -7,8 +7,8 @@ describe('FieldRendererRegistry', () => {
     const uniqueType = `test-type-${Date.now()}`;
     const fakeComponent = () => null;
 
-    it('returns undefined for an unregistered type', () => {
-        expect(FieldRendererRegistry.get('non-existent-type-xyz')).toBeUndefined();
+    it('throws an error when getting an unregistered type', () => {
+        expect(() => FieldRendererRegistry.get('non-existent-type-xyz')).toThrow("Renderer for type 'non-existent-type-xyz' not found.");
     });
 
     it('has() returns false for an unregistered type', () => {

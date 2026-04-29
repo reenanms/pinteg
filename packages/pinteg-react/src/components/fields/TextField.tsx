@@ -1,11 +1,14 @@
 import React from 'react';
-import { FieldRendererProps } from 'pinteg-core';
+import { FieldRendererProps, IFieldRenderer } from 'pinteg-core';
 import { resolveSizeStyle } from '../../utils/ComponentSizeUtils';
 
-export const TextField: React.FC<FieldRendererProps> = ({
-    name, caption, value, size, readOnly, tableMode, onChange,
+export const TextField: React.FC<FieldRendererProps> & IFieldRenderer = ({
+    name, caption, value, size, readOnly, tableMode, onChange, onBlur, validationResult
 }) => {
     const style = resolveSizeStyle(size);
+    const hasError = validationResult && !validationResult.isValid;
+    const inputClass = `pinteg-input ${hasError ? 'pinteg-input-' + validationResult.severity : ''}`;
+
     return (
         <div className="pinteg-field" style={style}>
             {!tableMode && caption && <label className="pinteg-label" htmlFor={name}>{caption}</label>}
@@ -13,11 +16,17 @@ export const TextField: React.FC<FieldRendererProps> = ({
                 id={name}
                 name={name}
                 type="text"
-                className="pinteg-input"
+                className={inputClass}
                 value={value ?? ''}
                 readOnly={readOnly}
                 onChange={(e) => onChange(name, e.target.value)}
+                onBlur={() => onBlur && onBlur(name)}
             />
+            {hasError && !tableMode && (
+                <span className={`pinteg-validation-msg pinteg-msg-${validationResult.severity}`}>
+                    {validationResult.severity === 'error' ? '!' : '⚠'} {validationResult.message}
+                </span>
+            )}
         </div>
     );
 };

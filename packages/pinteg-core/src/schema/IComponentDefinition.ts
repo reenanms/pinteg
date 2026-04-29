@@ -9,8 +9,15 @@ export interface IBasicComponentDefinition {
 
 
 
+export interface IValidationDef {
+  name: string;
+  params?: any[];
+}
+
 export interface IComponentDefinition extends IBasicComponentDefinition {
   type: string;
   options?: any[];
   source?: string;
+  validations?: (string | IValidationDef)[];
+  readOnly?: boolean;
 }

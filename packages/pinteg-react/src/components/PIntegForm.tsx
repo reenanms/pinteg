@@ -23,10 +23,11 @@ export interface PIntegFormProps {
     listOptions?: Record<string, any[]>;
     orientation?: 'vertical' | 'horizontal';
     style?: React.CSSProperties;
+    forceValidate?: boolean;
 }
 
 export const PIntegForm = React.forwardRef<PIntegFormRef, PIntegFormProps>((props, ref) => {
-    const { schema, value, defaultValue, onChange, readOnly, listOptions, orientation } = props;
+    const { schema, value, defaultValue, onChange, readOnly, listOptions, orientation, forceValidate } = props;
     const isControlled = value !== undefined;
     const [internalValues, setInternalValues] = useFormState(schema, defaultValue);
     const values = isControlled ? value : internalValues;
@@ -56,6 +57,7 @@ export const PIntegForm = React.forwardRef<PIntegFormRef, PIntegFormProps>((prop
                     tableMode={false}
                     listOptions={listOptions}
                     onChange={handleChange}
+                    forceValidate={forceValidate}
                 />
             ))}
         </div>

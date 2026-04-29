@@ -1,6 +1,7 @@
 export * from 'pinteg-core';
 export * from 'pinteg-theme-react';
 export * from './registry/SchemaRegistry';
+export * from './utils/SchemaValidator';
 export * from './components/PIntegRoot';
 export * from './components/PIntegField';
 export * from './registry/defaultRenderers';

@@ -7,13 +7,15 @@ export interface RecordEditorProps {
     data: any;
     onChange: (data: any) => void;
     isEditing: boolean;
+    forceValidate?: boolean;
 }
 
 export const RecordEditor: React.FC<RecordEditorProps> = ({
     schema,
     data,
     onChange,
-    isEditing
+    isEditing,
+    forceValidate
 }) => {
     return (
         <>
@@ -22,6 +24,7 @@ export const RecordEditor: React.FC<RecordEditorProps> = ({
                 value={data}
                 onChange={onChange}
                 readOnly={!isEditing}
+                forceValidate={forceValidate}
             />
         </>
     );

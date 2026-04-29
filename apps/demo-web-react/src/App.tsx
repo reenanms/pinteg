@@ -43,7 +43,7 @@ DataSourceManager.register('demoCitySource', async (params) => {
 
 // 1. Define Schames from legacy project
 const userSchema: ComponentSchema = {
-    param1: { type: "text", caption: "Sample with text:", size: "S" },
+    param1: { type: "text", caption: "Sample with text:", size: "S", validations: ['IsRequired', { name: 'MaxLength', params: [10] }] },
     param2: {
         type: "list",
         caption: "Sample with list:",
@@ -106,7 +106,7 @@ const tableSchema = userSchema;
 
 // 2. Initial Data
 const initialObject0 = {
-    param0: { param1: "user A", param2: "keyA", param3: 1.1, param4: 1, param5: "keyA_B", param6: "BR", param7: "SP", param8: "SAO" },
+    param0: { param1: "", param2: "keyA", param3: 1.1, param4: 1, param5: "keyA_B", param6: "BR", param7: "SP", param8: "SAO" },
     param1: { param1: "user B", param2: "keyB", param3: 2.2, param4: 2, param5: "keyB_B", param6: "US", param7: "NY", param8: "NYC" },
     param2: { param1: "user C", param2: "keyC", param3: 3.3, param4: 3, param5: "", param6: "", param7: "", param8: "" }
 };

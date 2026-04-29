@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { IComponentDefinition } from 'pinteg-core';
 import { FieldRendererRegistry } from 'pinteg-core';
 import { SchemaRegistry } from '../registry/SchemaRegistry';
 import { PIntegForm } from './PIntegForm';
+import { ValidationManager, ValidationResult } from '@pinteg/validation';
+import { getComponentValidations } from '../utils/SchemaValidator';
 
 export interface PIntegFieldProps {
     name: string;
@@ -13,6 +15,7 @@ export interface PIntegFieldProps {
     tableMode: boolean;
     listOptions?: Record<string, any[]>;
     onChange: (name: string, value: any) => void;
+    forceValidate?: boolean;
 }
 
 export const PIntegField: React.FC<PIntegFieldProps> = ({
@@ -23,13 +26,62 @@ export const PIntegField: React.FC<PIntegFieldProps> = ({
     readOnly,
     tableMode,
     listOptions,
-    onChange
+    onChange,
+    forceValidate = false
 }) => {
     const type = definition.type;
-    let Renderer = FieldRendererRegistry.get(type);
+    const [validationResult, setValidationResult] = useState<ValidationResult | undefined>(undefined);
+    const [isTouched, setIsTouched] = useState(false);
+
+    const handleFieldChange = (n: string, v: any) => {
+        if (!readOnly) setIsTouched(true);
+        onChange(n, v);
+    };
+
+    const handleFieldBlur = (n: string) => {
+        if (!readOnly) setIsTouched(true);
+    };
+
+    useEffect(() => {
+        if (readOnly) {
+            setValidationResult(undefined);
+            return;
+        }
+
+        const activeValidations = getComponentValidations(definition);
+
+        if (activeValidations.length === 0) {
+            setValidationResult(undefined);
+            return;
+        }
+
+        ValidationManager.validateMultiple(activeValidations, value, formValues).then(results => {
+            let errorResult = results.find(r => !r.isValid && r.severity === 'error');
+            let warningResult = results.find(r => !r.isValid && r.severity === 'warning');
+            let anyFailing = results.find(r => !r.isValid);
+
+            if (errorResult) {
+                setValidationResult(errorResult);
+            } else if (warningResult) {
+                setValidationResult(warningResult);
+            } else if (anyFailing) {
+                setValidationResult(anyFailing);
+            } else {
+                setValidationResult({ isValid: true });
+            }
+        }).catch(err => {
+            console.error('Validation error for field', name, err);
+        });
+    }, [value, type, definition.validations, formValues, name, readOnly]);
+
+    const displayValidationResult = (isTouched || forceValidate) ? validationResult : undefined;
+
+    let Renderer: React.FC<any> | undefined = undefined;
+    if (FieldRendererRegistry.has(type)) {
+        Renderer = FieldRendererRegistry.get(type) as React.FC<any>;
+    }
 
     if (!Renderer) {
-        // Check if it's a registered schema for nesting (only supported in form mode for now)
         if (!tableMode) {
             const subSchema = SchemaRegistry.get(type);
             if (subSchema) {
@@ -55,13 +107,15 @@ export const PIntegField: React.FC<PIntegFieldProps> = ({
     const rendererNode = (
         <Renderer
             name={name}
-            caption={!tableMode ? (definition.caption ?? '') : ''} // Tables render headers separately
+            caption={!tableMode ? (definition.caption ?? '') : ''}
             value={value}
-            size={tableMode ? undefined : definition.size} // In table mode, the flex wrapper handles size
+            size={tableMode ? undefined : definition.size}
             readOnly={readOnly}
             tableMode={tableMode}
-            onChange={onChange}
+            onChange={handleFieldChange}
+            onBlur={handleFieldBlur}
             formValues={formValues}
+            validationResult={displayValidationResult}
             props={{ ...definition, options: listOptions?.[name] ?? definition.options }}
         />
     );

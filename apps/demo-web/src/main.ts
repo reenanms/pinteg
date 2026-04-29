@@ -4,7 +4,7 @@ import 'pinteg-react'; // This implicitly registers the ReactRenderer via side e
 // --- Sample App 0 ---
 
 const userSchema = {
-    param1: { type: "text", caption: "Sample with text:", size: "S" },
+    param1: { type: "text", caption: "Sample with text:", size: "S", validations: ["IsRequired"] },
     param2: {
         type: "list",
         caption: "Sample with list:",
@@ -73,9 +73,9 @@ pinteg
 // --- Sample App 1 ---
 
 const schema = {
-    username: { type: "text", caption: "Username", size: "S" },
+    username: { type: "text", caption: "Username", size: "S", validations: ["IsRequired"] },
     name: { type: "text", caption: "Name", size: "L" },
-    email: { type: "text", caption: "E-mail", size: "M" }
+    email: { type: "text", caption: "E-mail", size: "M", validations: ["IsRequired"] }
 };
 const initialObject = [
     { username: "username0", name: "User name 0", email: "username0@user.com" },

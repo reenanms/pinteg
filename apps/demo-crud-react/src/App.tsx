@@ -43,7 +43,7 @@ DataSourceManager.register('userManager.schema.list', async () => ({
 }));
 
 DataSourceManager.register('userManager.schema.detail', async () => ({
-    name: { type: 'text', caption: 'Full Name', size: 'L' },
+    name: { type: 'text', caption: 'Full Name', size: 'L', validations: ['IsRequired', { name: 'MaxLength', params: [10] }] },
     role: {
         type: 'list',
         caption: 'System Role',
@@ -51,7 +51,8 @@ DataSourceManager.register('userManager.schema.detail', async () => ({
         options: [
             { key: 'admin', caption: 'Administrator' },
             { key: 'user', caption: 'Regular User' }
-        ]
+        ],
+        validations: ['IsRequired']
     }
 }));
 

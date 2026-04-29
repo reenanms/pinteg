@@ -1,11 +1,14 @@
 import React from 'react';
-import { FieldRendererProps } from 'pinteg-core';
+import { FieldRendererProps, IFieldRenderer } from 'pinteg-core';
 import { resolveSizeStyle } from '../../utils/ComponentSizeUtils';
 
-export const DoubleField: React.FC<FieldRendererProps> = ({
-    name, caption, value, size, readOnly, tableMode, onChange,
+export const DoubleField: React.FC<FieldRendererProps> & IFieldRenderer = ({
+    name, caption, value, size, readOnly, tableMode, onChange, onBlur, validationResult
 }) => {
     const style = resolveSizeStyle(size);
+    const hasError = validationResult && !validationResult.isValid;
+    const inputClass = `pinteg-input ${hasError ? 'pinteg-input-' + validationResult.severity : ''}`;
+
     return (
         <div className="pinteg-field" style={style}>
             {!tableMode && caption && <label className="pinteg-label" htmlFor={name}>{caption}</label>}
@@ -14,14 +17,22 @@ export const DoubleField: React.FC<FieldRendererProps> = ({
                 name={name}
                 type="number"
                 step="any"
-                className="pinteg-input"
+                className={inputClass}
                 value={value ?? ''}
                 readOnly={readOnly}
                 onChange={(e) => {
                     const val = e.target.value ? parseFloat(e.target.value) : undefined;
                     onChange(name, Number.isNaN(val) ? undefined : val);
                 }}
+                onBlur={() => onBlur && onBlur(name)}
             />
+            {hasError && !tableMode && (
+                <span className={`pinteg-validation-msg pinteg-msg-${validationResult.severity}`}>
+                    {validationResult.severity === 'error' ? '!' : '⚠'} {validationResult.message}
+                </span>
+            )}
         </div>
     );
 };
+
+DoubleField.defaultValidations = [{ name: 'IsNumber' }];

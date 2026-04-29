@@ -5,4 +5,6 @@ export * from './schema/Sizes';
 export * from './registry/FieldRendererRegistry';
 export * from './builder/PIntegBuilder';
 
-
+import { registerDefaultValidations } from './validations/DefaultValidations';
+registerDefaultValidations();
+export * from './validations/DefaultValidations';

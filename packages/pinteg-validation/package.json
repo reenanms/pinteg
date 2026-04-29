@@ -1,19 +1,18 @@
 {
-    "name": "pinteg-core",
-    "version": "2.0.26",
+    "name": "@pinteg/validation",
+    "version": "1.0.0",
     "type": "module",
     "main": "dist/index.js",
     "module": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
         "build": "tsc",
-        "test": "vitest run"
+        "test": "vitest run --coverage"
     },
     "devDependencies": {
         "vitest": "^4.1.3",
+        "@vitest/coverage-v8": "^4.1.3",
         "typescript": "^5.9.2"
     },
-    "dependencies": {
-        "@pinteg/validation": "*"
-    }
+    "dependencies": {}
 }

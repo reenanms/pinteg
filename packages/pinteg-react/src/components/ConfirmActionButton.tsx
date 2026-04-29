@@ -10,6 +10,8 @@ export interface ConfirmActionButtonProps extends PIntegButtonProps {
     confirmIcon?: React.ReactNode;
     /** Time in milliseconds to wait before reverting from confirmation state back to idle. Defaults to 3000ms. */
     timeout?: number;
+    /** Function to determine if confirmation is needed. Returns true to require confirm, false to proceed immediately. Throw an error to abort the action. */
+    shouldConfirm?: () => boolean | Promise<boolean>;
 }
 
 /**
@@ -18,6 +20,7 @@ export interface ConfirmActionButtonProps extends PIntegButtonProps {
  */
 export const ConfirmActionButton: React.FC<ConfirmActionButtonProps> = ({
     onConfirm,
+    shouldConfirm,
     confirmLabel = 'Are you sure?',
     confirmIcon,
     timeout = 3000,
@@ -34,12 +37,26 @@ export const ConfirmActionButton: React.FC<ConfirmActionButtonProps> = ({
         }
     }, [isConfirming, timeout]);
 
-    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-        if (isConfirming) {
+    const checkIsConfirmed = async () => {
+        if (isConfirming) return true;
+        if (!shouldConfirm) return false;
+        return !(await shouldConfirm());
+    };
+
+    const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        try {
+            const confirmed = await checkIsConfirmed();
+
+            if (!confirmed) {
+                setIsConfirming(true);
+                return;
+            }
+
             onConfirm();
             setIsConfirming(false);
-        } else {
-            setIsConfirming(true);
+        } catch (e) {
+            // Validation errors or explicit aborts throw an exception to stop execution
+            setIsConfirming(false);
         }
     };
 
@@ -47,6 +64,7 @@ export const ConfirmActionButton: React.FC<ConfirmActionButtonProps> = ({
         <PIntegButton
             {...props}
             onClick={handleClick}
+            disabled={props.disabled}
             icon={isConfirming ? (confirmIcon || icon) : icon}
             className={`${props.className || ''} ${isConfirming ? 'pinteg-btn--confirming' : ''}`.trim()}
         >

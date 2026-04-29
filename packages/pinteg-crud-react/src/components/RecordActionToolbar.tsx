@@ -7,6 +7,7 @@ export interface RecordActionToolbarProps {
     onEdit: () => void;
     onCancelEdit: () => void;
     onSave: () => void;
+    shouldConfirmSave?: () => boolean | Promise<boolean>;
     onCancelCreate?: () => void;
     canUpdate?: boolean;
 }
@@ -16,6 +17,7 @@ export const RecordActionToolbar: React.FC<RecordActionToolbarProps> = ({
     onEdit,
     onCancelEdit,
     onSave,
+    shouldConfirmSave,
     onCancelCreate,
     canUpdate = true,
 }) => {
@@ -30,13 +32,19 @@ export const RecordActionToolbar: React.FC<RecordActionToolbarProps> = ({
             {status === 'creating' ? (
                 <>
                     <CancelButton size="medium" onClick={onCancelCreate}>Cancel</CancelButton>
-                    <SaveButton size="medium" onClick={onSave}>Save New</SaveButton>
+                    <SaveButton size="medium" onClick={onSave} shouldConfirm={shouldConfirmSave} confirmLabel="Click to save with warnings!">
+                        Save New
+                    </SaveButton>
                 </>
             ) : (
                 <>
                     {canUpdate && status === 'viewing' && <EditButton size="medium" onClick={onEdit}>Edit</EditButton>}
                     {canUpdate && status === 'editing' && <CancelButton size="medium" onClick={onCancelEdit}>Cancel</CancelButton>}
-                    {canUpdate && <SaveButton size="medium" onClick={onSave} disabled={status !== 'editing'}>Save Changes</SaveButton>}
+                    {canUpdate && (
+                        <SaveButton size="medium" onClick={onSave} shouldConfirm={shouldConfirmSave} confirmLabel="Click to save with warnings!" disabled={status !== 'editing'}>
+                            Save Changes
+                        </SaveButton>
+                    )}
                 </>
             )}
         </div>
