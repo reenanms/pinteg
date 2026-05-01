@@ -1,0 +1,16 @@
+{
+    "name": "pinteg-string-template",
+    "version": "1.0.0",
+    "type": "module",
+    "main": "dist/index.js",
+    "module": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "test": "vitest run"
+    },
+    "devDependencies": {
+        "vitest": "^4.1.3",
+        "typescript": "^5.9.2"
+    }
+}
