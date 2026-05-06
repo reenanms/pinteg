@@ -7,69 +7,61 @@ import { CrudConfig } from 'pinteg-crud-react';
 // Mock Data Stores
 // ================================================================
 
-let usersData = [
-    { id: 1, name: 'Alice Johnson', role: 'admin', email: 'alice@example.com' },
-    { id: 2, name: 'Bob Smith', role: 'user', email: 'bob@example.com' },
-    { id: 3, name: 'Carol White', role: 'editor', email: 'carol@example.com' },
-];
-
-let rolesData = [
-    { id: 1, name: 'Administrator', level: 'full' },
-    { id: 2, name: 'Editor', level: 'partial' },
-    { id: 3, name: 'Viewer', level: 'read-only' },
-];
-
-let productsData = [
-    { id: 1, name: 'Widget Pro', category: 'Widgets', price: '29.99' },
-    { id: 2, name: 'Gadget Max', category: 'Gadgets', price: '49.99' },
-    { id: 3, name: 'Tool Set', category: 'Tools', price: '99.99' },
-];
-
-let ordersData = [
-    { id: 1, customer: 'Alice Johnson', product: 'Widget Pro', status: 'shipped' },
-    { id: 2, customer: 'Bob Smith', product: 'Gadget Max', status: 'pending' },
-    { id: 3, customer: 'Carol White', product: 'Tool Set', status: 'delivered' },
-];
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 // ================================================================
 // Generic CRUD handler factory
 // ================================================================
 
-function registerCrud(prefix: string, getData: () => any[], setData: (d: any[]) => void, pkField: string = 'id') {
-    DataSourceManager.register(`${prefix}.list`, async () => [...getData()]);
+function registerCrud(prefix: string, _pkField: string = 'id') {
+    const url = `${API_BASE}/${prefix}`;
+
+    DataSourceManager.register(`${prefix}.list`, async () => {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Failed to fetch ${prefix} list`);
+        return response.json();
+    });
 
     DataSourceManager.register(`${prefix}.get`, async (params: any) => {
-        const record = getData().find((r: any) => String(r[pkField]) === params.key);
-        if (!record) throw new Error('Record not found');
-        return record;
+        const response = await fetch(`${url}/${params.key}`);
+        if (!response.ok) throw new Error(`Failed to fetch ${prefix} record`);
+        return response.json();
     });
 
     DataSourceManager.register(`${prefix}.create`, async (data: any) => {
-        const newRecord = { ...data, [pkField]: Date.now() };
-        setData([...getData(), newRecord]);
-        return newRecord;
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+        if (!response.ok) throw new Error(`Failed to create ${prefix} record`);
+        return response.json();
     });
 
     DataSourceManager.register(`${prefix}.update`, async (params: any) => {
         const { key, ...data } = params;
-        const items = getData();
-        const index = items.findIndex((r: any) => String(r[pkField]) === key);
-        if (index === -1) throw new Error('Record not found');
-        items[index] = { ...items[index], ...data };
-        setData([...items]);
-        return items[index];
+        const response = await fetch(`${url}/${key}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+        if (!response.ok) throw new Error(`Failed to update ${prefix} record`);
+        return response.json();
     });
 
     DataSourceManager.register(`${prefix}.delete`, async (params: any) => {
-        setData(getData().filter((r: any) => String(r[pkField]) !== params.key));
+        const response = await fetch(`${url}/${params.key}`, {
+            method: 'DELETE',
+        });
+        if (!response.ok) throw new Error(`Failed to delete ${prefix} record`);
     });
 }
 
 // Register CRUD operations for each entity
-registerCrud('users', () => usersData, d => { usersData = d; });
-registerCrud('roles', () => rolesData, d => { rolesData = d; });
-registerCrud('products', () => productsData, d => { productsData = d; });
-registerCrud('orders', () => ordersData, d => { ordersData = d; });
+registerCrud('users');
+registerCrud('roles');
+registerCrud('products');
+registerCrud('orders');
 
 // ================================================================
 // Schema DSM sources

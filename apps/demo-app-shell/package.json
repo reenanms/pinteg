@@ -5,6 +5,7 @@
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build",
+        "seed": "node scripts/seed-data.js",
         "preview": "vite preview"
     },
     "dependencies": {
