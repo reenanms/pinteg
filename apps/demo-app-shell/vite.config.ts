@@ -15,6 +15,8 @@ export default defineConfig({
             'pinteg-data-source': path.resolve(__dirname, '../../packages/pinteg-data-source/src'),
             'pinteg-theme-react': path.resolve(__dirname, '../../packages/pinteg-theme-react/src'),
             'pinteg-app-shell': path.resolve(__dirname, '../../packages/pinteg-app-shell/src'),
+            'pinteg-formula-field': path.resolve(__dirname, '../../packages/pinteg-formula-field/src'),
+            'pinteg-string-template': path.resolve(__dirname, '../../packages/pinteg-string-template/src'),
         }
     },
     server: {

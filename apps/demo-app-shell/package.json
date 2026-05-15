@@ -16,7 +16,8 @@
         "pinteg-theme-react": "*",
         "pinteg-data-source": "*",
         "pinteg-crud-react": "*",
-        "pinteg-app-shell": "*"
+        "pinteg-app-shell": "*",
+        "pinteg-formula-field": "*"
     },
     "devDependencies": {
         "@types/react": "^18.2.15",

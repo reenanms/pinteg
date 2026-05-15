@@ -4,7 +4,7 @@
  * Usage: node scripts/seed-data.js
  */
 
-const API_BASE = 'http://localhost:6150/api';
+const API_BASE = process.env.VITE_API_BASE || 'http://localhost:3000/api';
 
 const data = {
     users: [
@@ -31,7 +31,7 @@ const data = {
 
 async function seed() {
     console.log(`Starting seed process for ${API_BASE}...`);
-    
+
     for (const [prefix, items] of Object.entries(data)) {
         console.log(`\nSeeding [${prefix}]...`);
         for (const item of items) {
@@ -41,7 +41,7 @@ async function seed() {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(item)
                 });
-                
+
                 if (res.ok) {
                     const created = await res.json();
                     console.log(`  ✅ Created ${prefix} (id: ${created.id}): ${item.name || item.customer}`);
@@ -54,7 +54,7 @@ async function seed() {
             }
         }
     }
-    
+
     console.log('\nSeed process finished.');
 }
 

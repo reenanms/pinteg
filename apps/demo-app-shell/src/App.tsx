@@ -2,6 +2,7 @@ import React from 'react';
 import { DataSourceManager } from 'pinteg-data-source';
 import { AppShell, AppShellConfig, PageDefinition, PortalDefinition } from 'pinteg-app-shell';
 import { CrudConfig } from 'pinteg-crud-react';
+import 'pinteg-formula-field';
 
 // ================================================================
 // Mock Data Stores
@@ -74,6 +75,12 @@ DataSourceManager.register('users.schema.list', async () => ({
 }));
 
 DataSourceManager.register('users.schema.detail', async () => ({
+    userBadge: {
+        type: 'formula',
+        caption: 'User Badge',
+        size: 'L',
+        props: { formula: '[${UPPER(role)}] - ${name}' }
+    },
     name: { type: 'text', caption: 'Full Name', size: 'L' },
     role: {
         type: 'list', caption: 'System Role', size: 'M',
@@ -107,6 +114,7 @@ DataSourceManager.register('products.schema.list', async () => ({
     name: { type: 'text', caption: 'Product Name', size: 'L' },
     category: { type: 'text', caption: 'Category', size: 'M' },
     price: { type: 'text', caption: 'Price ($)', size: 'S' },
+    total: { type: 'formula', caption: 'Total', size: 'S', props: { formula: '${price}' } },
 }));
 
 DataSourceManager.register('products.schema.detail', async () => ({
@@ -119,11 +127,23 @@ DataSourceManager.register('products.schema.detail', async () => ({
             { key: 'Tools', caption: 'Tools' },
         ]
     },
-    price: { type: 'text', caption: 'Price ($)', size: 'S' },
+    price: { type: 'double', caption: 'Base Price ($)', size: 'S' },
+    tax: { type: 'double', caption: 'Tax (%)', size: 'S' },
+    total: {
+        type: 'formula',
+        caption: 'Total Price (Calc)',
+        size: 'L',
+        props: { formula: '${SUM(price, (price * tax / 100))}' }
+    },
 }));
 
 DataSourceManager.register('orders.schema.list', async () => ({
-    customer: { type: 'text', caption: 'Customer', size: 'L' },
+    summary: { 
+        type: 'formula', 
+        caption: 'Order Summary', 
+        size: 'L', 
+        props: { formula: 'Order for ${UPPER(customer)}' } 
+    },
     product: { type: 'text', caption: 'Product', size: 'M' },
     status: { type: 'text', caption: 'Status', size: 'S' },
 }));
@@ -131,6 +151,21 @@ DataSourceManager.register('orders.schema.list', async () => ({
 DataSourceManager.register('orders.schema.detail', async () => ({
     customer: { type: 'text', caption: 'Customer Name', size: 'L' },
     product: { type: 'text', caption: 'Product', size: 'M' },
+    quantity: { type: 'double', caption: 'Quantity', size: 'S' },
+    unitPrice: { type: 'double', caption: 'Unit Price ($)', size: 'S' },
+    discount: { type: 'double', caption: 'Discount (%)', size: 'S' },
+    subtotal: {
+        type: 'formula',
+        caption: 'Subtotal',
+        size: 'M',
+        props: { formula: '${quantity * unitPrice}' }
+    },
+    total: {
+        type: 'formula',
+        caption: 'Total with Discount',
+        size: 'L',
+        props: { formula: '${IF(discount > 0, (quantity * unitPrice * (1 - discount / 100)), (quantity * unitPrice))}' }
+    },
     status: {
         type: 'list', caption: 'Order Status', size: 'M',
         options: [
