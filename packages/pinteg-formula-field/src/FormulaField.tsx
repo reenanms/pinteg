@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { FieldRendererProps, IFieldRenderer, Sizes, IComponentSize } from 'pinteg-core';
+import { CoreFieldProps, Sizes, IComponentSize } from 'pinteg-core';
 import { TemplateEngine } from 'pinteg-string-template';
 
 const engine = new TemplateEngine();
@@ -20,7 +20,7 @@ function resolveSizeStyle(size?: string): Record<string, string> {
     return sizeToStyle(preset);
 }
 
-export const FormulaField: React.FC<FieldRendererProps> & IFieldRenderer = ({
+export const FormulaField: React.FC<CoreFieldProps> = ({
     name, caption, size, tableMode, formValues, props
 }) => {
     const formula = props?.formula || props?.props?.formula || '';

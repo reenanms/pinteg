@@ -1,8 +1,8 @@
 import React from 'react';
-import { FieldRendererProps, IFieldRenderer } from 'pinteg-core';
+import { CoreFieldProps } from 'pinteg-core';
 import { resolveSizeStyle } from '../../utils/ComponentSizeUtils';
 
-export const TextField: React.FC<FieldRendererProps> & IFieldRenderer = ({
+export const TextField: React.FC<CoreFieldProps> = ({
     name, caption, value, size, readOnly, tableMode, onChange, onBlur, validationResult
 }) => {
     const style = resolveSizeStyle(size);

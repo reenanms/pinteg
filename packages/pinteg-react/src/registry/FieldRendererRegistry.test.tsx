@@ -1,13 +1,17 @@
-import { FieldRendererRegistry } from 'pinteg-core';
+import { FieldAdapterRegistry } from 'pinteg-core';
 
-describe('FieldRendererRegistry', () => {
+describe('FieldAdapterRegistry', () => {
     it('throws for unknown type', () => {
-        expect(() => FieldRendererRegistry.get('unknown')).toThrow();
+        expect(() => FieldAdapterRegistry.get('unknown')).toThrow();
     });
 
-    it('gets a registered renderer', () => {
-        const DummyComponent = () => null;
-        FieldRendererRegistry.register('dummy', DummyComponent as any);
-        expect(FieldRendererRegistry.get('dummy')).toBe(DummyComponent);
+    it('gets a registered adapter factory', () => {
+        const dummyFactory = () => ({
+            mount() {},
+            update() {},
+            unmount() {}
+        });
+        FieldAdapterRegistry.register('dummy', dummyFactory);
+        expect(FieldAdapterRegistry.get('dummy')).toBe(dummyFactory);
     });
 });

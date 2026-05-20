@@ -1,4 +1,4 @@
-import { ComponentSchema, FieldRendererRegistry } from 'pinteg-core';
+import { ComponentSchema, FieldAdapterRegistry } from 'pinteg-core';
 import { ValidationManager } from '@pinteg/validation';
 import { IValidationDef } from '@pinteg/validation';
 
@@ -13,10 +13,11 @@ export function getComponentValidations(definition: ComponentSchema[string]): IV
     
     const hasValidation = (name: string) => activeValidations.some(v => v.name === name);
     
-    if (FieldRendererRegistry.has(definition.type)) {
-        const renderer = FieldRendererRegistry.get(definition.type);
-        if (renderer.defaultValidations) {
-            for (const defVal of renderer.defaultValidations) {
+    if (FieldAdapterRegistry.has(definition.type)) {
+        const adapterFactory = FieldAdapterRegistry.get(definition.type);
+        const adapter = adapterFactory();
+        if (adapter.defaultValidations) {
+            for (const defVal of adapter.defaultValidations) {
                 if (!hasValidation(defVal.name)) {
                     activeValidations.push(defVal);
                 }

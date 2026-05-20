@@ -1,8 +1,8 @@
 import React from 'react';
-import { FieldRendererProps, IFieldRenderer } from 'pinteg-core';
+import { CoreFieldProps } from 'pinteg-core';
 import { resolveSizeStyle } from '../../utils/ComponentSizeUtils';
 
-export const DoubleField: React.FC<FieldRendererProps> & IFieldRenderer = ({
+export const DoubleField: React.FC<CoreFieldProps> = ({
     name, caption, value, size, readOnly, tableMode, onChange, onBlur, validationResult
 }) => {
     const style = resolveSizeStyle(size);
@@ -34,5 +34,3 @@ export const DoubleField: React.FC<FieldRendererProps> & IFieldRenderer = ({
         </div>
     );
 };
-
-DoubleField.defaultValidations = [{ name: 'IsNumber' }];

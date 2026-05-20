@@ -1,7 +1,6 @@
 import React, { useCallback, useImperativeHandle } from 'react';
 import { ComponentSchema } from 'pinteg-core';
 import { useFormState } from '../hooks/useFormState';
-import { FieldRendererRegistry } from 'pinteg-core';
 import { SchemaRegistry } from '../registry/SchemaRegistry';
 import { registerDefaultRenderers } from '../registry/defaultRenderers';
 import { PIntegField } from './PIntegField';

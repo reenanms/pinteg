@@ -2,7 +2,6 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { vi } from 'vitest';
 import { PIntegField } from '../src/components/PIntegField';
-import { FieldRendererRegistry } from 'pinteg-core';
 import { SchemaRegistry } from '../src/registry/SchemaRegistry';
 
 // Ensure defaults are registered

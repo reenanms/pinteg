@@ -1,8 +1,9 @@
-import { FieldRendererRegistry } from 'pinteg-core';
+import { FieldAdapterRegistry } from 'pinteg-core';
+import { createReactAdapter } from 'pinteg-react';
 import { FormulaField } from './FormulaField';
 
 export function registerFormulaField() {
-    FieldRendererRegistry.register('formula', FormulaField);
+    FieldAdapterRegistry.register('formula', createReactAdapter(FormulaField));
 }
 
 // Auto-register when the package is imported

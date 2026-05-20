@@ -1,6 +1,10 @@
-import { ValidationResult } from '@pinteg/validation';
+import { ValidationResult, IValidationDef } from '@pinteg/validation';
 
-export interface FieldRendererProps {
+/**
+ * Core properties passed to all fields — framework agnostic.
+ * Any UI framework adapter receives these properties.
+ */
+export interface CoreFieldProps {
     name: string;
     caption?: string;
     value: any;
@@ -14,33 +18,43 @@ export interface FieldRendererProps {
     validationResult?: ValidationResult;
 }
 
-import { IValidationDef } from '@pinteg/validation';
+/**
+ * The Universal Component Adapter interface.
+ * Provides a framework-agnostic lifecycle for mounting, updating,
+ * and unmounting a field component in the DOM.
+ */
+export interface IComponentAdapter {
+    /** Mount the component into the given DOM container */
+    mount(container: HTMLElement, props: CoreFieldProps): void;
 
-export interface IFieldRenderer {
-    /**
-     * Optional default validations that this component inherently requires.
-     */
+    /** Update the component with new properties */
+    update(props: CoreFieldProps): void;
+
+    /** Unmount the component and clean up */
+    unmount(): void;
+
+    /** Optional validations inherently required by this field type */
     defaultValidations?: IValidationDef[];
-    
-    // We allow any other properties so UI frameworks (like React, Vue) 
-    // can pass their native component signatures.
-    [key: string]: any; 
 }
 
-export type RendererType = IFieldRenderer;
+/**
+ * Registry for field adapter factories.
+ * Stores factory functions that produce IComponentAdapter instances,
+ * ensuring each field gets its own adapter with independent lifecycle state.
+ */
 class Registry {
-    private map = new Map<string, RendererType>();
+    private map = new Map<string, () => IComponentAdapter>();
 
-    register(type: string, component: RendererType) {
-        this.map.set(type, component);
+    register(type: string, adapterFactory: () => IComponentAdapter): void {
+        this.map.set(type, adapterFactory);
     }
 
-    get(type: string): RendererType {
-        const component = this.map.get(type);
-        if (!component) {
-            throw new Error(`Renderer for type '${type}' not found.`);
+    get(type: string): () => IComponentAdapter {
+        const factory = this.map.get(type);
+        if (!factory) {
+            throw new Error(`Adapter for type '${type}' not found.`);
         }
-        return component;
+        return factory;
     }
 
     has(type: string): boolean {
@@ -48,4 +62,4 @@ class Registry {
     }
 }
 
-export const FieldRendererRegistry = new Registry();
+export const FieldAdapterRegistry = new Registry();

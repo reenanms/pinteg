@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FieldRendererProps, IFieldRenderer } from 'pinteg-core';
+import { CoreFieldProps } from 'pinteg-core';
 import { resolveSizeStyle } from '../../utils/ComponentSizeUtils';
 import { DataSourceManager } from 'pinteg-data-source';
 
@@ -39,7 +39,7 @@ function resolveOption(opt: any): { val: any; label: any } {
     return { val: opt, label: opt };
 }
 
-export const ListField: React.FC<FieldRendererProps> & IFieldRenderer = ({
+export const ListField: React.FC<CoreFieldProps> = ({
     name, caption, value, size, readOnly, tableMode, onChange, onBlur, validationResult, props, formValues
 }) => {
     const style = resolveSizeStyle(size);

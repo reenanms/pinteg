@@ -14,6 +14,7 @@ export * from './components/ConfirmActionButton';
 export * from './components/SemanticButtons';
 export * from './components/Icons';
 export * from './utils/ComponentSizeUtils';
+export * from './adapters/createReactAdapter';
 
 // Auto-register ReactRenderer when the package is imported
 import { pinteg } from 'pinteg-core';

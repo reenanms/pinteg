@@ -1,37 +1,53 @@
-import { FieldRendererRegistry } from '../src/registry/FieldRendererRegistry';
+import { FieldAdapterRegistry, IComponentAdapter } from '../src/registry/FieldRendererRegistry';
 
-// Use a fresh isolated registry instance by testing the class behavior
-// The exported singleton is shared, so we test with unique type names per test.
+// Use unique type names per test since the singleton is shared.
 
-describe('FieldRendererRegistry', () => {
+function createFakeAdapterFactory(): () => IComponentAdapter {
+    return () => ({
+        mount() {},
+        update() {},
+        unmount() {}
+    });
+}
+
+describe('FieldAdapterRegistry', () => {
     const uniqueType = `test-type-${Date.now()}`;
-    const fakeComponent = () => null;
+    const fakeFactory = createFakeAdapterFactory();
 
     it('throws an error when getting an unregistered type', () => {
-        expect(() => FieldRendererRegistry.get('non-existent-type-xyz')).toThrow("Renderer for type 'non-existent-type-xyz' not found.");
+        expect(() => FieldAdapterRegistry.get('non-existent-type-xyz')).toThrow("Adapter for type 'non-existent-type-xyz' not found.");
     });
 
     it('has() returns false for an unregistered type', () => {
-        expect(FieldRendererRegistry.has('non-existent-type-abc')).toBe(false);
+        expect(FieldAdapterRegistry.has('non-existent-type-abc')).toBe(false);
     });
 
-    it('register() + get() returns the registered component', () => {
-        FieldRendererRegistry.register(uniqueType, fakeComponent);
-        expect(FieldRendererRegistry.get(uniqueType)).toBe(fakeComponent);
+    it('register() + get() returns the registered factory', () => {
+        FieldAdapterRegistry.register(uniqueType, fakeFactory);
+        expect(FieldAdapterRegistry.get(uniqueType)).toBe(fakeFactory);
     });
 
     it('has() returns true after registration', () => {
         const t = `has-test-${Date.now()}`;
-        FieldRendererRegistry.register(t, fakeComponent);
-        expect(FieldRendererRegistry.has(t)).toBe(true);
+        FieldAdapterRegistry.register(t, createFakeAdapterFactory());
+        expect(FieldAdapterRegistry.has(t)).toBe(true);
     });
 
-    it('re-registering a type overwrites the previous renderer', () => {
+    it('re-registering a type overwrites the previous factory', () => {
         const t = `overwrite-test-${Date.now()}`;
-        const comp1 = () => null;
-        const comp2 = () => null;
-        FieldRendererRegistry.register(t, comp1);
-        FieldRendererRegistry.register(t, comp2);
-        expect(FieldRendererRegistry.get(t)).toBe(comp2);
+        const factory1 = createFakeAdapterFactory();
+        const factory2 = createFakeAdapterFactory();
+        FieldAdapterRegistry.register(t, factory1);
+        FieldAdapterRegistry.register(t, factory2);
+        expect(FieldAdapterRegistry.get(t)).toBe(factory2);
+    });
+
+    it('factory produces new adapter instances with independent state', () => {
+        const t = `instance-test-${Date.now()}`;
+        FieldAdapterRegistry.register(t, createFakeAdapterFactory());
+        const factory = FieldAdapterRegistry.get(t);
+        const adapter1 = factory();
+        const adapter2 = factory();
+        expect(adapter1).not.toBe(adapter2);
     });
 });
